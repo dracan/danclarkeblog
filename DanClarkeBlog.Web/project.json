@@ -22,7 +22,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
-    "DanClarkeBlog.Core": "1.0.0-*"
+    "DanClarkeBlog.Core": "1.0.0-*",
+    "Autofac": "4.3.0"
   },
 
   "tools": {
