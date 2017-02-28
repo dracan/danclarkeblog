@@ -2,6 +2,7 @@
   "version": "1.0.0-*",
 
     "dependencies": {
+        "Dropbox.Api": "4.2.0",
         "Markdig": "0.10.6",
         "NETStandard.Library": "1.6.0"
     },
