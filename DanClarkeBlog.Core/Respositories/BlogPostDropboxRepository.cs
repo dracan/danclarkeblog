@@ -10,17 +10,13 @@ namespace DanClarkeBlog.Core.Respositories
         private readonly IBlogPostRenderer _renderer;
         private static readonly Dictionary<string, BlogPost> _cache = new Dictionary<string, BlogPost>();
 
-        //private Settings _settings;
+        private Settings _settings;
 
-        public BlogPostDropboxRepository(IBlogPostRenderer _renderer)
+        public BlogPostDropboxRepository(IBlogPostRenderer renderer, Settings settings)
         {
-            this._renderer = _renderer;
+            _renderer = renderer;
+            _settings = settings;
         }
-
-        //public MarkdownFileProvider(IOptions<Settings> settings)
-        //{
-        //    _settings = settings.Value;
-        //}
 
         public IEnumerable<BlogPost> GetAll()
         {
