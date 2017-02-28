@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using DanClarkeBlog.Core;
+using DanClarkeBlog.Core.Helpers;
+using DanClarkeBlog.Core.Respositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,13 +30,22 @@ namespace DanClarkeBlog
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddMvc();
 
             services.AddOptions();
             services.Configure<Settings>(Configuration);
+
+            // Setup Autofac
+            var builder = new ContainerBuilder();
+            builder.RegisterType<Settings>();
+            builder.RegisterType<BlogPostDropboxRepository>().As<IBlogPostRepository>();
+            builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();
+            builder.Populate(services);
+
+            return new AutofacServiceProvider(builder.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
