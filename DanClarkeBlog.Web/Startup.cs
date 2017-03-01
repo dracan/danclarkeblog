@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using DanClarkeBlog.Core;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Respositories;
 using Microsoft.AspNetCore.Builder;
@@ -12,8 +8,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NLog.Extensions.Logging;
+using NLog.Web;
+using Settings = DanClarkeBlog.Core.Settings;
 
-namespace DanClarkeBlog
+namespace DanClarkeBlog.Web
 {
     public class Startup
     {
@@ -38,9 +38,12 @@ namespace DanClarkeBlog
             services.AddOptions();
             services.Configure<Settings>(Configuration);
 
+            var sp = services.BuildServiceProvider();
+            var settings = sp.GetService<IOptions<Settings>>();
+
             // Setup Autofac
             var builder = new ContainerBuilder();
-            builder.RegisterType<Settings>();
+            builder.Register(_ => settings.Value);
             builder.RegisterType<BlogPostDropboxRepository>().As<IBlogPostRepository>();
             builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();
             builder.Populate(services);
@@ -53,6 +56,9 @@ namespace DanClarkeBlog
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            loggerFactory.AddNLog();
+
+            env.ConfigureNLog("nlog.config");
 
             if (env.IsDevelopment())
             {

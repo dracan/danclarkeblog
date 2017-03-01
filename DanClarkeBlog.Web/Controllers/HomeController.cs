@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Respositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DanClarkeBlog.Controllers
+namespace DanClarkeBlog.Web.Controllers
 {
     public class HomeController : Controller
     {
@@ -16,9 +13,9 @@ namespace DanClarkeBlog.Controllers
             _blogPostRepository = blogPostRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            _blogPostRepository.GetAll();
+            await _blogPostRepository.GetAllAsync();
 
             return View();
         }

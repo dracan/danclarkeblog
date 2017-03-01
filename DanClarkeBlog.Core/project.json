@@ -1,16 +1,18 @@
 {
-  "version": "1.0.0-*",
+    "version": "1.0.0-*",
 
     "dependencies": {
         "Autofac": "4.3.0",
         "Dropbox.Api": "4.2.0",
         "Markdig": "0.10.6",
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.0",
+        "NLog.Extensions.Logging": "1.0.0-rtm-beta3",
+        "NLog.Web.AspNetCore": "4.3.1"
     },
 
-  "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50"
+    "frameworks": {
+        "netstandard1.6": {
+            "imports": "dnxcore50"
+        }
     }
-  }
 }
