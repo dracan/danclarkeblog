@@ -27,7 +27,6 @@ namespace DanClarkeBlog.Core.Respositories
 
             using (var dropboxClient = new DropboxClient(_settings.DropboxAccessToken))
             {
-                //[here] // Looks like the dropbox library is failing with the System error :/
                 var result = await dropboxClient.Files.ListFolderAsync("", true, true);
 
                 _logger.Debug($"Returned {result.Entries.Count} entries from dropbox (hasmore = {result.HasMore})");
