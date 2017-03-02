@@ -19,9 +19,11 @@ namespace DanClarkeBlog.Web.Controllers
             this._settings = _settings;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var posts = await _blogPostRepository.GetAllAsync();
+
+            return View(posts);
         }
 
         public async Task<IActionResult> BlogPost(string route)

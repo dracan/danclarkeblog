@@ -1,0 +1,6 @@
+@model List<DanClarkeBlog.Core.Models.BlogPost>
+
+@foreach (var post in Model)
+{
+    <a href="@post.Route">@post.Title</a>
+}
