@@ -44,7 +44,8 @@ namespace DanClarkeBlog.Web
             // Setup Autofac
             var builder = new ContainerBuilder();
             builder.Register(_ => settings.Value);
-            builder.RegisterType<BlogPostDropboxRepository>().As<IBlogPostRepository>();
+            //builder.RegisterType<BlogPostDropboxRepository>().As<IBlogPostRepository>();
+            builder.RegisterType<BlogPostFileSystemRepository>().As<IBlogPostRepository>();
             builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();
             builder.Populate(services);
 
