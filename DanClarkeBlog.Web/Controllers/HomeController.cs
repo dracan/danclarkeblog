@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Respositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using Settings = DanClarkeBlog.Core.Settings;
 using NLog;
 
@@ -18,16 +19,18 @@ namespace DanClarkeBlog.Web.Controllers
             this._settings = _settings;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> BlogPost()
         {
             var posts = await _blogPostRepository.GetAllAsync();
 
-            foreach(var post in posts)
-            {
-                _logger.Debug(post.HtmlText);
-            }
+            var firstPost = posts.First();
 
-            return View();
+            return View(firstPost);
         }
 
         public IActionResult About()
