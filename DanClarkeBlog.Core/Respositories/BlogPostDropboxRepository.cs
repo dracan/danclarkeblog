@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using Dropbox.Api;
-using Dropbox.Api.Files;
+using Newtonsoft.Json;
 using NLog;
 
 namespace DanClarkeBlog.Core.Respositories
@@ -23,43 +25,41 @@ namespace DanClarkeBlog.Core.Respositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync()
         {
-            _logger.Debug("Getting all blog posts from dropbox ...");
+            _logger.Debug("Processing files from Dropbox ...");
+
+            var blogPosts = new List<BlogPost>();
 
             using (var dropboxClient = new DropboxClient(_settings.DropboxAccessToken))
             {
-                var result = await dropboxClient.Files.ListFolderAsync("", true, true);
+                _logger.Debug("Reading blog.json ...");
 
-                _logger.Debug($"Returned {result.Entries.Count} entries from dropbox (hasmore = {result.HasMore})");
-
-                while (result.HasMore)
+                using (var blogJson = await dropboxClient.Files.DownloadAsync("/Blog.json"))
                 {
-                    result = await dropboxClient.Files.ListFolderContinueAsync(new ListFolderContinueArg(result.Cursor));
+                    var content = await blogJson.GetContentAsStringAsync();
 
-                    _logger.Debug($"After continue, we now have {result.Entries.Count} entries from dropbox (hasmore = {result.HasMore})");
-                }
+                    _logger.Trace($"Blog.json content was {content}");
 
-                var entries = (from x in result.Entries
-                               where x.IsFile
-                               select x.AsFile).ToList();
+                    var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
 
-                _logger.Debug($"After filtering results for files, we now have {entries.Count} files returned. Downloading content for each ...");
+                    _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
-                var blogPosts = new List<BlogPost>();
-
-                foreach (var entry in entries)
-                {
-                    _logger.Debug($"Downloading content for {entry.PathLower} ...");
-
-                    using (var download = await dropboxClient.Files.DownloadAsync(entry.PathLower))
+                    foreach (var blogPost in blogPostList)
                     {
-                        var content = await download.GetContentAsStringAsync();
+                        using (var postFile = await dropboxClient.Files.DownloadAsync(blogPost.FilePath))
+                        {
+                            _logger.Trace($"Reading content for {blogPost.FilePath} ...");
 
-                        blogPosts.Add(new BlogPost
-                                      {
-                                          Title = "todo",
-                                          DateString = "todo",
-                                          HtmlText = _renderer.Render(content),
-                                      });
+                            content = await postFile.GetContentAsStringAsync();
+
+                            blogPosts.Add(new BlogPost
+                            {
+                                Title = blogPost.Title,
+                                PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+                                HtmlText = _renderer.Render(content),
+                                Route = blogPost.Route,
+                                Tags = blogPost.Tags.Split('|').ToList()
+                            });
+                        }
                     }
                 }
 

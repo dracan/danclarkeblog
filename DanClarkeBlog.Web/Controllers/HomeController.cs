@@ -24,13 +24,17 @@ namespace DanClarkeBlog.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> BlogPost()
+        public async Task<IActionResult> BlogPost(string route)
         {
             var posts = await _blogPostRepository.GetAllAsync();
 
-            var firstPost = posts.First();
+            var post = posts.FirstOrDefault(x => x.Route.TrimStart('/') == route.TrimStart('/'));
+            if (post == null)
+            {
+                return NotFound();
+            }
 
-            return View(firstPost);
+            return View(post);
         }
 
         public IActionResult About()
