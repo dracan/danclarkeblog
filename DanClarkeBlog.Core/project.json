@@ -7,12 +7,13 @@
         "Markdig": "0.10.6",
         "NETStandard.Library": "1.6.0",
         "NLog.Extensions.Logging": "1.0.0-rtm-beta3",
-        "NLog.Web.AspNetCore": "4.3.1"
+        "NLog.Web.AspNetCore": "4.3.1",
+        "Microsoft.NETCore.Portable.Compatibility": "1.0.1"
     },
 
     "frameworks": {
         "netstandard1.6": {
-            "imports": "dnxcore50"
+            "imports": "portable-net45+win8"
         }
     }
 }
