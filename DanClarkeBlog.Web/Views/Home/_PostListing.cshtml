@@ -2,5 +2,7 @@
 
 @foreach (var post in Model)
 {
-    <a href="@post.Route">@post.Title</a>
+    <div class="blogPostTitle"><a href="@post.Route">@post.Title</a></div>
+    <div class="blogPostDate">@post.PublishDate.ToString("dd MMM yyyy")</div>
+    <div class="blogPost">@Html.Raw(post.HtmlShortText)</div>
 }

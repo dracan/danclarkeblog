@@ -15,15 +15,19 @@ namespace DanClarkeBlog.Core.Respositories
     {
         private readonly IBlogPostRenderer _renderer;
         private readonly Settings _settings;
+        private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public BlogPostFileSystemRepository(IBlogPostRenderer renderer, Settings settings)
+        public BlogPostFileSystemRepository(IBlogPostRenderer renderer,
+                                            Settings settings,
+                                            BlogPostSummaryHelper blogPostSummaryHelper)
         {
             _renderer = renderer;
             _settings = settings;
+            _blogPostSummaryHelper = blogPostSummaryHelper;
         }
 
-        public async Task<IEnumerable<BlogPost>> GetAllAsync()
+        async Task<IEnumerable<BlogPost>> IBlogPostRepository.GetAllAsync()
         {
             _logger.Debug($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
 
@@ -50,6 +54,7 @@ namespace DanClarkeBlog.Core.Respositories
                     Title = blogPost.Title,
                     PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
                     HtmlText = _renderer.Render(postFile),
+                    HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFile)),
                     Route = blogPost.Route,
                     Tags = blogPost.Tags.Split('|').ToList()
                 });

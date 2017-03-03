@@ -9,6 +9,7 @@ namespace DanClarkeBlog.Core.Models
         public string Route { get; set; }
         public DateTime PublishDate { get; set; }
         public string HtmlText { get; set; }
+        public string HtmlShortText { get; set; }
         public List<string> Tags { get; set; }
     }
 }

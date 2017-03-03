@@ -46,6 +46,7 @@ namespace DanClarkeBlog.Web
             builder.Register(_ => settings.Value);
             //builder.RegisterType<BlogPostDropboxRepository>().As<IBlogPostRepository>();
             builder.RegisterType<BlogPostFileSystemRepository>().As<IBlogPostRepository>();
+            builder.RegisterType<BlogPostSummaryHelper>();
             builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();
             builder.Populate(services);
 

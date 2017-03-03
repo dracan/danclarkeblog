@@ -15,12 +15,16 @@ namespace DanClarkeBlog.Core.Respositories
     {
         private readonly IBlogPostRenderer _renderer;
         private readonly Settings _settings;
+        private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public BlogPostDropboxRepository(IBlogPostRenderer renderer, Settings settings)
+        public BlogPostDropboxRepository(IBlogPostRenderer renderer,
+                                         Settings settings,
+                                         BlogPostSummaryHelper blogPostSummaryHelper)
         {
             _renderer = renderer;
             _settings = settings;
+            _blogPostSummaryHelper = blogPostSummaryHelper;
         }
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync()
@@ -56,6 +60,7 @@ namespace DanClarkeBlog.Core.Respositories
                                 Title = blogPost.Title,
                                 PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
                                 HtmlText = _renderer.Render(content),
+                                HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
                                 Route = blogPost.Route,
                                 Tags = blogPost.Tags.Split('|').ToList()
                             });
