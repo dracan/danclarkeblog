@@ -61,11 +61,9 @@ namespace DanClarkeBlog.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
             loggerFactory.AddNLog();
 
-            env.ConfigureNLog(Path.Combine(env.WebRootPath, "..", "NLog.config"));
+            //env.ConfigureNLog("NLog.config");
 
             if (env.IsDevelopment())
             {
