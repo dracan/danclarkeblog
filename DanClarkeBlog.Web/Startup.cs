@@ -64,7 +64,7 @@ namespace DanClarkeBlog.Web
             loggerFactory.AddDebug();
             loggerFactory.AddNLog();
 
-            env.ConfigureNLog("nlog.config");
+            env.ConfigureNLog(Path.Combine(env.WebRootPath, "..", "NLog.config"));
 
             if (env.IsDevelopment())
             {
