@@ -1,3 +1,6 @@
 {
-    "projects": [ "DanClarkeBlog.Web", "DanClarkeBlog.Core" ]
+    "projects": [ "DanClarkeBlog.Web", "DanClarkeBlog.Core" ],
+    "sdk": {
+        "version": "1.0.0-preview2-1-003177"
+    }
 }
