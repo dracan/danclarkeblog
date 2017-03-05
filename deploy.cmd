@@ -77,6 +77,19 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
+echo Deploying webjob files ...
+xcopy /Y %DEPLOYMENT_SOURCE%\DanClarkeBlog.Tasks\bin\Release\* %DEPLOYMENT_TARGET%\App_Data\jobs\triggered\DanClarkeBlog\
+
+REM echo "***********************************************"
+REM echo "DEPLOYMENT_SOURCE = %DEPLOYMENT_SOURCE%"
+REM dir /s /b
+REM echo "***********************************************"
+
+REM echo "***********************************************"
+REM echo "DEPLOYMENT_TARGET = %DEPLOYMENT_TARGET%"
+REM dir /s /b
+REM echo "***********************************************"
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
 
