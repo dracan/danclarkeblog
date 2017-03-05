@@ -10,5 +10,10 @@ namespace DanClarkeBlog.Tasks
         {
             log.WriteLine(message);
         }
+
+        public static void ProcessTimer([TimerTrigger("*/5 * * * * *", RunOnStartup = true)] TimerInfo info, TextWriter log)
+        {
+            log.WriteLine("CALLING PROCESS TIMER");
+        }
     }
 }
