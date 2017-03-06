@@ -17,6 +17,7 @@ namespace DanClarkeBlog.Core.Helpers
 
             if (indexOfSplitter == -1)
             {
+                //(dan) What if content is < 200 characters?
                 indexOfSplitter = 200; // (dan) Make me a setting
             }
 
