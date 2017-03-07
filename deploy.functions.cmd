@@ -54,13 +54,9 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 
 echo Handling function App deployment.
 
-:: 1. Restore nuget packages
-call :ExecuteCmd nuget.exe restore -packagesavemode nuspec "%DEPLOYMENT_SOURCE%\DanClarkeBlog.sln"
-IF !ERRORLEVEL! NEQ 0 goto error
-
-:: 2. Build
-call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%\DanClarkeBlog.sln" /nologo /verbosity:m /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false %SCM_BUILD_ARGS%
-IF !ERRORLEVEL! NEQ 0 goto error
+cd %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core
+dotnet restore
+dotnet build
 
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
