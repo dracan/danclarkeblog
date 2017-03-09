@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
@@ -27,7 +28,7 @@ namespace DanClarkeBlog.Core.Respositories
             _blogPostSummaryHelper = blogPostSummaryHelper;
         }
 
-        async Task<IEnumerable<BlogPost>> IBlogPostRepository.GetAllAsync()
+        public Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
             _logger.Debug($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
 
@@ -56,11 +57,16 @@ namespace DanClarkeBlog.Core.Respositories
                     HtmlText = _renderer.Render(postFile),
                     HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFile)),
                     Route = blogPost.Route,
-                    Tags = blogPost.Tags.Split('|').ToList()
+                    Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList()
                 });
             }
 
-            return blogPosts;
+            return Task.FromResult(blogPosts.AsEnumerable());
+        }
+
+        public Task AddAsync(BlogPost post, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
         }
     }
 }

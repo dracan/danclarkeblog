@@ -47,7 +47,7 @@ namespace DanClarkeBlog.Web
             builder.Register(_ => settings.Value);
 
             if (string.IsNullOrWhiteSpace(settings.Value.BlogFileSystemRootPath))
-                builder.RegisterType<BlogPostDropboxRepository>().As<IBlogPostRepository>();
+                builder.RegisterType<BlogPostAzureSqlRepository>().As<IBlogPostRepository>();
             else
                 builder.RegisterType<BlogPostFileSystemRepository>().As<IBlogPostRepository>();
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
@@ -27,7 +28,7 @@ namespace DanClarkeBlog.Core.Respositories
             _blogPostSummaryHelper = blogPostSummaryHelper;
         }
 
-        public async Task<IEnumerable<BlogPost>> GetAllAsync()
+        public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
             _logger.Debug("Processing files from Dropbox ...");
 
@@ -62,7 +63,7 @@ namespace DanClarkeBlog.Core.Respositories
                                 HtmlText = _renderer.Render(content),
                                 HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
                                 Route = blogPost.Route,
-                                Tags = blogPost.Tags.Split('|').ToList()
+                                Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList()
                             });
                         }
                     }
@@ -70,6 +71,11 @@ namespace DanClarkeBlog.Core.Respositories
 
                 return blogPosts;
             }
+        }
+
+        public Task AddAsync(BlogPost post, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
         }
     }
 }
