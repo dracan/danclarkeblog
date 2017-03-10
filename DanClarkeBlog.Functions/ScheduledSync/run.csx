@@ -1,8 +1,11 @@
 #r "DanClarkeBlog.Core.dll"
 
 using System;
+using DanClarkeBlog.Core;
 using DanClarkeBlog.Core.Helpers;
+using DanClarkeBlog.Core.Respositories;
 using System.Configuration;
+using System.Threading;
 
 public static async Task Run(TimerInfo myTimer, TraceWriter log)
 {

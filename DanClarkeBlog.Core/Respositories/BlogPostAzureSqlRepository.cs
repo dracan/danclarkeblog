@@ -5,7 +5,7 @@ using DanClarkeBlog.Core.Data;
 using DanClarkeBlog.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DanClarkeBlog.Core.Respositories
+namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 {
     public class BlogPostAzureSqlRepository : IBlogPostRepository
     {
