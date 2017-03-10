@@ -2,12 +2,25 @@
 
 using System;
 using DanClarkeBlog.Core.Helpers;
+using System.Configuration;
 
-public static void Run(TimerInfo myTimer, TraceWriter log)
+public static async Task Run(TimerInfo myTimer, TraceWriter log)
 {
-    log.Info($"*** C# Timer trigger function executed at: {DateTime.Now}");    
+    log.Info($"Starting Dropbox Sync ...");
 
-    var helper = new BlogPostSummaryHelper();
+    helper = new SyncHelper();
 
-    log.Info(helper.GetSummaryText("A-----B"));
+    var settings = new Settings
+    {
+        DropboxAccessToken = ConfigurationManager.AppSettings["DropboxAccessToken"],
+        BlogSqlConnectionString = ConfigurationManager.AppSettings["BlogSqlConnectionString"],
+    };
+
+    var blogPostRenderer = new BlogPostMarkdownRenderer();
+    var blogPostSummaryHelper = new BlogPostSummaryHelper();
+
+    var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper);
+    var destRepo = new BlogPostAzureSqlRepository(settings);
+
+    await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, CancellationToken.None);
 }

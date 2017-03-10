@@ -9,5 +9,6 @@ namespace DanClarkeBlog.Core.Respositories
     {
         Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken);
         Task AddAsync(BlogPost post, CancellationToken cancellationToken);
+        Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken);
     }
 }

@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Respositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading;
 using Settings = DanClarkeBlog.Core.Settings;
 using NLog;
 
@@ -19,16 +20,16 @@ namespace DanClarkeBlog.Web.Controllers
             this._settings = _settings;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var posts = await _blogPostRepository.GetAllAsync();
+            var posts = await _blogPostRepository.GetAllAsync(cancellationToken);
 
             return View(posts);
         }
 
-        public async Task<IActionResult> BlogPost(string route)
+        public async Task<IActionResult> BlogPost(string route, CancellationToken cancellationToken)
         {
-            var posts = await _blogPostRepository.GetAllAsync();
+            var posts = await _blogPostRepository.GetAllAsync(cancellationToken);
 
             var post = posts.FirstOrDefault(x => x.Route.TrimStart('/') == route.TrimStart('/'));
             if (post == null)

@@ -77,5 +77,10 @@ namespace DanClarkeBlog.Core.Respositories
         {
             throw new NotSupportedException();
         }
+
+        public Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

@@ -17,5 +17,16 @@ namespace DanClarkeBlog.Core.Models
         {
             Id = Guid.NewGuid();
         }
+
+        public void UpdateFrom(BlogPost post)
+        {
+            Title = post.Title;
+            Route = post.Route;
+            PublishDate = post.PublishDate;
+            HtmlText = post.HtmlText;
+            HtmlShortText = post.HtmlShortText;
+
+            //(todo) Update tags here too
+        }
     }
 }

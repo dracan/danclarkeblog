@@ -40,5 +40,24 @@ namespace DanClarkeBlog.Core.Respositories
                 await ctx.SaveChangesAsync(cancellationToken);
             }
         }
+
+        public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_settings))
+            {
+                var existing = await ctx.BlogPosts.FindAsync(post.Id, cancellationToken);
+
+                if (existing == null)
+                {
+                    await ctx.BlogPosts.AddAsync(post, cancellationToken);
+                }
+                else
+                {
+                    existing.UpdateFrom(post);
+                }
+
+                await ctx.SaveChangesAsync(cancellationToken);
+            }
+        }
     }
 }
