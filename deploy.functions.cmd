@@ -79,7 +79,7 @@ dotnet build -c Release
 dir /s /b %DEPLOYMENT_SOURCE%
 echo Copying DanClarkeBlog.Core files from %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core\bin\Release\netstandard1.6
 echo To %DEPLOYMENT_TARGET%\ScheduledSync\bin
-xcopy /Y %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core\bin\Release\netstandard1.6\*.dll %DEPLOYMENT_TARGET%\ScheduledSync\bin\
+xcopy /Y %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core\bin\Release\netstandard1.6\DanClarkeBlog.Core.* %DEPLOYMENT_TARGET%\ScheduledSync\bin\
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
