@@ -268,3 +268,6 @@ __pycache__/
 # tools/
 
 .vscode/
+
+*ncrunchproject
+*ncrunchsolution
