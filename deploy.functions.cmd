@@ -78,8 +78,8 @@ FOR /F "tokens=*" %%i IN ('DIR /B %DEPLOYMENT_TARGET% /A:D') DO (
 
 dir /s /b %DEPLOYMENT_SOURCE%
 echo Copying DanClarkeBlog.Core files from %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core\bin\Release\netstandard1.6
-echo To %DEPLOYMENT_TARGET%\ScheduledSync\
-xcopy /Y %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core\bin\Release\netstandard1.6\*.dll %DEPLOYMENT_TARGET%\ScheduledSync\
+echo To %DEPLOYMENT_TARGET%\ScheduledSync\bin
+xcopy /Y %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core\bin\Release\netstandard1.6\*.dll %DEPLOYMENT_TARGET%\ScheduledSync\bin\
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
