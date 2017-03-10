@@ -1,4 +1,4 @@
-#r "DanClarkeBlog.Core"
+#r "DanClarkeBlog.Core.dll"
 
 using System;
 using DanClarkeBlog.Core.Helpers;
