@@ -54,10 +54,6 @@ IF NOT DEFINED KUDU_SYNC_CMD (
 
 echo Handling function App deployment.
 
-cd %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core
-dotnet restore
-dotnet build
-
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\DanClarkeBlog.Functions" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
@@ -75,6 +71,10 @@ FOR /F "tokens=*" %%i IN ('DIR /B %DEPLOYMENT_TARGET% /A:D') DO (
 )
 
 :: 3. (Custom) Copy DanClarkeBlog.Core DLL
+
+cd %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core
+dotnet restore
+dotnet build -c Release
 
 dir /s /b %DEPLOYMENT_SOURCE%
 echo Copying DanClarkeBlog.Core files from %DEPLOYMENT_SOURCE%\DanClarkeBlog.Core\bin\Release\netstandard1.6
