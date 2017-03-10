@@ -8,7 +8,7 @@ public static async Task Run(TimerInfo myTimer, TraceWriter log)
 {
     log.Info($"Starting Dropbox Sync ...");
 
-    helper = new SyncHelper();
+    var helper = new SyncHelper();
 
     var settings = new Settings
     {
