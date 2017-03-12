@@ -77,6 +77,8 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper);
             var destRepo = new BlogPostAzureSqlRepository(settings);
 
+            //destRepo.CreateDatabase();
+
             var helper = new SyncHelper();
 
             await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, CancellationToken.None);

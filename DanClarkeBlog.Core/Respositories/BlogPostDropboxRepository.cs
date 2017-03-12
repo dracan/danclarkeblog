@@ -73,6 +73,11 @@ namespace DanClarkeBlog.Core.Respositories
             }
         }
 
+        public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task AddAsync(BlogPost post, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
@@ -81,6 +86,11 @@ namespace DanClarkeBlog.Core.Respositories
         public Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
+        }
+
+        public Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +34,14 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
             }
         }
 
+        public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_settings))
+            {
+                return await ctx.BlogPosts.Where(conditionFunc).AsQueryable().ToListAsync(cancellationToken);
+            }
+        }
+
         public async Task AddAsync(BlogPost post, CancellationToken cancellationToken)
         {
             using (var ctx = new DataContext(_settings))
@@ -45,7 +55,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
         {
             using (var ctx = new DataContext(_settings))
             {
-                var existing = await ctx.BlogPosts.FindAsync(new object[] { post.Id }, cancellationToken);
+                var existing = await ctx.BlogPosts.FirstOrDefaultAsync(x => x.Title == post.Title, cancellationToken);
 
                 if (existing == null)
                 {
@@ -56,6 +66,15 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
                     existing.UpdateFrom(post);
                 }
 
+                await ctx.SaveChangesAsync(cancellationToken);
+            }
+        }
+
+        public async Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_settings))
+            {
+                ctx.BlogPosts.RemoveRange(postsToDelete);
                 await ctx.SaveChangesAsync(cancellationToken);
             }
         }
