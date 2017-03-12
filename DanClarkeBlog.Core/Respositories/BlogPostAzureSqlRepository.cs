@@ -45,7 +45,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
         {
             using (var ctx = new DataContext(_settings))
             {
-                var existing = await ctx.BlogPosts.FindAsync(post.Id, cancellationToken);
+                var existing = await ctx.BlogPosts.FindAsync(new object[] { post.Id }, cancellationToken);
 
                 if (existing == null)
                 {
