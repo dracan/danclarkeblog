@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using DanClarkeBlog.Core.Respositories;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Test/*, Explicit*/]
+        [Test, Explicit]
         public async Task AddPost()
         {
             var settings = new Settings
@@ -40,14 +41,13 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Test/*, Explicit*/]
+        [Test, Explicit]
         public async Task GetPosts()
         {
             var settings = new Settings
                            {
                                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
                            };
-
 
             var repo = new BlogPostAzureSqlRepository(settings);
 
@@ -57,6 +57,29 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             {
                 Console.WriteLine(post.Title);
             }
+        }
+
+        /// <summary>
+        /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
+        /// </summary>
+        [Test/*, Explicit*/]
+        public async Task RunSync()
+        {
+            var settings = new Settings
+                           {
+                               DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
+                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
+                           };
+
+            var blogPostRenderer = new BlogPostMarkdownRenderer();
+            var blogPostSummaryHelper = new BlogPostSummaryHelper();
+
+            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper);
+            var destRepo = new BlogPostAzureSqlRepository(settings);
+
+            var helper = new SyncHelper();
+
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, CancellationToken.None);
         }
     }
 }
