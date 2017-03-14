@@ -2,15 +2,14 @@ using System;
 
 namespace DanClarkeBlog.Core.Models
 {
-    public class Tag
+    public class Image
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string ImageToken { get; set; }
 
-        public Tag(string name)
+        public Image()
         {
             Id = Guid.NewGuid();
-            Name = name;
         }
     }
 }

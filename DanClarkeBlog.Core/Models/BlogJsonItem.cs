@@ -7,5 +7,6 @@ namespace DanClarkeBlog.Core.Models
         public string Route { get; set; }
         public string PublishDate { get; set; }
         public string Tags { get; set; }
+        public string ImagePath { get; set; }
     }
 }

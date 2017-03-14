@@ -69,12 +69,14 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                            {
                                DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
                                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
+                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
                            };
 
             var blogPostRenderer = new BlogPostMarkdownRenderer();
             var blogPostSummaryHelper = new BlogPostSummaryHelper();
+            var imageRepository = new AzureImageRepository(settings);
 
-            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper);
+            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository);
             var destRepo = new BlogPostAzureSqlRepository(settings);
 
             //destRepo.CreateDatabase();

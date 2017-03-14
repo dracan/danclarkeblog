@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using Dropbox.Api;
+using Dropbox.Api.Files;
 using Newtonsoft.Json;
 using NLog;
 
@@ -17,15 +19,18 @@ namespace DanClarkeBlog.Core.Respositories
         private readonly IBlogPostRenderer _renderer;
         private readonly Settings _settings;
         private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
+        private readonly IImageRepository _imageRepository;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
                                          Settings settings,
-                                         BlogPostSummaryHelper blogPostSummaryHelper)
+                                         BlogPostSummaryHelper blogPostSummaryHelper,
+                                         IImageRepository imageRepository)
         {
             _renderer = renderer;
             _settings = settings;
             _blogPostSummaryHelper = blogPostSummaryHelper;
+            _imageRepository = imageRepository;
         }
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
@@ -50,6 +55,22 @@ namespace DanClarkeBlog.Core.Respositories
 
                     foreach (var blogPost in blogPostList)
                     {
+                        var imageFiles = await dropboxClient.Files.ListFolderAsync(blogPost.ImagePath);
+
+                        while(imageFiles.HasMore)
+                        {
+                            //(todo) Is this the right way of doing it? Does returning append the previous iteration?
+                            imageFiles = await dropboxClient.Files.ListFolderContinueAsync(imageFiles.Cursor);
+                        }
+
+                        foreach(var image in imageFiles.Entries.Where(x => x.IsFile))
+                        {
+                            using (var imageFile = await dropboxClient.Files.DownloadAsync(image.PathLower))
+                            {
+                                await _imageRepository.AddAsync(Regex.Replace(image.PathLower, @"^/images/", ""), await imageFile.GetContentAsByteArrayAsync());
+                            }
+                        }
+
                         using (var postFile = await dropboxClient.Files.DownloadAsync(blogPost.FilePath))
                         {
                             _logger.Trace($"Reading content for {blogPost.FilePath} ...");
@@ -63,7 +84,7 @@ namespace DanClarkeBlog.Core.Respositories
                                 HtmlText = _renderer.Render(content),
                                 HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
                                 Route = blogPost.Route,
-                                Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList()
+                                Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList(),
                             });
                         }
                     }
