@@ -1,5 +1,5 @@
-@model DanClarkeBlog.Core.Models.BlogPost
+@model DanClarkeBlog.Web.ViewModels.PostViewModel
 
-<h1>@Model.Title</h1>
+<h1>@Model.Post.Title</h1>
 
-@Html.Raw(Model.HtmlText)
+@Html.Raw(Model.Post.HtmlText)

@@ -11,6 +11,7 @@ namespace DanClarkeBlog.Core.Models
         public DateTime PublishDate { get; set; }
         public string HtmlText { get; set; }
         public string HtmlShortText { get; set; }
+        public bool Featured { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
 
         public BlogPost()
@@ -25,6 +26,7 @@ namespace DanClarkeBlog.Core.Models
             PublishDate = post.PublishDate;
             HtmlText = post.HtmlText;
             HtmlShortText = post.HtmlShortText;
+            Featured = post.Featured;
 
             //(todo) Update tags here too
         }

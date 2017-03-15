@@ -57,7 +57,8 @@ namespace DanClarkeBlog.Core.Respositories
                     HtmlText = _renderer.Render(postFile),
                     HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFile)),
                     Route = blogPost.Route,
-                    Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList()
+                    Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList(),
+                    Featured = blogPost.Featured
                 });
             }
 

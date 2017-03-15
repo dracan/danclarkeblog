@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using Dropbox.Api;
-using Dropbox.Api.Files;
 using Newtonsoft.Json;
 using NLog;
 
@@ -85,6 +84,7 @@ namespace DanClarkeBlog.Core.Respositories
                                 HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
                                 Route = blogPost.Route,
                                 Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList(),
+                                Featured = blogPost.Featured
                             });
                         }
                     }

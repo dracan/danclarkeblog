@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model DanClarkeBlog.Web.ViewModels.ViewModelBase
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -43,7 +45,7 @@
                 @RenderBody()
             </div>
             <div class="col-md-3" style="border: 1px solid red">
-                PLACEHOLDER FOR RIGHTHAND MENU
+                @await Html.PartialAsync("_FeaturedPosts")
             </div>
         </div>
         <hr />

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Respositories;
+using DanClarkeBlog.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading;
@@ -22,14 +23,22 @@ namespace DanClarkeBlog.Web.Controllers
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var posts = await _blogPostRepository.GetAllAsync(cancellationToken);
+            //(todo) This is getting much more than we need back. We don't need to blog content for all the posts - just the short version
 
-            return View(posts);
+            var posts = (await _blogPostRepository.GetAllAsync(cancellationToken)).ToList();
+
+            return View(new HomeViewModel
+            {
+                FeaturedPosts = posts.Where(x => x.Featured).ToList(),
+                Posts = posts,
+            });
         }
 
         public async Task<IActionResult> BlogPost(string route, CancellationToken cancellationToken)
         {
-            var posts = await _blogPostRepository.GetAllAsync(cancellationToken);
+            //(todo) This is getting much more than we need back. We don't need to blog content for all other posts
+
+            var posts = (await _blogPostRepository.GetAllAsync(cancellationToken)).ToList();
 
             var post = posts.FirstOrDefault(x => x.Route.TrimStart('/') == route.TrimStart('/'));
             if (post == null)
@@ -37,7 +46,11 @@ namespace DanClarkeBlog.Web.Controllers
                 return NotFound();
             }
 
-            return View(post);
+            return View(new PostViewModel
+            {
+                FeaturedPosts = posts.Where(x => x.Featured).ToList(),
+                Post = post,
+            });
         }
 
         public IActionResult About()
