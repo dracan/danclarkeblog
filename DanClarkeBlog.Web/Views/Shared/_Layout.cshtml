@@ -37,8 +37,15 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid body-content">
-        @RenderBody()
+    <div class="container body-content">
+        <div class="row">
+            <div class="col-md-9" style="border: 1px solid red">
+                @RenderBody()
+            </div>
+            <div class="col-md-3" style="border: 1px solid red">
+                PLACEHOLDER FOR RIGHTHAND MENU
+            </div>
+        </div>
         <hr />
         <footer>
             <p>&copy; 2016 - DanClarkeBlog</p>
