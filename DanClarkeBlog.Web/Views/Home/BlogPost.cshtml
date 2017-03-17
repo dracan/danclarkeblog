@@ -1,5 +1,7 @@
 @model DanClarkeBlog.Web.ViewModels.PostViewModel
 
-<h1>@Model.Post.Title</h1>
+<div class="blogPost">
+    <h1>@Model.Post.Title</h1>
 
-@Html.Raw(Model.Post.HtmlText)
+    @Html.Raw(Model.Post.HtmlText)
+</div>
