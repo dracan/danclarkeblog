@@ -30,7 +30,9 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
         {
             using (var ctx = new DataContext(_settings))
             {
-                return await ctx.BlogPosts.ToListAsync(cancellationToken);
+                return await ctx.BlogPosts
+                    .OrderByDescending(x => x.PublishDate)
+                    .ToListAsync(cancellationToken);
             }
         }
 
@@ -38,7 +40,9 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
         {
             using (var ctx = new DataContext(_settings))
             {
-                return await ctx.BlogPosts.Where(conditionFunc).AsQueryable().ToListAsync(cancellationToken);
+                return await ctx.BlogPosts
+                    .OrderByDescending(x => x.PublishDate)
+                    .Where(conditionFunc).AsQueryable().ToListAsync(cancellationToken);
             }
         }
 
