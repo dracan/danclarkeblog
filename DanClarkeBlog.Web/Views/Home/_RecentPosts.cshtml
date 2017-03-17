@@ -1,0 +1,9 @@
+@model DanClarkeBlog.Web.ViewModels.ViewModelBase
+
+<h2>Recent Posts</h2>
+
+@foreach (var post in Model.RecentPosts)
+{
+    <div class="blogPostTitle"><a href="@post.Route">@post.Title</a></div>
+    <div class="blogPostDate">@post.PublishDate.ToString("dd MMM yyyy")</div>
+}

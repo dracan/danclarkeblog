@@ -44,6 +44,7 @@
                 @RenderBody()
             </div>
             <div class="col-md-3">
+                @await Html.PartialAsync("_RecentPosts")
                 @await Html.PartialAsync("_FeaturedPosts")
                 @await Html.PartialAsync("_TagCloud")
             </div>

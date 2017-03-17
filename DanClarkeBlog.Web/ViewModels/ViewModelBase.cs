@@ -4,6 +4,7 @@ namespace DanClarkeBlog.Web.ViewModels
 {
     public abstract class ViewModelBase
     {
-        public List<DanClarkeBlog.Core.Models.BlogPost> FeaturedPosts { get; set; }
+        public List<Core.Models.BlogPost> FeaturedPosts { get; set; }
+        public List<Core.Models.BlogPost> RecentPosts { get; set; }
     }
 }

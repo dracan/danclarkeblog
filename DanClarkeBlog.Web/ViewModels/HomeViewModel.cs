@@ -4,6 +4,6 @@ namespace DanClarkeBlog.Web.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
-        public List<DanClarkeBlog.Core.Models.BlogPost> Posts { get; set; }
+        public List<Core.Models.BlogPost> Posts { get; set; }
     }
 }

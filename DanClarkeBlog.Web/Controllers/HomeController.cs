@@ -14,6 +14,7 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private const int NumRecentPosts = 5;
 
         public HomeController(IBlogPostRepository blogPostRepository, Settings _settings)
         {
@@ -30,6 +31,7 @@ namespace DanClarkeBlog.Web.Controllers
             return View(new HomeViewModel
             {
                 FeaturedPosts = posts.Where(x => x.Featured).ToList(),
+                RecentPosts = posts.Take(NumRecentPosts).ToList(),
                 Posts = posts,
             });
         }
@@ -49,6 +51,7 @@ namespace DanClarkeBlog.Web.Controllers
             return View(new PostViewModel
             {
                 FeaturedPosts = posts.Where(x => x.Featured).ToList(),
+                RecentPosts = posts.Take(NumRecentPosts).ToList(),
                 Post = post,
             });
         }
