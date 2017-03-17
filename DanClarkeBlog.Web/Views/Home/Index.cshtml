@@ -1,3 +1,7 @@
 @model DanClarkeBlog.Web.ViewModels.HomeViewModel
 
+@{
+    ViewData["Title"] = "Home";
+}
+
 @await Html.PartialAsync("_PostListing")
