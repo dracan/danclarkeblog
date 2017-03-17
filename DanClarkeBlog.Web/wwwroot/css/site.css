@@ -18,6 +18,10 @@ textarea {
     max-width: 280px;
 }
 
+.navbar-fixed-top {
+    background-image: url('/images/HeaderBackground.jpg');
+}
+
 .blogPost img {
     max-width: 100%;
 }
