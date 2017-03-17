@@ -40,10 +40,10 @@
     </div>
     <div class="container body-content">
         <div class="row">
-            <div class="col-md-9" style="border: 1px solid red">
+            <div class="col-md-9">
                 @RenderBody()
             </div>
-            <div class="col-md-3" style="border: 1px solid red">
+            <div class="col-md-3">
                 @await Html.PartialAsync("_FeaturedPosts")
                 @await Html.PartialAsync("_TagCloud")
             </div>
