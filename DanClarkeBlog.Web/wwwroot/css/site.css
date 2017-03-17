@@ -1,6 +1,7 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-size: 16px;
 }
 
 /* Wrapping element */
@@ -20,3 +21,21 @@ textarea {
 .blogPost img {
     max-width: 100%;
 }
+
+.postListing h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.postListing .blogPostDate {
+    font-style: italic;
+    font-size: 16px;
+    color: cornflowerblue;
+    margin-bottom: 5px;
+}
+
+.postListing h1 a:link { color: black; }
+.postListing h1 a:visited { color: black; }
+.postListing h1 a:hover { color: black; }
+.postListing h1 a:active { color: black; }

@@ -1,8 +1,10 @@
 @model DanClarkeBlog.Web.ViewModels.HomeViewModel
 
-@foreach (var post in Model.Posts)
-{
-    <div class="blogPostTitle"><a href="@post.Route">@post.Title</a></div>
-    <div class="blogPostDate">@post.PublishDate.ToString("dd MMM yyyy")</div>
-    <div class="blogPost">@Html.Raw(post.HtmlShortText)</div>
-}
+<div class="postListing">
+    @foreach (var post in Model.Posts)
+    {
+        <h1><a href="@post.Route">@post.Title</a></h1>
+        <div class="blogPostDate">@post.PublishDate.ToString("dd MMM yyyy")</div>
+        <div class="blogPost">@Html.Raw(post.HtmlShortText)</div>
+    }
+</div>
