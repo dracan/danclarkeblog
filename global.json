@@ -1,6 +1,1 @@
-{
-    "projects": [ "DanClarkeBlog.Web", "DanClarkeBlog.Core", "DanClarkeBlog.Core.Tests" ],
-    "sdk": {
-        "version": "1.0.0-preview2-1-003177"
-    }
-}
+{"projects":["DanClarkeBlog.Web","DanClarkeBlog.Core","DanClarkeBlog.Core.Tests"]}
