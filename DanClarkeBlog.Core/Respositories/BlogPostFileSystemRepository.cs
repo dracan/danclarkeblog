@@ -28,7 +28,12 @@ namespace DanClarkeBlog.Core.Respositories
             _blogPostSummaryHelper = blogPostSummaryHelper;
         }
 
-        public Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return (await GetAllAsync(null, null, cancellationToken)).Posts;
+        }
+
+        public Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken)
         {
             _logger.Debug($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
 
@@ -44,7 +49,19 @@ namespace DanClarkeBlog.Core.Respositories
 
             _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
-            foreach (var blogPost in blogPostList)
+            var posts = blogPostList.AsQueryable();
+
+            if (offset.HasValue)
+            {
+                posts = posts.Skip(offset.Value);
+            }
+
+            if (maxResults.HasValue)
+            {
+                posts = posts.Take(maxResults.Value);
+            }
+
+            foreach (var blogPost in posts)
             {
                 var postFile = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, blogPost.FilePath.TrimStart('/')));
 
@@ -62,7 +79,11 @@ namespace DanClarkeBlog.Core.Respositories
                 });
             }
 
-            return Task.FromResult(blogPosts.AsEnumerable());
+            return Task.FromResult(new BlogPostListing
+            {
+                Posts = blogPosts,
+                TotalPosts = blogPostList.Count
+            });
         }
 
         public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)

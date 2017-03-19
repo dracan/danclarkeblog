@@ -1,0 +1,15 @@
+@model DanClarkeBlog.Web.ViewModels.HomeViewModel
+
+<div class="paging">
+    <span>Page @Model.PageNumber of @Model.TotalPages</span>
+
+    @if (Model.PageNumber > 1)
+    {
+        <a href="?page=@(Model.PageNumber - 1)">(view previous)</a>
+    }
+
+    @if (Model.PageNumber < Model.TotalPages)
+    {
+        <a href="?page=@(Model.PageNumber + 1)">(view more)</a>
+    }
+</div>

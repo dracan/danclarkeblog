@@ -39,6 +39,16 @@ textarea {
     margin-bottom: 5px;
 }
 
+.paging {
+    text-align: center;
+    font-style: italic;
+}
+
+.paging a {
+    text-align: center;
+    font-style: italic;
+}
+
 .postListing h1 a:link { color: black; }
 .postListing h1 a:visited { color: black; }
 .postListing h1 a:hover { color: black; }

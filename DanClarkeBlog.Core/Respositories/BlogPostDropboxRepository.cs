@@ -32,6 +32,11 @@ namespace DanClarkeBlog.Core.Respositories
             _imageRepository = imageRepository;
         }
 
+        public Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
             _logger.Debug("Processing files from Dropbox ...");

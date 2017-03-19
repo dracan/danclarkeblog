@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Respositories;
 using DanClarkeBlog.Web.ViewModels;
@@ -14,6 +15,7 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private const int NumPostsPerPage = 10;
         private const int NumRecentPosts = 5;
 
         public HomeController(IBlogPostRepository blogPostRepository, Settings _settings)
@@ -22,36 +24,39 @@ namespace DanClarkeBlog.Web.Controllers
             this._settings = _settings;
         }
 
-        public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(int? page, CancellationToken cancellationToken)
         {
-            //(todo) This is getting much more than we need back. We don't need to blog content for all the posts - just the short version
+            var offset = ((page ?? 1) - 1) * NumPostsPerPage;
 
-            var posts = (await _blogPostRepository.GetAllAsync(cancellationToken)).ToList();
+            var pagedResults = await _blogPostRepository.GetAllAsync(offset, NumPostsPerPage, cancellationToken);
+            var featured = await _blogPostRepository.GetFeaturedAsync(cancellationToken);
+            var recent = await _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
 
             return View(new HomeViewModel
             {
-                FeaturedPosts = posts.Where(x => x.Featured).ToList(),
-                RecentPosts = posts.Take(NumRecentPosts).ToList(),
-                Posts = posts,
+                FeaturedPosts = featured,
+                RecentPosts = recent,
+                Posts = pagedResults.Posts,
+                PageNumber = page ?? 1,
+                TotalPages = (int)Math.Ceiling((decimal)pagedResults.TotalPosts / NumPostsPerPage)
             });
         }
 
         public async Task<IActionResult> BlogPost(string route, CancellationToken cancellationToken)
         {
-            //(todo) This is getting much more than we need back. We don't need to blog content for all other posts
-
-            var posts = (await _blogPostRepository.GetAllAsync(cancellationToken)).ToList();
-
-            var post = posts.FirstOrDefault(x => x.Route.TrimStart('/') == route.TrimStart('/'));
+            var post = (await _blogPostRepository.GetWithConditionAsync(x => x.Route.TrimStart('/') == route.TrimStart('/'), cancellationToken)).SingleOrDefault();
             if (post == null)
             {
                 return NotFound();
             }
 
+            var recent = (await _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken)).ToList();
+            var featured = await _blogPostRepository.GetFeaturedAsync(cancellationToken);
+
             return View(new PostViewModel
             {
-                FeaturedPosts = posts.Where(x => x.Featured).ToList(),
-                RecentPosts = posts.Take(NumRecentPosts).ToList(),
+                FeaturedPosts = featured,
+                RecentPosts = recent,
                 Post = post,
                 DisqusDomainName = _settings.DisqusDomainName
             });

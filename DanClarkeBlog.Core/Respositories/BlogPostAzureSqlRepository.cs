@@ -36,6 +36,32 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
             }
         }
 
+        public async Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_settings))
+            {
+                var totalPosts = await ctx.BlogPosts.CountAsync(cancellationToken);
+
+                var query = ctx.BlogPosts.AsQueryable();
+
+                if (offset.HasValue)
+                {
+                    query = query.Skip(offset.Value);
+                }
+
+                if (maxResults.HasValue)
+                {
+                    query = query.Take(maxResults.Value);
+                }
+
+                return new BlogPostListing
+                       {
+                           Posts = await query.OrderByDescending(x => x.PublishDate).ToListAsync(cancellationToken),
+                           TotalPosts = totalPosts
+                       };
+            }
+        }
+
         public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
         {
             using (var ctx = new DataContext(_settings))
