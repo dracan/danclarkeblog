@@ -5,6 +5,7 @@
         public string DropboxAccessToken { get; set; }
         public string BlogSqlConnectionString { get; set; }
         public string AzureStorageConnectionString { get; set; }
+        public string DisqusDomainName { get; set; }
 
         /// <summary>
         /// For use locally to access Dropbox folder directly without going through the API

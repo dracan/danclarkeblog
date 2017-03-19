@@ -1,7 +1,10 @@
+using DanClarkeBlog.Core.Models;
+
 namespace DanClarkeBlog.Web.ViewModels
 {
     public class PostViewModel : ViewModelBase
     {
-        public DanClarkeBlog.Core.Models.BlogPost Post { get; set; }
+        public BlogPost Post { get; set; }
+        public string DisqusDomainName { get; set; }
     }
 }

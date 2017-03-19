@@ -53,6 +53,7 @@ namespace DanClarkeBlog.Web.Controllers
                 FeaturedPosts = posts.Where(x => x.Featured).ToList(),
                 RecentPosts = posts.Take(NumRecentPosts).ToList(),
                 Post = post,
+                DisqusDomainName = _settings.DisqusDomainName
             });
         }
 
