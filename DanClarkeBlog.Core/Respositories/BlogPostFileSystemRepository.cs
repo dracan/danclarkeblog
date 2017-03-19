@@ -86,6 +86,11 @@ namespace DanClarkeBlog.Core.Respositories
             });
         }
 
+        public async Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
+        {
+            return (await GetAllAsync(cancellationToken)).Where(x => x.Featured).ToList();
+        }
+
         public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -104,6 +109,11 @@ namespace DanClarkeBlog.Core.Respositories
         public Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken)
+        {
+            return (await GetAllAsync(cancellationToken)).Take(numRecent).ToList();
         }
     }
 }

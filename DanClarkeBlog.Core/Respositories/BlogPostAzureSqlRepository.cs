@@ -62,6 +62,17 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
             }
         }
 
+        public async Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_settings))
+            {
+                return await ctx.BlogPosts
+                    .Where(x => x.Featured)
+                    .OrderByDescending(x => x.PublishDate)
+                    .ToListAsync(cancellationToken);
+            }
+        }
+
         public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
         {
             using (var ctx = new DataContext(_settings))
@@ -106,6 +117,17 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
             {
                 ctx.BlogPosts.RemoveRange(postsToDelete);
                 await ctx.SaveChangesAsync(cancellationToken);
+            }
+        }
+
+        public async Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_settings))
+            {
+                return await ctx.BlogPosts
+                    .OrderByDescending(x => x.PublishDate)
+                    .Take(numRecent)
+                    .ToListAsync(cancellationToken);
             }
         }
     }

@@ -37,6 +37,11 @@ namespace DanClarkeBlog.Core.Respositories
             throw new NotSupportedException();
         }
 
+        public Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
             _logger.Debug("Processing files from Dropbox ...");
@@ -115,6 +120,11 @@ namespace DanClarkeBlog.Core.Respositories
         }
 
         public Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
