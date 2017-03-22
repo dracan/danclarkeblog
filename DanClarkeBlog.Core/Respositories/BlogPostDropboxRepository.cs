@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
-using Dropbox.Api;
 using Newtonsoft.Json;
 using NLog;
 
@@ -48,60 +47,62 @@ namespace DanClarkeBlog.Core.Respositories
 
             var blogPosts = new List<BlogPost>();
 
-            using (var dropboxClient = new DropboxClient(_settings.DropboxAccessToken))
-            {
-                _logger.Debug("Reading blog.json ...");
+            throw new NotImplementedException("This needs rewriting using the Dropbox HTTP API");
 
-                using (var blogJson = await dropboxClient.Files.DownloadAsync("/Blog.json"))
-                {
-                    var content = await blogJson.GetContentAsStringAsync();
+            //using (var dropboxClient = new DropboxClient(_settings.DropboxAccessToken))
+            //{
+            //    _logger.Debug("Reading blog.json ...");
 
-                    _logger.Trace($"Blog.json content was {content}");
+            //    using (var blogJson = await dropboxClient.Files.DownloadAsync("/Blog.json"))
+            //    {
+            //        var content = await blogJson.GetContentAsStringAsync();
 
-                    var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
+            //        _logger.Trace($"Blog.json content was {content}");
 
-                    _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            //        var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
 
-                    foreach (var blogPost in blogPostList)
-                    {
-                        var imageFiles = await dropboxClient.Files.ListFolderAsync(blogPost.ImagePath);
+            //        _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
-                        while(imageFiles.HasMore)
-                        {
-                            //(todo) Is this the right way of doing it? Does returning append the previous iteration?
-                            imageFiles = await dropboxClient.Files.ListFolderContinueAsync(imageFiles.Cursor);
-                        }
+            //        foreach (var blogPost in blogPostList)
+            //        {
+            //            var imageFiles = await dropboxClient.Files.ListFolderAsync(blogPost.ImagePath);
 
-                        foreach(var image in imageFiles.Entries.Where(x => x.IsFile))
-                        {
-                            using (var imageFile = await dropboxClient.Files.DownloadAsync(image.PathLower))
-                            {
-                                await _imageRepository.AddAsync(Regex.Replace(image.PathLower, @"^/images/", ""), await imageFile.GetContentAsByteArrayAsync());
-                            }
-                        }
+            //            while(imageFiles.HasMore)
+            //            {
+            //                //(todo) Is this the right way of doing it? Does returning append the previous iteration?
+            //                imageFiles = await dropboxClient.Files.ListFolderContinueAsync(imageFiles.Cursor);
+            //            }
 
-                        using (var postFile = await dropboxClient.Files.DownloadAsync(blogPost.FilePath))
-                        {
-                            _logger.Trace($"Reading content for {blogPost.FilePath} ...");
+            //            foreach(var image in imageFiles.Entries.Where(x => x.IsFile))
+            //            {
+            //                using (var imageFile = await dropboxClient.Files.DownloadAsync(image.PathLower))
+            //                {
+            //                    await _imageRepository.AddAsync(Regex.Replace(image.PathLower, @"^/images/", ""), await imageFile.GetContentAsByteArrayAsync());
+            //                }
+            //            }
 
-                            content = await postFile.GetContentAsStringAsync();
+            //            using (var postFile = await dropboxClient.Files.DownloadAsync(blogPost.FilePath))
+            //            {
+            //                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
 
-                            blogPosts.Add(new BlogPost
-                            {
-                                Title = blogPost.Title,
-                                PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
-                                HtmlText = _renderer.Render(content),
-                                HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
-                                Route = blogPost.Route,
-                                Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList(),
-                                Featured = blogPost.Featured
-                            });
-                        }
-                    }
-                }
+            //                content = await postFile.GetContentAsStringAsync();
 
-                return blogPosts;
-            }
+            //                blogPosts.Add(new BlogPost
+            //                {
+            //                    Title = blogPost.Title,
+            //                    PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+            //                    HtmlText = _renderer.Render(content),
+            //                    HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
+            //                    Route = blogPost.Route,
+            //                    Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList(),
+            //                    Featured = blogPost.Featured
+            //                });
+            //            }
+            //        }
+            //    }
+
+            //    return blogPosts;
+            //}
         }
 
         public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
