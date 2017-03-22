@@ -15,4 +15,9 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <ProjectReference Include="..\DanClarkeBlog.Core\DanClarkeBlog.Core.csproj" />
+  </ItemGroup>
+
+
 </Project>
