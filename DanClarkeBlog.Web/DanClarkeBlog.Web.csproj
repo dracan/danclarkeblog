@@ -46,7 +46,7 @@
   </Target>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install" />
+    <!--<Exec Command="bower install" />-->
   </Target>
 
   <ItemGroup>
