@@ -4,17 +4,16 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using DanClarkeBlog.Core.Respositories;
-using NUnit.Framework;
+using Xunit;
 
 namespace DanClarkeBlog.Core.Tests.Respositories
 {
-    [TestFixture]
     public class BlogPostAzureSqlRepositoryTests
     {
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Test, Explicit]
+        [Fact, Trait("Category", "Manual")]
         public async Task AddPost()
         {
             var settings = new Settings
@@ -41,7 +40,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Test, Explicit]
+        [Fact, Trait("Category", "Manual")]
         public async Task GetPosts()
         {
             var settings = new Settings
@@ -62,7 +61,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Test/*, Explicit*/]
+        [Fact, Trait("Category", "Manual")]
         public async Task RunSync()
         {
             var settings = new Settings
