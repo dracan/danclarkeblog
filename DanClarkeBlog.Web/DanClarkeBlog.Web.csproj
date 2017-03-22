@@ -49,6 +49,16 @@
     <!--<Exec Command="bower install" />-->
   </Target>
 
+  <Target Name="InstallDeps" BeforeTargets="BeforeBuild">
+   <Exec Command="node" ContinueOnError="false" />
+   <!-- it is, so have npm install all dependencies -->
+   <Exec WorkingDirectory="$(ProjectDir)" Command="npm install" ContinueOnError="false" />
+   <!-- npm installed bower for us, so now let bower install it's dependencies -->
+   <Exec WorkingDirectory="$(ProjectDir)" Command="node_modules\.bin\bower install" ContinueOnError="false" />
+   <!-- run the gulp task for the appropriate configuration -->
+   <!--<Exec WorkingDirectory="$(ProjectDir)" Command="node_modules\.bin\gulp $(Configuration)" ContinueOnError="false" />-->
+ </Target>
+
   <ItemGroup>
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.2.301" />
     <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
