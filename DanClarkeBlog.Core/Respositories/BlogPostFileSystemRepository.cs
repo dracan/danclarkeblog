@@ -67,16 +67,19 @@ namespace DanClarkeBlog.Core.Respositories
 
                 _logger.Trace($"Reading content for {blogPost.FilePath} ...");
 
-                blogPosts.Add(new BlogPost
+                var post = new BlogPost
                 {
                     Title = blogPost.Title,
                     PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
                     HtmlText = _renderer.Render(postFile),
                     HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFile)),
                     Route = blogPost.Route,
-                    Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList(),
                     Featured = blogPost.Featured
-                });
+                };
+
+                post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();
+
+                blogPosts.Add(post);
             }
 
             return Task.FromResult(new BlogPostListing

@@ -43,66 +43,71 @@ namespace DanClarkeBlog.Core.Respositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
+            throw new NotImplementedException("This needs rewriting using the Dropbox HTTP API");
+
+            /*
             _logger.Debug("Processing files from Dropbox ...");
 
             var blogPosts = new List<BlogPost>();
 
-            throw new NotImplementedException("This needs rewriting using the Dropbox HTTP API");
+            using (var dropboxClient = new DropboxClient(_settings.DropboxAccessToken))
+            {
+                _logger.Debug("Reading blog.json ...");
 
-            //using (var dropboxClient = new DropboxClient(_settings.DropboxAccessToken))
-            //{
-            //    _logger.Debug("Reading blog.json ...");
+                using (var blogJson = await dropboxClient.Files.DownloadAsync("/Blog.json"))
+                {
+                    var content = await blogJson.GetContentAsStringAsync();
 
-            //    using (var blogJson = await dropboxClient.Files.DownloadAsync("/Blog.json"))
-            //    {
-            //        var content = await blogJson.GetContentAsStringAsync();
+                    _logger.Trace($"Blog.json content was {content}");
 
-            //        _logger.Trace($"Blog.json content was {content}");
+                    var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
 
-            //        var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
+                    _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
-            //        _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+                    foreach (var blogPost in blogPostList)
+                    {
+                        var imageFiles = await dropboxClient.Files.ListFolderAsync(blogPost.ImagePath);
 
-            //        foreach (var blogPost in blogPostList)
-            //        {
-            //            var imageFiles = await dropboxClient.Files.ListFolderAsync(blogPost.ImagePath);
+                        while(imageFiles.HasMore)
+                        {
+                            //(todo) Is this the right way of doing it? Does returning append the previous iteration?
+                            imageFiles = await dropboxClient.Files.ListFolderContinueAsync(imageFiles.Cursor);
+                        }
 
-            //            while(imageFiles.HasMore)
-            //            {
-            //                //(todo) Is this the right way of doing it? Does returning append the previous iteration?
-            //                imageFiles = await dropboxClient.Files.ListFolderContinueAsync(imageFiles.Cursor);
-            //            }
+                        foreach(var image in imageFiles.Entries.Where(x => x.IsFile))
+                        {
+                            using (var imageFile = await dropboxClient.Files.DownloadAsync(image.PathLower))
+                            {
+                                await _imageRepository.AddAsync(Regex.Replace(image.PathLower, @"^/images/", ""), await imageFile.GetContentAsByteArrayAsync());
+                            }
+                        }
 
-            //            foreach(var image in imageFiles.Entries.Where(x => x.IsFile))
-            //            {
-            //                using (var imageFile = await dropboxClient.Files.DownloadAsync(image.PathLower))
-            //                {
-            //                    await _imageRepository.AddAsync(Regex.Replace(image.PathLower, @"^/images/", ""), await imageFile.GetContentAsByteArrayAsync());
-            //                }
-            //            }
+                        using (var postFile = await dropboxClient.Files.DownloadAsync(blogPost.FilePath))
+                        {
+                            _logger.Trace($"Reading content for {blogPost.FilePath} ...");
 
-            //            using (var postFile = await dropboxClient.Files.DownloadAsync(blogPost.FilePath))
-            //            {
-            //                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
+                            content = await postFile.GetContentAsStringAsync();
 
-            //                content = await postFile.GetContentAsStringAsync();
+                            var post = new BlogPost
+                            {
+                                Title = blogPost.Title,
+                                PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+                                HtmlText = _renderer.Render(content),
+                                HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
+                                Route = blogPost.Route,
+                                Featured = blogPost.Featured
+                            };
 
-            //                blogPosts.Add(new BlogPost
-            //                {
-            //                    Title = blogPost.Title,
-            //                    PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
-            //                    HtmlText = _renderer.Render(content),
-            //                    HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
-            //                    Route = blogPost.Route,
-            //                    Tags = blogPost.Tags.Split('|').Select(x => new Tag(x)).ToList(),
-            //                    Featured = blogPost.Featured
-            //                });
-            //            }
-            //        }
-            //    }
+                            post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();
 
-            //    return blogPosts;
-            //}
+                            blogPosts.Add(post);
+                        }
+                    }
+                }
+
+                return blogPosts;
+            }
+            */
         }
 
         public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)

@@ -105,9 +105,31 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
                 else
                 {
                     existing.UpdateFrom(post);
+
+                    await UpdateTagsAsync(ctx, post, existing.BlogPostTags.Select(x => x.Tag.Name).ToList());
                 }
 
                 await ctx.SaveChangesAsync(cancellationToken);
+            }
+        }
+
+        private async Task UpdateTagsAsync(DataContext ctx, BlogPost post, IReadOnlyCollection<string> expectedTags)
+        {
+            // ReSharper disable SimplifyLinqExpression
+            var newTags = expectedTags.Where(et => !post.BlogPostTags.Any(t => t.Tag.Name == et));
+            var tagsToRemove = post.BlogPostTags.Where(t => !expectedTags.Any(et => et == t.Tag.Name));
+            // ReSharper restore SimplifyLinqExpression
+
+            foreach (var newTag in newTags)
+            {
+                var tag = ctx.Tags.SingleOrDefault(t => t.Name == newTag) ?? new Tag(newTag);
+
+                post.BlogPostTags.Add(new BlogPostTag(post, tag));
+            }
+
+            foreach (var tagToRemove in tagsToRemove)
+            {
+                post.BlogPostTags.Remove(new BlogPostTag(post, tagToRemove.Tag));
             }
         }
 

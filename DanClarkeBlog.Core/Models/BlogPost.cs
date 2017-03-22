@@ -12,7 +12,7 @@ namespace DanClarkeBlog.Core.Models
         public string HtmlText { get; set; }
         public string HtmlShortText { get; set; }
         public bool Featured { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<BlogPostTag> BlogPostTags { get; set; }
 
         public BlogPost()
         {
