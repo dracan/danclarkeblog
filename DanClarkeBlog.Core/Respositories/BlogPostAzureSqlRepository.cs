@@ -11,16 +11,16 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 {
     public class BlogPostAzureSqlRepository : IBlogPostRepository
     {
-        private readonly Settings _settings;
+        private readonly string _connectionString;
 
-        public BlogPostAzureSqlRepository(Settings settings)
+        public BlogPostAzureSqlRepository(string connectionString)
         {
-            _settings = settings;
+            _connectionString = connectionString;
         }
 
         public void CreateDatabase()
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 ctx.Database.EnsureCreated();
             }
@@ -28,7 +28,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 return await ctx.BlogPosts
                     .OrderByDescending(x => x.PublishDate)
@@ -38,7 +38,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 
         public async Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 var totalPosts = await ctx.BlogPosts.CountAsync(cancellationToken);
 
@@ -64,7 +64,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 
         public async Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 return await ctx.BlogPosts
                     .Where(x => x.Featured)
@@ -75,7 +75,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 
         public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 return await ctx.BlogPosts
                     .OrderByDescending(x => x.PublishDate)
@@ -85,7 +85,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 
         public async Task AddAsync(BlogPost post, CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 await ctx.BlogPosts.AddAsync(post, cancellationToken);
                 await ctx.SaveChangesAsync(cancellationToken);
@@ -94,7 +94,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 var existing = await ctx.BlogPosts.FirstOrDefaultAsync(x => x.Title == post.Title, cancellationToken);
 
@@ -113,7 +113,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
             }
         }
 
-        private async Task UpdateTagsAsync(DataContext ctx, BlogPost post, IReadOnlyCollection<string> expectedTags)
+        private Task UpdateTagsAsync(DataContext ctx, BlogPost post, IReadOnlyCollection<string> expectedTags)
         {
             // ReSharper disable SimplifyLinqExpression
             var newTags = expectedTags.Where(et => !post.BlogPostTags.Any(t => t.Tag.Name == et));
@@ -131,11 +131,13 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
             {
                 post.BlogPostTags.Remove(new BlogPostTag(post, tagToRemove.Tag));
             }
+
+            return Task.FromResult(true);
         }
 
         public async Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 ctx.BlogPosts.RemoveRange(postsToDelete);
                 await ctx.SaveChangesAsync(cancellationToken);
@@ -144,7 +146,7 @@ namespace DanClarkeBlog.Core.Respositories //(dan) Spelt wrong!
 
         public async Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken)
         {
-            using (var ctx = new DataContext(_settings))
+            using (var ctx = new DataContext(_connectionString))
             {
                 return await ctx.BlogPosts
                     .OrderByDescending(x => x.PublishDate)

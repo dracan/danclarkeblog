@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,17 +19,22 @@ namespace DanClarkeBlog.Core.Respositories
         private readonly Settings _settings;
         private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
         private readonly IImageRepository _imageRepository;
+        private readonly IDropboxHelper _dropboxHelper;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        private static readonly Func<string, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Contains(x);
 
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
                                          Settings settings,
                                          BlogPostSummaryHelper blogPostSummaryHelper,
-                                         IImageRepository imageRepository)
+                                         IImageRepository imageRepository,
+                                         IDropboxHelper dropboxHelper)
         {
             _renderer = renderer;
             _settings = settings;
             _blogPostSummaryHelper = blogPostSummaryHelper;
             _imageRepository = imageRepository;
+            _dropboxHelper = dropboxHelper;
         }
 
         public Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken)
@@ -43,71 +49,57 @@ namespace DanClarkeBlog.Core.Respositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("This needs rewriting using the Dropbox HTTP API");
+            //var files = await _dropboxHelper.GetFilesAsync(cancellationToken);
 
-            /*
             _logger.Debug("Processing files from Dropbox ...");
 
             var blogPosts = new List<BlogPost>();
 
-            using (var dropboxClient = new DropboxClient(_settings.DropboxAccessToken))
+            _logger.Debug("Reading blog.json ...");
+
+            var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
+
+            var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
+
+            _logger.Trace($"Blog.json content was {blogJson}");
+
+            var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
+
+            _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+
+            foreach (var blogPost in blogPostList)
             {
-                _logger.Debug("Reading blog.json ...");
+                var imageFiles = (await _dropboxHelper.GetFilesAsync(blogPost.ImagePath, cancellationToken)).Where(ImageFileFilter);
 
-                using (var blogJson = await dropboxClient.Files.DownloadAsync("/Blog.json"))
+                foreach (var image in imageFiles)
                 {
-                    var content = await blogJson.GetContentAsStringAsync();
+                    var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 
-                    _logger.Trace($"Blog.json content was {content}");
-
-                    var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
-
-                    _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
-
-                    foreach (var blogPost in blogPostList)
-                    {
-                        var imageFiles = await dropboxClient.Files.ListFolderAsync(blogPost.ImagePath);
-
-                        while(imageFiles.HasMore)
-                        {
-                            //(todo) Is this the right way of doing it? Does returning append the previous iteration?
-                            imageFiles = await dropboxClient.Files.ListFolderContinueAsync(imageFiles.Cursor);
-                        }
-
-                        foreach(var image in imageFiles.Entries.Where(x => x.IsFile))
-                        {
-                            using (var imageFile = await dropboxClient.Files.DownloadAsync(image.PathLower))
-                            {
-                                await _imageRepository.AddAsync(Regex.Replace(image.PathLower, @"^/images/", ""), await imageFile.GetContentAsByteArrayAsync());
-                            }
-                        }
-
-                        using (var postFile = await dropboxClient.Files.DownloadAsync(blogPost.FilePath))
-                        {
-                            _logger.Trace($"Reading content for {blogPost.FilePath} ...");
-
-                            content = await postFile.GetContentAsStringAsync();
-
-                            var post = new BlogPost
-                            {
-                                Title = blogPost.Title,
-                                PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
-                                HtmlText = _renderer.Render(content),
-                                HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(content)),
-                                Route = blogPost.Route,
-                                Featured = blogPost.Featured
-                            };
-
-                            post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();
-
-                            blogPosts.Add(post);
-                        }
-                    }
+                    await _imageRepository.AddAsync(Regex.Replace(image, @"^/images/", ""), imageFileContent);
                 }
 
-                return blogPosts;
+                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
+
+                var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
+
+                var postFileText = Encoding.UTF8.GetString(postFile);
+
+                var post = new BlogPost
+                           {
+                               Title = blogPost.Title,
+                               PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+                               HtmlText = _renderer.Render(postFileText),
+                               HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText)),
+                               Route = blogPost.Route,
+                               Featured = blogPost.Featured
+                           };
+
+                post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();
+
+                blogPosts.Add(post);
             }
-            */
+
+            return blogPosts;
         }
 
         public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)

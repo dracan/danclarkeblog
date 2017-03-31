@@ -30,7 +30,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                            PublishDate = new DateTime(2017, 03, 07)
                        };
 
-            var repo = new BlogPostAzureSqlRepository(settings);
+            var repo = new BlogPostAzureSqlRepository(settings.BlogSqlConnectionString);
 
             repo.CreateDatabase();
 
@@ -48,7 +48,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
                            };
 
-            var repo = new BlogPostAzureSqlRepository(settings);
+            var repo = new BlogPostAzureSqlRepository(settings.BlogSqlConnectionString);
 
             var posts = await repo.GetAllAsync(CancellationToken.None);
 
@@ -74,9 +74,10 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             var blogPostRenderer = new BlogPostMarkdownRenderer();
             var blogPostSummaryHelper = new BlogPostSummaryHelper();
             var imageRepository = new AzureImageRepository(settings);
+            var dropboxHelper = new DropboxHelper(settings, new HttpClientHelper());
 
-            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository);
-            var destRepo = new BlogPostAzureSqlRepository(settings);
+            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper);
+            var destRepo = new BlogPostAzureSqlRepository(settings.BlogSqlConnectionString);
 
             //destRepo.CreateDatabase();
 
