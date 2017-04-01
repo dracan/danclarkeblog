@@ -4,7 +4,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using NLog;
 
-namespace DanClarkeBlog.Core.Respositories
+namespace DanClarkeBlog.Core.Repositories
 {
     public class AzureImageRepository : IImageRepository
     {

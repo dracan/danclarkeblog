@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
-using DanClarkeBlog.Core.Respositories;
+using DanClarkeBlog.Core.Repositories;
 using Xunit;
 
 namespace DanClarkeBlog.Core.Tests.Respositories

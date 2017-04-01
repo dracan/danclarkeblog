@@ -3,7 +3,7 @@ using System.IO;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DanClarkeBlog.Core.Helpers;
-using DanClarkeBlog.Core.Respositories;
+using DanClarkeBlog.Core.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

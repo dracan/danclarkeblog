@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DanClarkeBlog.Core.Respositories;
+using DanClarkeBlog.Core.Repositories;
 
 namespace DanClarkeBlog.Core.Helpers
 {

@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using DanClarkeBlog.Core.Respositories;
+using DanClarkeBlog.Core.Repositories;
 using DanClarkeBlog.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;

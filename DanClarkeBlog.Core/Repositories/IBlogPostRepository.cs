@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Models;
 
-namespace DanClarkeBlog.Core.Respositories
+namespace DanClarkeBlog.Core.Repositories
 {
     public interface IBlogPostRepository
     {

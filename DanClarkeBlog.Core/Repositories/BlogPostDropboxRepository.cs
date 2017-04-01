@@ -11,7 +11,7 @@ using DanClarkeBlog.Core.Models;
 using Newtonsoft.Json;
 using NLog;
 
-namespace DanClarkeBlog.Core.Respositories
+namespace DanClarkeBlog.Core.Repositories
 {
     public class BlogPostDropboxRepository : IBlogPostRepository
     {
