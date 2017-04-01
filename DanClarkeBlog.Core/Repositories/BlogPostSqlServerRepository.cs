@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DanClarkeBlog.Core.Repositories
 {
-    public class BlogPostAzureSqlRepository : IBlogPostRepository
+    public class BlogPostSqlServerRepository : IBlogPostRepository
     {
         private readonly Settings _setting;
 
-        public BlogPostAzureSqlRepository(Settings setting)
+        public BlogPostSqlServerRepository(Settings setting)
         {
             _setting = setting;
         }
