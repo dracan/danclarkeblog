@@ -94,9 +94,9 @@ namespace DanClarkeBlog.Core.Repositories
             return (await GetAllAsync(cancellationToken)).Where(x => x.Featured).ToList();
         }
 
-        public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
+        public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return (await GetAllAsync(cancellationToken)).Where(conditionFunc).ToList();
         }
 
         public Task AddAsync(BlogPost post, CancellationToken cancellationToken)
