@@ -78,8 +78,9 @@ namespace DanClarkeBlog.Core.Repositories
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 return await ctx.BlogPosts
+                    .Where(x => conditionFunc(x))
                     .OrderByDescending(x => x.PublishDate)
-                    .Where(conditionFunc).AsQueryable().ToListAsync(cancellationToken);
+                    .ToListAsync(cancellationToken);
             }
         }
 
