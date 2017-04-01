@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,7 +23,7 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly IDropboxHelper _dropboxHelper;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly Func<string, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Contains(x);
+        private static readonly Func<string, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Contains);
 
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
                                          Settings settings,
@@ -71,11 +72,11 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var imageFiles = (await _dropboxHelper.GetFilesAsync(blogPost.ImagePath, cancellationToken)).Where(ImageFileFilter);
 
-                foreach (var image in imageFiles)
+                foreach (var image in imageFiles.Select(x => Path.Combine(blogPost.ImagePath, x)))
                 {
                     var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 
-                    await _imageRepository.AddAsync(Regex.Replace(image, @"^/images/", ""), imageFileContent);
+                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), imageFileContent);
                 }
 
                 _logger.Trace($"Reading content for {blogPost.FilePath} ...");
