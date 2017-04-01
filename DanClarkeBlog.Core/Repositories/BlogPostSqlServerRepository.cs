@@ -96,7 +96,10 @@ namespace DanClarkeBlog.Core.Repositories
         {
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
-                var existing = await ctx.BlogPosts.FirstOrDefaultAsync(x => x.Title == post.Title, cancellationToken);
+                var existing = await ctx.BlogPosts
+                    .Include(x => x.BlogPostTags)
+                    .ThenInclude(t => t.Tag)
+                    .FirstOrDefaultAsync(x => x.Title == post.Title, cancellationToken);
 
                 if (existing == null)
                 {

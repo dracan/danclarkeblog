@@ -10,6 +10,10 @@ namespace DanClarkeBlog.Core.Models
 
         public virtual ICollection<BlogPostTag> BlogPostTags { get; set; }
 
+        public Tag()
+        {
+        }
+
         public Tag(string name)
         {
             Name = name;

@@ -14,6 +14,10 @@ namespace DanClarkeBlog.Core.Models
         public virtual BlogPost BlogPost { get; set; }
         public virtual Tag Tag { get; set; }
 
+        public BlogPostTag()
+        {
+        }
+
         public BlogPostTag(BlogPost blogPost, Tag tag)
         {
             BlogPostId = blogPost.Id;
