@@ -28,17 +28,21 @@ namespace DanClarkeBlog.Web.Controllers
         {
             var offset = ((page ?? 1) - 1) * NumPostsPerPage;
 
-            var pagedResults = await _blogPostRepository.GetAllAsync(offset, NumPostsPerPage, cancellationToken);
-            var featured = await _blogPostRepository.GetFeaturedAsync(cancellationToken);
-            var recent = await _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
+            var pagedPostsTask = _blogPostRepository.GetAllAsync(offset, NumPostsPerPage, cancellationToken);
+            var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
+            var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
+
+            var pagedPostsResults = await pagedPostsTask;
+            var featuredPosts = await featuredPostsTask;
+            var recentPosts = await recentPostsTask;
 
             return View(new HomeViewModel
             {
-                FeaturedPosts = featured,
-                RecentPosts = recent,
-                Posts = pagedResults.Posts,
+                FeaturedPosts = featuredPosts,
+                RecentPosts = recentPosts,
+                Posts = pagedPostsResults.Posts,
                 PageNumber = page ?? 1,
-                TotalPages = (int)Math.Ceiling((decimal)pagedResults.TotalPosts / NumPostsPerPage)
+                TotalPages = (int)Math.Ceiling((decimal)pagedPostsResults.TotalPosts / NumPostsPerPage)
             });
         }
 
