@@ -80,6 +80,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             var destRepo = new BlogPostSqlServerRepository(settings);
 
             //destRepo.CreateDatabase();
+            destRepo.UpdateDatabase();
 
             var helper = new SyncHelper();
 

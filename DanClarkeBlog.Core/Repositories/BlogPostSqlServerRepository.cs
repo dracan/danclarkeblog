@@ -158,5 +158,13 @@ namespace DanClarkeBlog.Core.Repositories
                     .ToListAsync(cancellationToken);
             }
         }
+
+        public void UpdateDatabase()
+        {
+            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
+            {
+                ctx.Database.Migrate();
+            }
+        }
     }
 }
