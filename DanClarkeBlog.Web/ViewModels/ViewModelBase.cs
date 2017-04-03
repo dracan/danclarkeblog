@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using DanClarkeBlog.Core.Models;
 
 namespace DanClarkeBlog.Web.ViewModels
 {
     public abstract class ViewModelBase
     {
-        public List<Core.Models.BlogPost> FeaturedPosts { get; set; }
-        public List<Core.Models.BlogPost> RecentPosts { get; set; }
+        public List<BlogPost> FeaturedPosts { get; set; }
+        public List<BlogPost> RecentPosts { get; set; }
+        public List<TagCount> Tags { get; set; }
     }
 }

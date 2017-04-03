@@ -16,5 +16,8 @@ namespace DanClarkeBlog.Core.Repositories
         Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken);
         Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken);
         Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken);
+
+        // Tags
+        Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken);
     }
 }

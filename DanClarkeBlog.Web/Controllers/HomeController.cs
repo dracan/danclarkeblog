@@ -31,16 +31,19 @@ namespace DanClarkeBlog.Web.Controllers
             var pagedPostsTask = _blogPostRepository.GetAllAsync(offset, NumPostsPerPage, cancellationToken);
             var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
             var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
+            var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);
 
             var pagedPostsResults = await pagedPostsTask;
             var featuredPosts = await featuredPostsTask;
             var recentPosts = await recentPostsTask;
+            var tags = await tagsTask;
 
             return View(new HomeViewModel
             {
                 FeaturedPosts = featuredPosts,
                 RecentPosts = recentPosts,
                 Posts = pagedPostsResults.Posts,
+                Tags = tags,
                 PageNumber = page ?? 1,
                 TotalPages = (int)Math.Ceiling((decimal)pagedPostsResults.TotalPosts / NumPostsPerPage)
             });
@@ -48,21 +51,30 @@ namespace DanClarkeBlog.Web.Controllers
 
         public async Task<IActionResult> BlogPost(string route, CancellationToken cancellationToken)
         {
-            var post = (await _blogPostRepository.GetWithConditionAsync(x => x.Route.TrimStart('/') == route.TrimStart('/'), cancellationToken)).SingleOrDefault();
+            var postTask = _blogPostRepository.GetWithConditionAsync(x => x.Route.TrimStart('/') == route.TrimStart('/'), cancellationToken);
+            var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
+            var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
+            var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);
+
+            var post = (await postTask).SingleOrDefault();
             if (post == null)
             {
+                //todo: Cancel the other tasks here?
+
                 return NotFound();
             }
 
-            var recent = (await _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken)).ToList();
-            var featured = await _blogPostRepository.GetFeaturedAsync(cancellationToken);
+            var recent = await recentPostsTask;
+            var featured = await featuredPostsTask;
+            var tags = await tagsTask;
 
             return View(new PostViewModel
             {
                 FeaturedPosts = featured,
                 RecentPosts = recent,
                 Post = post,
-                DisqusDomainName = _settings.DisqusDomainName
+                DisqusDomainName = _settings.DisqusDomainName,
+                Tags = tags
             });
         }
 

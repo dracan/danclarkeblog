@@ -127,5 +127,10 @@ namespace DanClarkeBlog.Core.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

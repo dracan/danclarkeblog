@@ -46,10 +46,10 @@ namespace DanClarkeBlog.Web
             var builder = new ContainerBuilder();
             builder.Register(_ => settings.Value);
 
-            if (string.IsNullOrWhiteSpace(settings.Value.BlogFileSystemRootPath))
+            //if (string.IsNullOrWhiteSpace(settings.Value.BlogFileSystemRootPath))
                 builder.RegisterType<BlogPostSqlServerRepository>().As<IBlogPostRepository>();
-            else
-                builder.RegisterType<BlogPostFileSystemRepository>().As<IBlogPostRepository>();
+            //else
+            //    builder.RegisterType<BlogPostFileSystemRepository>().As<IBlogPostRepository>();
 
             builder.RegisterType<BlogPostSummaryHelper>();
             builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();

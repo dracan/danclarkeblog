@@ -2,4 +2,7 @@
 
 <h2>Tags</h2>
 
-*todo: tag cloud*
+@foreach (var tag in Model.Tags)
+{
+    <a href="/tags/@tag.TagName.ToLower()">@tag.TagName (@tag.Count)</a>
+}

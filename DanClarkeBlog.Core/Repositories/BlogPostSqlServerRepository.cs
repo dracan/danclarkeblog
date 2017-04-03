@@ -159,6 +159,18 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
+        public async Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
+            {
+                return await ctx.BlogPostTags
+                                .GroupBy(x => x.Tag.Name)
+                                .OrderByDescending(x => x.Count())
+                                .Select(x => new TagCount(x.Key, x.Count()))
+                                .ToListAsync(cancellationToken);
+            }
+        }
+
         public void UpdateDatabase()
         {
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))

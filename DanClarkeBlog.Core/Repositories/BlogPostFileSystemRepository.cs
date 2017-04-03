@@ -118,5 +118,10 @@ namespace DanClarkeBlog.Core.Repositories
         {
             return (await GetAllAsync(cancellationToken)).Take(numRecent).ToList();
         }
+
+        public Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace DanClarkeBlog.Core.Data
 
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<BlogPostTag> BlogPostTags { get; set; }
 
         public DataContext(Settings settings)
         {
