@@ -1,4 +1,5 @@
 #r "DanClarkeBlog.Core.dll"
+#r "Microsoft.WindowsAzure.Storage"
 
 using System;
 using DanClarkeBlog.Core;

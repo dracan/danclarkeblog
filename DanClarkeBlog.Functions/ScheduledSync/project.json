@@ -1,0 +1,10 @@
+{
+  "frameworks": {
+    "net46": {
+      "dependencies": {
+        "Markdig": "0.10.7",
+        "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1"
+      }
+    }
+  }
+}

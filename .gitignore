@@ -271,3 +271,5 @@ __pycache__/
 
 *ncrunchproject
 *ncrunchsolution
+
+!DanClarkeBlog.Functions/ScheduledSync/bin/
