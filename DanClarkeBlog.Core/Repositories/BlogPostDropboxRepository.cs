@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using Newtonsoft.Json;
-using NLog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
@@ -21,7 +20,6 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
         private readonly IImageRepository _imageRepository;
         private readonly IDropboxHelper _dropboxHelper;
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Func<string, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Contains);
 
@@ -52,21 +50,21 @@ namespace DanClarkeBlog.Core.Repositories
         {
             //var files = await _dropboxHelper.GetFilesAsync(cancellationToken);
 
-            _logger.Debug("Processing files from Dropbox ...");
+            //_logger.Debug("Processing files from Dropbox ...");
 
             var blogPosts = new List<BlogPost>();
 
-            _logger.Debug("Reading blog.json ...");
+            //_logger.Debug("Reading blog.json ...");
 
             var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
 
             var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
 
-            _logger.Trace($"Blog.json content was {blogJson}");
+            //_logger.Trace($"Blog.json content was {blogJson}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
 
-            _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            //_logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
             foreach (var blogPost in blogPostList)
             {
@@ -79,7 +77,7 @@ namespace DanClarkeBlog.Core.Repositories
                     await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), imageFileContent);
                 }
 
-                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
+                //_logger.Trace($"Reading content for {blogPost.FilePath} ...");
 
                 var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
 

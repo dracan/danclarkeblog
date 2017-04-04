@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading;
 using Settings = DanClarkeBlog.Core.Settings;
-using NLog;
 
 namespace DanClarkeBlog.Web.Controllers
 {
@@ -14,7 +13,6 @@ namespace DanClarkeBlog.Web.Controllers
     {
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private const int NumPostsPerPage = 10;
         private const int NumRecentPosts = 5;
 
