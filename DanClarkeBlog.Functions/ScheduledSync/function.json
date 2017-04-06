@@ -1,11 +1,13 @@
 {
-  "bindings": [
-    {
-      "name": "myTimer",
-      "type": "timerTrigger",
-      "direction": "in",
-      "schedule": "0 */5 * * * *"
-    }
-  ],
-  "disabled": true
+    "scriptFile": "DanClarkeBlog.Functions.dll",
+    "entryPoint": "DanClarkeBlog.Functions.ScheduledSync.ScheduledSyncFunction.Run",
+    "bindings": [
+        {
+            "name": "myTimer",
+            "type": "timerTrigger",
+            "direction": "in",
+            "schedule": "0 */5 * * * *"
+        }
+    ],
+    "disabled": true
 }

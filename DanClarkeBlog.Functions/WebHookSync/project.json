@@ -1,11 +1,11 @@
 {
-  "frameworks": {
-    "net46": {
-      "dependencies": {
-        "Markdig": "0.10.7",
-        "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1",
-        "System.Net.Primitives": "4.0.10"
-      }
+    "runtimes": { "win": {} },
+    "frameworks": {
+        "net46": {
+            "dependencies": {
+                "Markdig": "0.10.7",
+                "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1"
+            }
+        }
     }
-  }
 }

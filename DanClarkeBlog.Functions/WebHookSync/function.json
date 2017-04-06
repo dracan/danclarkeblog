@@ -1,16 +1,18 @@
 {
-  "bindings": [
-    {
-      "type": "httpTrigger",
-      "direction": "in",
-      "name": "req",
-      "authLevel": "function"
-    },
-    {
-      "type": "http",
-      "direction": "out",
-      "name": "res"
-    }
-  ],
-  "disabled": false
+    "scriptFile": "DanClarkeBlog.Functions.dll",
+    "entryPoint": "DanClarkeBlog.Functions.WebHookSync.WebHookSyncFunction.Run",
+    "bindings": [
+        {
+            "type": "httpTrigger",
+            "direction": "in",
+            "name": "req",
+            "authLevel": "function"
+        },
+        {
+            "type": "http",
+            "direction": "out",
+            "name": "res"
+        }
+    ],
+    "disabled": false
 }

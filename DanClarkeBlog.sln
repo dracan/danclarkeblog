@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CEF8AFD-28C8-432C-A787-5319778B3437}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanClarkeBlog.Core", "DanClarkeBlog.Core\DanClarkeBlog.Core.csproj", "{CC675CD9-5AD5-4D9E-8782-2431C227E099}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanClarkeBlog.Core.Tests", "DanClarkeBlog.Core.Tests\DanClarkeBlog.Core.Tests.csproj", "{51C31B74-41C6-4647-8217-3C9AD7739340}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanClarkeBlog.Functions", "DanClarkeBlog.Functions\DanClarkeBlog.Functions.csproj", "{351767E6-4C99-4ED6-9EC2-FA235E19F467}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{51C31B74-41C6-4647-8217-3C9AD7739340}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51C31B74-41C6-4647-8217-3C9AD7739340}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51C31B74-41C6-4647-8217-3C9AD7739340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{351767E6-4C99-4ED6-9EC2-FA235E19F467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{351767E6-4C99-4ED6-9EC2-FA235E19F467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{351767E6-4C99-4ED6-9EC2-FA235E19F467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{351767E6-4C99-4ED6-9EC2-FA235E19F467}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
