@@ -87,6 +87,11 @@ namespace DanClarkeBlog.Core.Repositories
             });
         }
 
+        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
         {
             return (await GetAllAsync(cancellationToken)).Where(x => x.Featured).ToList();
@@ -118,6 +123,16 @@ namespace DanClarkeBlog.Core.Repositories
         }
 
         public Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task<string> GetDropboxCursorAsync(CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }

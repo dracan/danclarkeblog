@@ -41,6 +41,16 @@ namespace DanClarkeBlog.Core.Repositories
             throw new NotSupportedException();
         }
 
+        public async Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken)
+        {
+            //var updatedFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
+
+            //[here] // Need to do something similar here to what we do below in GetAllAsync, except
+            // just using the updated files we get from Dropbox.
+
+            throw new NotImplementedException();
+        }
+
         public Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
@@ -127,6 +137,16 @@ namespace DanClarkeBlog.Core.Repositories
         }
 
         public Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task<string> GetDropboxCursorAsync(CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }

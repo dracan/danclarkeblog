@@ -7,9 +7,21 @@ namespace DanClarkeBlog.Core.Helpers
 {
     public class SyncHelper
     {
-        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo, IBlogPostRepository destRepo, CancellationToken cancellationToken)
+        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo, IBlogPostRepository destRepo, bool incremental, CancellationToken cancellationToken)
         {
-            var sourcePosts = (await sourceRepo.GetAllAsync(cancellationToken)).ToList();
+            string dropboxCursor = null;
+
+            if (incremental)
+            {
+                // Try to get a persisted cursor from our SQL database, if that's null (so we haven't got one),
+                // then get the very latest from Dropbox itself.
+                dropboxCursor = await destRepo.GetDropboxCursorAsync(cancellationToken) ?? await sourceRepo.GetDropboxCursorAsync(cancellationToken);
+            }
+
+            var sourcePosts = incremental
+                ? (await sourceRepo.GetUpdatesAsync(dropboxCursor, cancellationToken)).ToList()
+                : (await sourceRepo.GetAllAsync(cancellationToken)).ToList();
+
             var destPosts = await destRepo.GetAllAsync(cancellationToken);
 
             foreach(var sourcePost in sourcePosts)

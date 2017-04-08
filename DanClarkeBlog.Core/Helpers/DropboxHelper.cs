@@ -25,21 +25,37 @@ namespace DanClarkeBlog.Core.Helpers
             _httpClientHelper = httpClientHelper;
         }
 
-        public async Task<List<string>> GetFilesAsync(string path, CancellationToken cancellationToken)
+        public Task<List<string>> GetFilesAsync(string path, CancellationToken cancellationToken)
+        {
+            return GetFilesAsync(path, null, cancellationToken);
+        }
+
+        public async Task<List<string>> GetFilesAsync(string path, string cursor, CancellationToken cancellationToken)
         {
             var uri = new Uri(DropboxApiUri + "/2/files/list_folder");
             var continueUri = new Uri(DropboxApiUri + "/2/files/list_folder/continue");
 
-            var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":""{path}""}}", _settings.DropboxAccessToken, cancellationToken);
+            List<string> results;
+            DropboxApiResponseListFiles response;
 
-            var response = JsonConvert.DeserializeObject<DropboxApiResponseListFiles>(jsonResponse);
+            if (cursor == null)
+            {
+                var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":""{path}""}}", _settings.DropboxAccessToken, cancellationToken);
 
-            var results = response.entries.Select(x => x.name).ToList();
+                response = JsonConvert.DeserializeObject<DropboxApiResponseListFiles>(jsonResponse);
+
+                results = response.entries.Select(x => x.name).ToList();
+            }
+            else
+            {
+                results = new List<string>();
+                response = new DropboxApiResponseListFiles {cursor = cursor, has_more = true};
+            }
 
             while (response.has_more)
             {
                 var json = $@"{{""path"":"""", ""cursor"": ""{response.cursor}""}}";
-                jsonResponse = await _httpClientHelper.PostAsync(continueUri, json, _settings.DropboxAccessToken, cancellationToken);
+                var jsonResponse = await _httpClientHelper.PostAsync(continueUri, json, _settings.DropboxAccessToken, cancellationToken);
                 response = JsonConvert.DeserializeObject<DropboxApiResponseListFiles>(jsonResponse);
                 results.AddRange(response.entries.Select(x => x.name).ToList());
             }

@@ -14,6 +14,11 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
         {
             log.Info($"Found message on queue: {message}");
 
+            if (message != "INCREMENTAL_DROPBOX_UPDATE")
+            {
+                return;
+            }
+
             var settings = new Settings
             {
                 DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
@@ -31,7 +36,7 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
 
             var helper = new SyncHelper();
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, CancellationToken.None);
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, CancellationToken.None);
 
             log.Info("Finished dropbox sync");
         }

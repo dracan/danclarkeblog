@@ -62,6 +62,11 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
+        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
         {
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
@@ -168,6 +173,29 @@ namespace DanClarkeBlog.Core.Repositories
                                 .OrderByDescending(x => x.Count())
                                 .Select(x => new TagCount(x.Key, x.Count()))
                                 .ToListAsync(cancellationToken);
+            }
+        }
+
+        public async Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
+            {
+                var entity = await ctx.DropboxCursors.SingleOrDefaultAsync(cancellationToken)
+                    ?? new DropboxCursor {Id = Guid.NewGuid()};
+
+                entity.Cursor = cursor;
+
+                await ctx.SaveChangesAsync(cancellationToken);
+            }
+        }
+
+        public async Task<string> GetDropboxCursorAsync(CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
+            {
+                return await ctx.DropboxCursors
+                                .Select(x => x.Cursor)
+                                .SingleOrDefaultAsync(cancellationToken);
             }
         }
 

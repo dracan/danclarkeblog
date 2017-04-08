@@ -3,7 +3,7 @@
     "entryPoint": "DanClarkeBlog.Functions.ProcessDropboxChange.ProcessDropboxChangeFunction.Run",
     "bindings": [
         {
-            "name": "myQueueItem",
+            "name": "message",
             "type": "serviceBusTrigger",
             "direction": "in",
             "queueName": "dropboxupdates",
