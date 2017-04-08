@@ -1,5 +1,5 @@
 {
-    "scriptFile": "DanClarkeBlog.Functions.dll",
+    "scriptFile": "../bin/release/net46/DanClarkeBlog.Functions.dll",
     "entryPoint": "DanClarkeBlog.Functions.ScheduledSync.ScheduledSyncFunction.Run",
     "bindings": [
         {
