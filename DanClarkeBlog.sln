@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CEF8AFD-28C8-432C-A787-5319778B3437}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,9 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanClarkeBlog.Web", "DanClarkeBlog.Web\DanClarkeBlog.Web.csproj", "{C2AC090A-57D7-49DE-8E8F-278CA13022B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanClarkeBlog.Core", "DanClarkeBlog.Core\DanClarkeBlog.Core.csproj", "{CC675CD9-5AD5-4D9E-8782-2431C227E099}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanClarkeBlog.Core", "DanClarkeBlog.Core\DanClarkeBlog.Core.csproj", "{CC675CD9-5AD5-4D9E-8782-2431C227E099}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanClarkeBlog.Core.Tests", "DanClarkeBlog.Core.Tests\DanClarkeBlog.Core.Tests.csproj", "{51C31B74-41C6-4647-8217-3C9AD7739340}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanClarkeBlog.Core.Tests", "DanClarkeBlog.Core.Tests\DanClarkeBlog.Core.Tests.csproj", "{51C31B74-41C6-4647-8217-3C9AD7739340}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DanClarkeBlog.Functions", "DanClarkeBlog.Functions\DanClarkeBlog.Functions.csproj", "{351767E6-4C99-4ED6-9EC2-FA235E19F467}"
 EndProject

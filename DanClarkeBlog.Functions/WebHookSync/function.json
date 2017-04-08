@@ -12,6 +12,14 @@
             "type": "http",
             "direction": "out",
             "name": "res"
+        },
+        {
+            "name": "message",
+            "queueName": "dropboxupdates",
+            "connection": "danclarkeblog",
+            "accessRights": "listen",
+            "type": "serviceBus",
+            "direction": "out"
         }
     ],
     "disabled": false
