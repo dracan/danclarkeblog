@@ -23,14 +23,17 @@ namespace DanClarkeBlog.Functions.WebHookSync
 
                 message = "";
 
-                var res = req.CreateResponse(HttpStatusCode.OK);
-                res.Content = new StringContent(challenge, System.Text.Encoding.UTF8, "text/plain");
+                var res = new HttpResponseMessage(HttpStatusCode.OK)
+                          {
+                              Content = new StringContent(challenge, System.Text.Encoding.UTF8, "text/plain")
+                          };
+
                 return res;
             }
 
             message = "INCREMENTAL_DROPBOX_UPDATE";
 
-            return req.CreateResponse(HttpStatusCode.OK);
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }
