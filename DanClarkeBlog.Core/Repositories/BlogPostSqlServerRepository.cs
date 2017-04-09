@@ -37,13 +37,21 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
-        public async Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken)
+        public async Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 var totalPosts = await ctx.BlogPosts.CountAsync(cancellationToken);
 
-                var query = ctx.BlogPosts.Where(x => x.Published)
+                var query = ctx.BlogPosts.Where(x => x.Published);
+
+                if (tag != null)
+                {
+                    var lowerTag = tag.ToLower();
+                    query = query.Where(x => x.BlogPostTags.Any(y => y.Tag.Name == lowerTag));
+                }
+
+                query = query
                     .Include(x => x.BlogPostTags)
                     .ThenInclude(x => x.Tag)
                     .AsQueryable();

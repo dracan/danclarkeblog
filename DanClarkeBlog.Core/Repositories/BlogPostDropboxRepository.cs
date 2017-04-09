@@ -36,7 +36,7 @@ namespace DanClarkeBlog.Core.Repositories
             _dropboxHelper = dropboxHelper;
         }
 
-        public Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken)
+        public Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }

@@ -79,6 +79,11 @@ namespace DanClarkeBlog.Web
                     template: "{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
+                    name: "tags",
+                    template: "tags/{tag}",
+                    defaults: new { Controller = "Home", Action = "Index"});
+
+                routes.MapRoute(
                     name: "blogPost",
                     template: "{route}",
                     defaults: new { controller = "Home", action = "BlogPost" });

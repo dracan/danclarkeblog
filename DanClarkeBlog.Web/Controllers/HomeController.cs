@@ -22,11 +22,11 @@ namespace DanClarkeBlog.Web.Controllers
             this._settings = _settings;
         }
 
-        public async Task<IActionResult> Index(int? page, CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(string tag, int? page, CancellationToken cancellationToken)
         {
             var offset = ((page ?? 1) - 1) * NumPostsPerPage;
 
-            var pagedPostsTask = _blogPostRepository.GetAllAsync(offset, NumPostsPerPage, cancellationToken);
+            var pagedPostsTask = _blogPostRepository.GetAllAsync(tag, offset, NumPostsPerPage, cancellationToken);
             var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
             var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
             var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);

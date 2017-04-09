@@ -9,7 +9,7 @@ namespace DanClarkeBlog.Core.Repositories
     public interface IBlogPostRepository
     {
         Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken);
-        Task<BlogPostListing> GetAllAsync(int? offset, int? maxResults, CancellationToken cancellationToken);
+        Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken);
         Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken);
         Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken);
         Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken);
