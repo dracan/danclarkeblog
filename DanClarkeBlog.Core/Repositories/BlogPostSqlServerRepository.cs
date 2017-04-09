@@ -43,7 +43,10 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var totalPosts = await ctx.BlogPosts.CountAsync(cancellationToken);
 
-                var query = ctx.BlogPosts.Where(x => x.Published).AsQueryable();
+                var query = ctx.BlogPosts.Where(x => x.Published)
+                    .Include(x => x.BlogPostTags)
+                    .ThenInclude(x => x.Tag)
+                    .AsQueryable();
 
                 if (offset.HasValue)
                 {

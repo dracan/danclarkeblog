@@ -6,6 +6,12 @@
         <h1><a href="@post.Route">@post.Title</a></h1>
         <div class="blogPostDate">@post.PublishDate.ToString("dd MMM yyyy")</div>
         <div class="blogPost">@Html.Raw(post.HtmlShortText)</div>
+
+        foreach (var tag in post.Tags)
+        {
+            <a class="tag" href="/tags/@tag.ToLower()">@tag</a>
+        }
+
         <hr />
     }
 </div>

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
+using System.Linq;
 
 namespace DanClarkeBlog.Core.Models
 {
@@ -14,6 +16,8 @@ namespace DanClarkeBlog.Core.Models
         public bool Featured { get; set; }
         public bool Published { get; set; }
         public virtual ICollection<BlogPostTag> BlogPostTags { get; set; }
+
+        public List<string> Tags => BlogPostTags.Where(x => x.Tag != null).Select(x => x.Tag.Name).ToList();
 
         public BlogPost()
         {
