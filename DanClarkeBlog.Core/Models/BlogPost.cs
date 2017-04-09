@@ -12,6 +12,7 @@ namespace DanClarkeBlog.Core.Models
         public string HtmlText { get; set; }
         public string HtmlShortText { get; set; }
         public bool Featured { get; set; }
+        public bool Published { get; set; }
         public virtual ICollection<BlogPostTag> BlogPostTags { get; set; }
 
         public BlogPost()
@@ -27,6 +28,7 @@ namespace DanClarkeBlog.Core.Models
             HtmlText = post.HtmlText;
             HtmlShortText = post.HtmlShortText;
             Featured = post.Featured;
+            Published = post.Published;
 
             //(todo) Update tags here too
         }

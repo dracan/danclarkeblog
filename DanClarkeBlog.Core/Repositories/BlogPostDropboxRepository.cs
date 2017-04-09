@@ -41,7 +41,7 @@ namespace DanClarkeBlog.Core.Repositories
             throw new NotSupportedException();
         }
 
-        public async Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken)
+        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken)
         {
             //var updatedFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
 
@@ -100,7 +100,8 @@ namespace DanClarkeBlog.Core.Repositories
                                HtmlText = _renderer.Render(postFileText),
                                HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText)),
                                Route = blogPost.Route,
-                               Featured = blogPost.Featured
+                               Featured = blogPost.Featured,
+                               Published = blogPost.Status.ToLower() == "published"
                            };
 
                 post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();

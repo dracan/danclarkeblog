@@ -31,6 +31,7 @@ namespace DanClarkeBlog.Core.Repositories
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 return await ctx.BlogPosts
+                    .Where(x => x.Published)
                     .OrderByDescending(x => x.PublishDate)
                     .ToListAsync(cancellationToken);
             }
@@ -42,7 +43,7 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var totalPosts = await ctx.BlogPosts.CountAsync(cancellationToken);
 
-                var query = ctx.BlogPosts.AsQueryable();
+                var query = ctx.BlogPosts.Where(x => x.Published).AsQueryable();
 
                 if (offset.HasValue)
                 {
@@ -72,7 +73,7 @@ namespace DanClarkeBlog.Core.Repositories
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 return await ctx.BlogPosts
-                    .Where(x => x.Featured)
+                    .Where(x => x.Featured && x.Published)
                     .OrderByDescending(x => x.PublishDate)
                     .ToListAsync(cancellationToken);
             }

@@ -72,7 +72,8 @@ namespace DanClarkeBlog.Core.Repositories
                     HtmlText = _renderer.Render(postFile),
                     HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFile)),
                     Route = blogPost.Route,
-                    Featured = blogPost.Featured
+                    Featured = blogPost.Featured,
+                    Published = blogPost.Status.ToLower() == "published"
                 };
 
                 post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();

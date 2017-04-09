@@ -9,5 +9,6 @@ namespace DanClarkeBlog.Core.Models
         public string Tags { get; set; }
         public string ImagePath { get; set; }
         public bool Featured { get; set; }
+        public string Status { get; set; }
     }
 }
