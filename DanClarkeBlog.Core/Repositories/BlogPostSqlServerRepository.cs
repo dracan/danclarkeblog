@@ -200,11 +200,11 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
-        public void UpdateDatabase()
+        public async Task UpdateDatabaseAsync(CancellationToken cancellationToken)
         {
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
-                ctx.Database.Migrate();
+                await ctx.Database.MigrateAsync(cancellationToken);
             }
         }
     }

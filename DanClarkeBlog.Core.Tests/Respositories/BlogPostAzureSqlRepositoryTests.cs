@@ -62,6 +62,24 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
         [Fact, Trait("Category", "Manual")]
+        public async Task MigrateAsync()
+        {
+            var settings = new Settings
+                           {
+                               DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
+                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
+                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
+                           };
+
+            var destRepo = new BlogPostSqlServerRepository(settings);
+
+            await destRepo.UpdateDatabaseAsync(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
+        /// </summary>
+        [Fact, Trait("Category", "Manual")]
         public async Task RunSync()
         {
             var settings = new Settings
@@ -80,7 +98,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             var destRepo = new BlogPostSqlServerRepository(settings);
 
             //destRepo.CreateDatabase();
-            destRepo.UpdateDatabase();
+            await destRepo.UpdateDatabaseAsync(CancellationToken.None);
 
             var helper = new SyncHelper();
 
