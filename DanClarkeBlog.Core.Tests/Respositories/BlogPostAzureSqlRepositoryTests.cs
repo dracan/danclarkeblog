@@ -93,8 +93,9 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             var blogPostSummaryHelper = new BlogPostSummaryHelper();
             var imageRepository = new AzureImageRepository(settings);
             var dropboxHelper = new DropboxHelper(settings, new HttpClientHelper());
+            var imageResizer = new ImageResizer();
 
-            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper);
+            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer);
             var destRepo = new BlogPostSqlServerRepository(settings);
 
             //destRepo.CreateDatabase();

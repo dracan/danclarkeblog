@@ -30,8 +30,9 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
             var blogPostSummaryHelper = new BlogPostSummaryHelper();
             var imageRepository = new AzureImageRepository(settings);
             var dropboxHelper = new DropboxHelper(settings, new HttpClientHelper());
+            var imageResizer = new ImageResizer();
 
-            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper);
+            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer);
             var destRepo = new BlogPostSqlServerRepository(settings);
 
             var helper = new SyncHelper();

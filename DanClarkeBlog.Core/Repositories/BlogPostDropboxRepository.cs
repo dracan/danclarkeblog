@@ -20,6 +20,7 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
         private readonly IImageRepository _imageRepository;
         private readonly IDropboxHelper _dropboxHelper;
+        private readonly IImageResizer _imageResizer;
 
         private static readonly Func<string, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Contains);
 
@@ -27,13 +28,15 @@ namespace DanClarkeBlog.Core.Repositories
                                          Settings settings,
                                          BlogPostSummaryHelper blogPostSummaryHelper,
                                          IImageRepository imageRepository,
-                                         IDropboxHelper dropboxHelper)
+                                         IDropboxHelper dropboxHelper,
+                                         IImageResizer imageResizer)
         {
             _renderer = renderer;
             _settings = settings;
             _blogPostSummaryHelper = blogPostSummaryHelper;
             _imageRepository = imageRepository;
             _dropboxHelper = dropboxHelper;
+            _imageResizer = imageResizer;
         }
 
         public Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
@@ -84,7 +87,9 @@ namespace DanClarkeBlog.Core.Repositories
                 {
                     var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 
-                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), imageFileContent);
+                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, 800);
+
+                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
                 }
 
                 //_logger.Trace($"Reading content for {blogPost.FilePath} ...");
