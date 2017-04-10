@@ -22,7 +22,7 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly IDropboxHelper _dropboxHelper;
         private readonly IImageResizer _imageResizer;
 
-        private static readonly Func<string, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Contains);
+        private static readonly Func<DropboxFileModel, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Name.Contains);
 
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
                                          Settings settings,
@@ -44,14 +44,62 @@ namespace DanClarkeBlog.Core.Repositories
             throw new NotSupportedException();
         }
 
-        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken)
+        public async Task<IEnumerable<BlogPost>> GetUpdatesAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
-            //var updatedFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
+            var updatedFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
 
-            //[here] // Need to do something similar here to what we do below in GetAllAsync, except
-            // just using the updated files we get from Dropbox.
+            //_logger.Debug("Processing updated files from Dropbox ...");
 
-            throw new NotImplementedException();
+            var blogPosts = new List<BlogPost>();
+
+            //_logger.Debug("Reading blog.json ...");
+
+            var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
+
+            var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
+
+            //_logger.Trace($"Blog.json content was {blogJson}");
+
+            var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
+
+            //_logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+
+            foreach (var blogPost in blogPostList.Where(x => updatedFiles.Any(y => y.PathLower == x.FilePath.ToLower())))
+            {
+                var imageFiles = (await _dropboxHelper.GetFilesAsync(blogPost.ImagePath, cancellationToken)).Where(ImageFileFilter);
+
+                foreach (var image in imageFiles.Select(x => Path.Combine(blogPost.ImagePath, x.Name)))
+                {
+                    var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
+
+                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, 800);
+
+                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
+                }
+
+                //_logger.Trace($"Reading content for {blogPost.FilePath} ...");
+
+                var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
+
+                var postFileText = Encoding.UTF8.GetString(postFile);
+
+                var post = new BlogPost
+                           {
+                               Title = blogPost.Title,
+                               PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+                               HtmlText = _renderer.Render(postFileText),
+                               HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText)),
+                               Route = blogPost.Route,
+                               Featured = blogPost.Featured,
+                               Published = blogPost.Status.ToLower() == "published"
+                           };
+
+                post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();
+
+                blogPosts.Add(post);
+            }
+
+            return blogPosts;
         }
 
         public Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
@@ -83,7 +131,7 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var imageFiles = (await _dropboxHelper.GetFilesAsync(blogPost.ImagePath, cancellationToken)).Where(ImageFileFilter);
 
-                foreach (var image in imageFiles.Select(x => Path.Combine(blogPost.ImagePath, x)))
+                foreach (var image in imageFiles.Select(x => Path.Combine(blogPost.ImagePath, x.Name)))
                 {
                     var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Dropbox;
+using DanClarkeBlog.Core.Models;
 using Newtonsoft.Json;
 
 namespace DanClarkeBlog.Core.Helpers
@@ -25,17 +26,17 @@ namespace DanClarkeBlog.Core.Helpers
             _httpClientHelper = httpClientHelper;
         }
 
-        public Task<List<string>> GetFilesAsync(string path, CancellationToken cancellationToken)
+        public Task<List<DropboxFileModel>> GetFilesAsync(string path, CancellationToken cancellationToken)
         {
             return GetFilesAsync(path, null, cancellationToken);
         }
 
-        public async Task<List<string>> GetFilesAsync(string path, string cursor, CancellationToken cancellationToken)
+        public async Task<List<DropboxFileModel>> GetFilesAsync(string path, CursorContainer cursor, CancellationToken cancellationToken)
         {
             var uri = new Uri(DropboxApiUri + "/2/files/list_folder");
             var continueUri = new Uri(DropboxApiUri + "/2/files/list_folder/continue");
 
-            List<string> results;
+            List<DropboxFileModel> results;
             DropboxApiResponseListFiles response;
 
             if (cursor == null)
@@ -44,20 +45,29 @@ namespace DanClarkeBlog.Core.Helpers
 
                 response = JsonConvert.DeserializeObject<DropboxApiResponseListFiles>(jsonResponse);
 
-                results = response.entries.Select(x => x.name).ToList();
+                results = response.entries.Select(x => new DropboxFileModel(x.name, x.path_lower)).ToList();
             }
             else
             {
-                results = new List<string>();
-                response = new DropboxApiResponseListFiles {cursor = cursor, has_more = true};
+                results = new List<DropboxFileModel>();
+                response = new DropboxApiResponseListFiles {cursor = cursor.Cursor, has_more = true};
             }
 
             while (response.has_more)
             {
-                var json = $@"{{""path"":"""", ""cursor"": ""{response.cursor}""}}";
+                var json = $@"{{""cursor"": ""{response.cursor}""}}";
                 var jsonResponse = await _httpClientHelper.PostAsync(continueUri, json, _settings.DropboxAccessToken, cancellationToken);
                 response = JsonConvert.DeserializeObject<DropboxApiResponseListFiles>(jsonResponse);
-                results.AddRange(response.entries.Select(x => x.name).ToList());
+
+                if (response.entries != null)
+                {
+                    results.AddRange(response.entries.Select(x => new DropboxFileModel(x.name, x.path_lower)).ToList());
+                }
+
+	            if (cursor != null)
+	            {
+		            cursor.Cursor = response.cursor;
+	            }
             }
 
             return results;

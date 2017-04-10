@@ -35,7 +35,7 @@ namespace DanClarkeBlog.Core.Tests.Helpers
 
             Assert.NotEmpty(files);
             Assert.Equal(1, files.Count);
-            Assert.Equal("Item 1", files[0]);
+            Assert.Equal("Item 1", files[0].Name);
         }
 
         [Fact, Trait("Category", "Unit")]
@@ -71,7 +71,7 @@ namespace DanClarkeBlog.Core.Tests.Helpers
             httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), @"{""path"":""""}", Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(dropboxResponse)));
 
-            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder/continue"), @"{""path"":"""", ""cursor"": ""mycursor""}", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder/continue"), @"{""cursor"": ""mycursor""}", Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(dropboxResponse2)));
 
             var sut = new DropboxHelper(settings, httpClient);
@@ -80,11 +80,11 @@ namespace DanClarkeBlog.Core.Tests.Helpers
 
             Assert.NotEmpty(files);
             Assert.Equal(5, files.Count);
-            Assert.Equal("Item 1", files[0]);
-            Assert.Equal("Item 2", files[1]);
-            Assert.Equal("Item 3", files[2]);
-            Assert.Equal("Item 4", files[3]);
-            Assert.Equal("Item 5", files[4]);
+            Assert.Equal("Item 1", files[0].Name);
+            Assert.Equal("Item 2", files[1].Name);
+            Assert.Equal("Item 3", files[2].Name);
+            Assert.Equal("Item 4", files[3].Name);
+            Assert.Equal("Item 5", files[4].Name);
         }
     }
 }

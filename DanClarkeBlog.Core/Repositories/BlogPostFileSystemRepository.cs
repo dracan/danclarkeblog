@@ -88,7 +88,7 @@ namespace DanClarkeBlog.Core.Repositories
             });
         }
 
-        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(string cursor, CancellationToken cancellationToken)
+        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
