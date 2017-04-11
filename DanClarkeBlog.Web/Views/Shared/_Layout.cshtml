@@ -1,4 +1,4 @@
-@model DanClarkeBlog.Web.ViewModels.ViewModelBase
+﻿@model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
 <!DOCTYPE html>
 <html>
@@ -43,7 +43,7 @@
             <div class="col-md-9">
         @RenderBody()
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 sidemenu">
                 @await Html.PartialAsync("_RecentPosts")
                 @await Html.PartialAsync("_FeaturedPosts")
                 @await Html.PartialAsync("_TagCloud")

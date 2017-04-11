@@ -1,8 +1,8 @@
 @model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
-<h2>Tags</h2>
+<h3>Tags</h3>
 
 @foreach (var tag in Model.Tags)
 {
-    <a href="/tags/@tag.TagName.ToLower()">@tag.TagName (@tag.Count)</a>
+    <a class="postTag" href="/tags/@tag.TagName.ToLower()">@tag.TagName (@tag.Count)</a>
 }

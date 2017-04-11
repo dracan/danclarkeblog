@@ -1,9 +1,8 @@
 @model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
-<h2>Featured</h2>
+<h3>Featured</h3>
 
 @foreach (var post in Model.FeaturedPosts)
 {
-    <div class="blogPostTitle"><a href="@post.Route">@post.Title</a></div>
-    <div class="blogPostDate">@post.PublishDate.ToString("dd MMM yyyy")</div>
+    <div class="postTitle"><a href="@post.Route">@post.Title</a></div>
 }
