@@ -58,6 +58,15 @@ textarea {
     text-align: center;
 }
 
+.socialImg {
+    float: left;
+    padding: 5px !important;
+}
+
+.socialImg img {
+    height: 40px;
+}
+
 .postListing h1 a:link { color: black; }
 .postListing h1 a:visited { color: black; }
 .postListing h1 a:hover { color: black; }
