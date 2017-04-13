@@ -3,8 +3,8 @@
 <div class="postListing">
     @foreach (var post in Model.Posts)
     {
-        <h1><a href="@post.Route">@post.Title</a></h1>
         <div class="blogPostDate">@post.PublishDate.ToString("dd MMM yyyy")</div>
+        <h1><a href="@post.Route">@post.Title</a></h1>
         <div class="blogPost">@Html.Raw(post.HtmlShortText)</div>
 
         foreach (var tag in post.Tags)
