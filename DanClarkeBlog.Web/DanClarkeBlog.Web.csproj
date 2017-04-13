@@ -17,4 +17,8 @@
     <ProjectReference Include="..\DanClarkeBlog.Core\DanClarkeBlog.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.0.238" />
+  </ItemGroup>
+
 </Project>
