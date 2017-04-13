@@ -23,8 +23,17 @@ textarea {
     background-image: url('/images/HeaderBackground.jpg');
 }
 
-.blogPost img {
-    max-width: 100%;
+.navbar-brand {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 26px;
+    font-weight: bold;
+    padding-top: 8px;
+}
+
+.navbar-brand small {
+    display:block;
+    font-size:12px;
+    padding-top: 2px;
 }
 
 .postListing {
