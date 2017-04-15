@@ -10,5 +10,6 @@ namespace DanClarkeBlog.Core.Helpers
         Task<List<DropboxFileModel>> GetFilesAsync(string path, CancellationToken cancellationToken);
         Task<List<DropboxFileModel>> GetFilesAsync(string path, CursorContainer cursor, CancellationToken cancellationToken);
         Task<byte[]> GetFileContentAsync(string path, CancellationToken cancellationToken);
+        Task<string> GetCurrentCursorAsync(CancellationToken cancellationToken);
     }
 }

@@ -8,7 +8,7 @@ namespace DanClarkeBlog.Core.Helpers
 {
     public class SyncHelper
     {
-        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo, IBlogPostRepository destRepo, bool incremental, ILogger logger, CancellationToken cancellationToken)
+        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo, IBlogPostRepository destRepo, IDropboxHelper dropboxHelper, bool incremental, ILogger logger, CancellationToken cancellationToken)
         {
             logger.Trace($"SynchronizeBlogPostsAsync with incremental = {incremental}");
 
@@ -25,6 +25,13 @@ namespace DanClarkeBlog.Core.Helpers
             var sourcePosts = incremental && !string.IsNullOrWhiteSpace(dropboxCursor.Cursor)
                 ? (await sourceRepo.GetUpdatesAsync(dropboxCursor, cancellationToken)).ToList()
                 : (await sourceRepo.GetAllAsync(cancellationToken)).ToList();
+
+            if (incremental && string.IsNullOrWhiteSpace(dropboxCursor.Cursor))
+            {
+                logger.Trace($"First incremental run, so explicitly requesting current cursor ...");
+                dropboxCursor.Cursor = await dropboxHelper.GetCurrentCursorAsync(cancellationToken);
+                logger.Trace($"Returned cursor {dropboxCursor.Cursor}");
+            }
 
             var destPosts = (await destRepo.GetAllAsync(cancellationToken)).ToList();
 

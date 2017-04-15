@@ -106,7 +106,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
 
             var helper = new SyncHelper();
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, logger, CancellationToken.None);
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, dropboxHelper, false, logger, CancellationToken.None);
         }
     }
 }

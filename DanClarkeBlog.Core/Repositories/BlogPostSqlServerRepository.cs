@@ -192,8 +192,13 @@ namespace DanClarkeBlog.Core.Repositories
         {
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
-                var entity = await ctx.DropboxCursors.SingleOrDefaultAsync(cancellationToken)
-                    ?? new DropboxCursor {Id = Guid.NewGuid()};
+                var entity = await ctx.DropboxCursors.SingleOrDefaultAsync(cancellationToken);
+
+                if (entity == null)
+                {
+                    entity = new DropboxCursor {Id = Guid.NewGuid()};
+                    await ctx.DropboxCursors.AddAsync(entity, cancellationToken);
+                }
 
                 entity.Cursor = cursor;
 

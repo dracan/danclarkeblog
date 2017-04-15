@@ -84,5 +84,16 @@ namespace DanClarkeBlog.Core.Helpers
 
             return await _httpClientHelper.GetBytesAsync(uri, headers, _settings.DropboxAccessToken, cancellationToken);
         }
+
+        public async Task<string> GetCurrentCursorAsync(CancellationToken cancellationToken)
+        {
+            var uri = new Uri(DropboxApiUri + "/2/files/list_folder/get_latest_cursor");
+
+            var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":""""}}", _settings.DropboxAccessToken, cancellationToken);
+
+            var response = JsonConvert.DeserializeObject<DropboxApiResponseGetCurrentCursor>(jsonResponse);
+
+            return response.cursor;
+        }
     }
 }
