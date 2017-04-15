@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DanClarkeBlog.Core.Helpers;
@@ -11,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Settings = DanClarkeBlog.Core.Settings;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace DanClarkeBlog.Web
 {
@@ -18,11 +19,14 @@ namespace DanClarkeBlog.Web
     {
         public Startup(IHostingEnvironment env)
         {
+            env.ConfigureNLog("nlog.config");
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
         }
 
@@ -60,6 +64,8 @@ namespace DanClarkeBlog.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddNLog();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

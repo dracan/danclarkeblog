@@ -26,13 +26,15 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
                 AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
             };
 
+            var logger = new TraceLogLoggerImpl(log);
+
             var blogPostRenderer = new BlogPostMarkdownRenderer();
             var blogPostSummaryHelper = new BlogPostSummaryHelper();
-            var imageRepository = new AzureImageRepository(settings);
+            var imageRepository = new AzureImageRepository(settings, logger);
             var dropboxHelper = new DropboxHelper(settings, new HttpClientHelper());
             var imageResizer = new ImageResizer();
 
-            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer);
+            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer, logger);
             var destRepo = new BlogPostSqlServerRepository(settings);
 
             var helper = new SyncHelper();

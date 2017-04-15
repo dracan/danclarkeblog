@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DanClarkeBlog.Core.Helpers;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -8,11 +9,13 @@ namespace DanClarkeBlog.Core.Repositories
     public class AzureImageRepository : IImageRepository
     {
         private readonly Settings _settings;
+	    private readonly ILogger _logger;
 
-        public AzureImageRepository(Settings settings)
-        {
-            _settings = settings;
-        }
+	    public AzureImageRepository(Settings settings, ILogger logger)
+	    {
+		    _settings = settings;
+		    _logger = logger;
+	    }
 
         public async Task AddAsync(string fileReference, byte[] data)
         {
@@ -47,12 +50,12 @@ namespace DanClarkeBlog.Core.Repositories
             }
             catch (FormatException)
             {
-                //_logger.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
                 throw;
             }
             catch (ArgumentException)
             {
-                //_logger.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
                 throw;
             }
 

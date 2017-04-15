@@ -21,15 +21,17 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly IImageRepository _imageRepository;
         private readonly IDropboxHelper _dropboxHelper;
         private readonly IImageResizer _imageResizer;
+	    private readonly ILogger _logger;
 
-        private static readonly Func<DropboxFileModel, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Name.Contains);
+	    private static readonly Func<DropboxFileModel, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Name.Contains);
 
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
                                          Settings settings,
                                          BlogPostSummaryHelper blogPostSummaryHelper,
                                          IImageRepository imageRepository,
                                          IDropboxHelper dropboxHelper,
-                                         IImageResizer imageResizer)
+                                         IImageResizer imageResizer,
+										ILogger logger)
         {
             _renderer = renderer;
             _settings = settings;
@@ -37,6 +39,7 @@ namespace DanClarkeBlog.Core.Repositories
             _imageRepository = imageRepository;
             _dropboxHelper = dropboxHelper;
             _imageResizer = imageResizer;
+	        _logger = logger;
         }
 
         public Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
@@ -48,21 +51,21 @@ namespace DanClarkeBlog.Core.Repositories
         {
             var updatedFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
 
-            //_logger.Debug("Processing updated files from Dropbox ...");
+            _logger.Debug("Processing updated files from Dropbox ...");
 
             var blogPosts = new List<BlogPost>();
 
-            //_logger.Debug("Reading blog.json ...");
+            _logger.Debug("Reading blog.json ...");
 
             var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
 
             var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
 
-            //_logger.Trace($"Blog.json content was {blogJson}");
+            _logger.Trace($"Blog.json content was {blogJson}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
 
-            //_logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
             foreach (var blogPost in blogPostList.Where(x => updatedFiles.Any(y => y.PathLower == x.FilePath.ToLower())))
             {
@@ -77,7 +80,7 @@ namespace DanClarkeBlog.Core.Repositories
                     await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
                 }
 
-                //_logger.Trace($"Reading content for {blogPost.FilePath} ...");
+                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
 
                 var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
 
@@ -111,21 +114,21 @@ namespace DanClarkeBlog.Core.Repositories
         {
             //var files = await _dropboxHelper.GetFilesAsync(cancellationToken);
 
-            //_logger.Debug("Processing files from Dropbox ...");
+            _logger.Debug("Processing files from Dropbox ...");
 
             var blogPosts = new List<BlogPost>();
 
-            //_logger.Debug("Reading blog.json ...");
+            _logger.Debug("Reading blog.json ...");
 
             var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
 
             var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
 
-            //_logger.Trace($"Blog.json content was {blogJson}");
+            _logger.Trace($"Blog.json content was {blogJson}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
 
-            //_logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
             foreach (var blogPost in blogPostList)
             {
@@ -140,7 +143,7 @@ namespace DanClarkeBlog.Core.Repositories
                     await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
                 }
 
-                //_logger.Trace($"Reading content for {blogPost.FilePath} ...");
+                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
 
                 var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
 
