@@ -14,7 +14,7 @@ namespace DanClarkeBlog.Functions
 
         public void Trace(string msg)
         {
-            _traceWriter.Verbose(msg);
+            _traceWriter.Info(msg);
         }
 
         public void Info(string msg)
@@ -24,7 +24,7 @@ namespace DanClarkeBlog.Functions
 
         public void Debug(string msg)
         {
-            _traceWriter.Verbose(msg);
+            _traceWriter.Info(msg);
         }
 
         public void Error(string msg)
