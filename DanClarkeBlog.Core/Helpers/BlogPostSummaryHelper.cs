@@ -5,6 +5,8 @@ namespace DanClarkeBlog.Core.Helpers
 {
     public class BlogPostSummaryHelper
     {
+        private const int SummaryLength = 200; // (dan) Make me a setting
+
         public string GetSummaryText(string content)
         {
             var indexOfSplitter = content.IndexOf("-----", StringComparison.Ordinal);
@@ -15,11 +17,18 @@ namespace DanClarkeBlog.Core.Helpers
                 indexOfSplitter = match.Success ? match.Index : -1;
             }
 
+            if (content.Length < SummaryLength)
+            {
+                return content;
+            }
+
             if (indexOfSplitter == -1)
             {
-                //(dan) What if content is < 200 characters?
-                indexOfSplitter = 200; // (dan) Make me a setting
+                indexOfSplitter = SummaryLength;
             }
+
+            //(todo) Splitting by this Summary Length should really only break on whole words or sentences.
+            //Not a big priority, as for most posts, I'll use the "-----" splitter to explicitly specify the break.
 
             return content.Substring(0, indexOfSplitter);
         }
