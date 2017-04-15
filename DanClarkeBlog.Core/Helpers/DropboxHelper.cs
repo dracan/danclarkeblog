@@ -39,7 +39,7 @@ namespace DanClarkeBlog.Core.Helpers
             List<DropboxFileModel> results;
             DropboxApiResponseListFiles response;
 
-            if (cursor == null)
+            if (string.IsNullOrWhiteSpace(cursor?.Cursor))
             {
                 var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":""{path}""}}", _settings.DropboxAccessToken, cancellationToken);
 
