@@ -35,7 +35,7 @@ namespace DanClarkeBlog.Functions.ScheduledSync
 
             var helper = new SyncHelper();
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, CancellationToken.None);
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, logger, CancellationToken.None);
 
             log.Info($"Finished dropbox sync");
         }

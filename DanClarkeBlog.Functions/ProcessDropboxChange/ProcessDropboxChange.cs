@@ -39,7 +39,7 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
 
             var helper = new SyncHelper();
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, CancellationToken.None);
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, logger, CancellationToken.None);
 
             log.Info("Finished dropbox sync");
         }
