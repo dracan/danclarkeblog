@@ -42,13 +42,16 @@ namespace DanClarkeBlog.Core.Helpers
                 await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
             }
 
-            var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Title != d.Title)).ToList();
+            if (!incremental) // Do not delete posts when in incremental mode
+            {
+                var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Title != d.Title)).ToList();
 
-            logger.Trace($"Found {postsToDelete.Count} to delete");
+                logger.Trace($"Found {postsToDelete.Count} to delete");
 
-            await destRepo.DeleteAsync(postsToDelete, cancellationToken);
+                await destRepo.DeleteAsync(postsToDelete, cancellationToken);
+            }
 
-	        if (incremental)
+            if (incremental)
 	        {
                 logger.Trace($"Saving new Dropbox cursor: {dropboxCursor.Cursor}");
 
