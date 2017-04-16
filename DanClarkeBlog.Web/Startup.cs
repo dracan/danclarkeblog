@@ -21,7 +21,7 @@ namespace DanClarkeBlog.Web
     {
         public Startup(IHostingEnvironment env)
         {
-            env.ConfigureNLog("nlog.config");
+            //env.ConfigureNLog("nlog.config");
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
