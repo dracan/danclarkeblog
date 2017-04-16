@@ -9,9 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NLog;
 using Settings = DanClarkeBlog.Core.Settings;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using ILogger = DanClarkeBlog.Core.Helpers.ILogger;
 
 namespace DanClarkeBlog.Web
 {
@@ -56,6 +58,7 @@ namespace DanClarkeBlog.Web
             builder.RegisterType<BlogPostSummaryHelper>();
             builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();
             builder.RegisterType<AzureImageRepository>().As<IImageRepository>();
+            builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger("")));
             builder.Populate(services);
 
             return new AutofacServiceProvider(builder.Build());

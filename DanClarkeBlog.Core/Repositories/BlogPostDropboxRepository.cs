@@ -143,7 +143,7 @@ namespace DanClarkeBlog.Core.Repositories
                     await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
                 }
 
-                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
+                _logger.Trace($"*Reading content for {blogPost.FilePath} ...");
 
                 var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
 

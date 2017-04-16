@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Data;
+using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,14 +13,18 @@ namespace DanClarkeBlog.Core.Repositories
     public class BlogPostSqlServerRepository : IBlogPostRepository
     {
         private readonly Settings _setting;
+        private readonly ILogger _logger;
 
-        public BlogPostSqlServerRepository(Settings setting)
+        public BlogPostSqlServerRepository(Settings setting, ILogger logger)
         {
             _setting = setting;
+            _logger = logger;
         }
 
         public void CreateDatabase()
         {
+            _logger.Trace("CreateDatabase");
+
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 ctx.Database.EnsureCreated();
@@ -28,6 +33,8 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
+            _logger.Trace("Get all async");
+
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 return await ctx.BlogPosts
@@ -39,6 +46,8 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
+            _logger.Trace($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
+
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 var totalPosts = await ctx.BlogPosts.CountAsync(cancellationToken);
@@ -76,6 +85,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public Task<IEnumerable<BlogPost>> GetUpdatesAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
+            _logger.Error("Trying to call unsupported GetUpdatesAsync on SQL Server implementation");
             throw new NotSupportedException();
         }
 
@@ -190,6 +200,8 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
         {
+            _logger.Trace($"Setting dropbox cursor to {cursor}");
+
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 var entity = await ctx.DropboxCursors.SingleOrDefaultAsync(cancellationToken);

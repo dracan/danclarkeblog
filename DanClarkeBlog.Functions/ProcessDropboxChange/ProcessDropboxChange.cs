@@ -35,7 +35,7 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
             var imageResizer = new ImageResizer();
 
             var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer, logger);
-            var destRepo = new BlogPostSqlServerRepository(settings);
+            var destRepo = new BlogPostSqlServerRepository(settings, logger);
 
             var helper = new SyncHelper();
 

@@ -22,6 +22,8 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
                            };
 
+            var logger = new NLogLoggerImpl(LogManager.GetCurrentClassLogger());
+
             var post = new BlogPost
                        {
                            Title = "My Post",
@@ -31,7 +33,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                            PublishDate = new DateTime(2017, 03, 07)
                        };
 
-            var repo = new BlogPostSqlServerRepository(settings);
+            var repo = new BlogPostSqlServerRepository(settings, logger);
 
             repo.CreateDatabase();
 
@@ -49,7 +51,9 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
                            };
 
-            var repo = new BlogPostSqlServerRepository(settings);
+            var logger = new NLogLoggerImpl(LogManager.GetCurrentClassLogger());
+
+            var repo = new BlogPostSqlServerRepository(settings, logger);
 
             var posts = await repo.GetAllAsync(CancellationToken.None);
 
@@ -72,7 +76,9 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                                AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
                            };
 
-            var destRepo = new BlogPostSqlServerRepository(settings);
+            var logger = new NLogLoggerImpl(LogManager.GetCurrentClassLogger());
+
+            var destRepo = new BlogPostSqlServerRepository(settings, logger);
 
             await destRepo.UpdateDatabaseAsync(CancellationToken.None);
         }
@@ -99,7 +105,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             var imageResizer = new ImageResizer();
 
             var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer, logger);
-            var destRepo = new BlogPostSqlServerRepository(settings);
+            var destRepo = new BlogPostSqlServerRepository(settings, logger);
 
             //destRepo.CreateDatabase();
             await destRepo.UpdateDatabaseAsync(CancellationToken.None);
