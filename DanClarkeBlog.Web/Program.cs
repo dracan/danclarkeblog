@@ -16,8 +16,10 @@ namespace DanClarkeBlog.Web
                 .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseSetting("detailedErrors", "true") //(todo) I've added this to debug a 500 issue, it probably shouldn't be in prod!
                 .UseIISIntegration()
                 .UseStartup<Startup>()
+                .CaptureStartupErrors(true) //(todo) I've added this to debug a 500 issue, it probably shouldn't be in prod!
                 .Build();
 
             host.Run();
