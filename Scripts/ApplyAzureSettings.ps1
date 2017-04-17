@@ -1,6 +1,7 @@
 Param(
     [string] $ResourceGroup,
     [string] $AppName,
+    [string] $Project,
     [string] $DropboxAccessToken,
     [string] $BlogSqlConnectionString,
     [string] $AzureStorageConnectionString,
@@ -19,6 +20,6 @@ $hash['DropboxAccessToken'] = $DropboxAccessToken
 $hash['BlogSqlConnectionString'] = $BlogSqlConnectionString
 $hash['AzureStorageConnectionString'] = $AzureStorageConnectionString
 $hash['DisqusDomainName'] = $DisqusDomainName
-$hash['PROJECT'] = 'danclarkeblog.web'
+$hash['PROJECT'] = $Project
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash
