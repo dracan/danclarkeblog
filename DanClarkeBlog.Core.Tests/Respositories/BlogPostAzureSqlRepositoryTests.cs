@@ -1,10 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using DanClarkeBlog.Core.Repositories;
-using NLog;
 using Xunit;
 
 namespace DanClarkeBlog.Core.Tests.Respositories
@@ -17,12 +17,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         [Fact, Trait("Category", "Manual")]
         public async Task AddPost()
         {
-            var settings = new Settings
-                           {
-                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
-                           };
-
-            var logger = new NLogLoggerImpl(LogManager.GetCurrentClassLogger());
+            var container = TestBootstrapper.Init();
 
             var post = new BlogPost
                        {
@@ -33,9 +28,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
                            PublishDate = new DateTime(2017, 03, 07)
                        };
 
-            var repo = new BlogPostSqlServerRepository(settings, logger);
-
-            repo.CreateDatabase();
+            var repo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
             await repo.AddAsync(post, CancellationToken.None);
         }
@@ -46,14 +39,9 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         [Fact, Trait("Category", "Manual")]
         public async Task GetPosts()
         {
-            var settings = new Settings
-                           {
-                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
-                           };
+            var container = TestBootstrapper.Init();
 
-            var logger = new NLogLoggerImpl(LogManager.GetCurrentClassLogger());
-
-            var repo = new BlogPostSqlServerRepository(settings, logger);
+            var repo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
             var posts = await repo.GetAllAsync(CancellationToken.None);
 
@@ -69,16 +57,9 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         [Fact, Trait("Category", "Manual")]
         public async Task MigrateAsync()
         {
-            var settings = new Settings
-                           {
-                               DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
-                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
-                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
-                           };
+            var container = TestBootstrapper.Init();
 
-            var logger = new NLogLoggerImpl(LogManager.GetCurrentClassLogger());
-
-            var destRepo = new BlogPostSqlServerRepository(settings, logger);
+            var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer") as BlogPostSqlServerRepository;
 
             await destRepo.UpdateDatabaseAsync(CancellationToken.None);
         }
@@ -89,30 +70,17 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         [Fact, Trait("Category", "Manual")]
         public async Task RunSync()
         {
-            var settings = new Settings
-                           {
-                               DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
-                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
-                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
-                           };
+            var container = TestBootstrapper.Init();
 
-            var logger = new NLogLoggerImpl(LogManager.GetCurrentClassLogger());
-
-            var blogPostRenderer = new BlogPostMarkdownRenderer();
-            var blogPostSummaryHelper = new BlogPostSummaryHelper();
-            var imageRepository = new AzureImageRepository(settings, logger);
-            var dropboxHelper = new DropboxHelper(settings, new HttpClientHelper());
-            var imageResizer = new ImageResizer();
-
-            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer, logger);
-            var destRepo = new BlogPostSqlServerRepository(settings, logger);
+            var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
+            var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
             //destRepo.CreateDatabase();
-            await destRepo.UpdateDatabaseAsync(CancellationToken.None);
+            //await destRepo.UpdateDatabaseAsync(CancellationToken.None);
 
-            var helper = new SyncHelper();
+            var helper = container.Resolve<SyncHelper>();
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, dropboxHelper, false, logger, CancellationToken.None);
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, CancellationToken.None);
         }
     }
 }

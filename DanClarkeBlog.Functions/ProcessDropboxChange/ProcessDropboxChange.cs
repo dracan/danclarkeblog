@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using DanClarkeBlog.Core;
+using Autofac;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
 using Microsoft.Azure.WebJobs.Host;
@@ -19,27 +18,14 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
                 return;
             }
 
-            var settings = new Settings
-            {
-                DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
-                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
-                AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
-            };
+            var container = Bootstrapper.Init(log);
 
-            var logger = new TraceLogLoggerImpl(log);
+            var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
+            var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
-            var blogPostRenderer = new BlogPostMarkdownRenderer();
-            var blogPostSummaryHelper = new BlogPostSummaryHelper();
-            var imageRepository = new AzureImageRepository(settings, logger);
-            var dropboxHelper = new DropboxHelper(settings, new HttpClientHelper());
-            var imageResizer = new ImageResizer();
+            var helper = container.Resolve<SyncHelper>();
 
-            var sourceRepo = new BlogPostDropboxRepository(blogPostRenderer, settings, blogPostSummaryHelper, imageRepository, dropboxHelper, imageResizer, logger);
-            var destRepo = new BlogPostSqlServerRepository(settings, logger);
-
-            var helper = new SyncHelper();
-
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, dropboxHelper, true, logger, CancellationToken.None);
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, CancellationToken.None);
 
             log.Info("Finished dropbox sync");
         }
