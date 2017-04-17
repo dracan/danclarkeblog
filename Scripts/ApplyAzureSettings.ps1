@@ -7,7 +7,13 @@ Param(
     [string] $DisqusDomainName
 )
 
+$webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
+$appSettingList = $webApp.SiteConfig.AppSettings
+
 $hash = @{}
+ForEach ($kvp in $appSettingList) {
+    $hash[$kvp.Name] = $kvp.Value
+}
 
 $hash['DropboxAccessToken'] = $DropboxAccessToken
 $hash['BlogSqlConnectionString'] = $BlogSqlConnectionString
