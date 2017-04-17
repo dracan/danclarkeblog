@@ -4,5 +4,5 @@
 
 @foreach (var tag in Model.Tags)
 {
-    <a class="postTag" href="/tags/@tag.TagName.ToLower()">@tag.TagName (@tag.Count)</a>
+    <a class="postTag" href="/tags/@tag.TagName.ToLower()">@tag.TagName (@tag.Count)@(tag == Model.Tags.Last() ? "" : ", ")</a>
 }
