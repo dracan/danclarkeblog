@@ -65,9 +65,11 @@ namespace DanClarkeBlog.Core.Repositories
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
 
-            _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            var blogPostsToUpdate = blogPostList.Where(x => updatedFiles.Any(y => y.PathLower == x.FilePath.ToLower())).ToList();
 
-            foreach (var blogPost in blogPostList.Where(x => updatedFiles.Any(y => y.PathLower == x.FilePath.ToLower())))
+            _logger.Trace($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
+
+            foreach (var blogPost in blogPostsToUpdate)
             {
                 var imageFiles = (await _dropboxHelper.GetFilesAsync(blogPost.ImagePath, cancellationToken)).Where(ImageFileFilter);
 
