@@ -14,6 +14,8 @@ namespace DanClarkeBlog.Core.Tests.Helpers
         [Fact, Trait("Category", "Unit")]
         public async Task ListFilesInSingleRequest()
         {
+            //(todo) These tests should be using the TestBootstrapper like the other tests.
+
             var settings = new Settings { DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken") };
 
             var httpClient = Substitute.For<IHttpClientHelper>();

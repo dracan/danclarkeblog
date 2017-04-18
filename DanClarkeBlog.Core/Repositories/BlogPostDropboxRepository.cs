@@ -77,7 +77,7 @@ namespace DanClarkeBlog.Core.Repositories
                 {
                     var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 
-                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, 800);
+                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
 
                     await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
                 }
@@ -140,7 +140,7 @@ namespace DanClarkeBlog.Core.Repositories
                 {
                     var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 
-                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, 800);
+                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
 
                     await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
                 }

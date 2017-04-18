@@ -19,6 +19,8 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task AddAsync(string fileReference, byte[] data)
         {
+            _logger.Debug($"AzureImageRepository.AddAsync called for image {fileReference}");
+
             var storageAccount = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
 
             var blogClient = storageAccount.CreateCloudBlobClient();
@@ -28,8 +30,13 @@ namespace DanClarkeBlog.Core.Repositories
 
             var blobReference = container.GetBlockBlobReference(fileReference);
 
-            if(!await blobReference.ExistsAsync())
+            if(await blobReference.ExistsAsync())
             {
+                _logger.Debug("File already exists, so not attempting upload");
+            }
+            else
+            {
+                _logger.Debug($"File does not exist, so attempting upload (data length = {data.Length}) ...");
                 await blobReference.UploadFromByteArrayAsync(data, 0, data.Length);
             }
         }

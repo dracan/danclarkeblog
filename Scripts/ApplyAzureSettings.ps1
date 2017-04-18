@@ -5,7 +5,8 @@ Param(
     [string] $DropboxAccessToken,
     [string] $BlogSqlConnectionString,
     [string] $AzureStorageConnectionString,
-    [string] $DisqusDomainName
+    [string] $DisqusDomainName,
+    [string] $MaxResizedImageSize
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -21,5 +22,6 @@ $hash['BlogSqlConnectionString'] = $BlogSqlConnectionString
 $hash['AzureStorageConnectionString'] = $AzureStorageConnectionString
 $hash['DisqusDomainName'] = $DisqusDomainName
 $hash['PROJECT'] = $Project
+$hash['MaxResizedImageSize'] = $MaxResizedImageSize
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash

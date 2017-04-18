@@ -16,7 +16,8 @@ namespace DanClarkeBlog.Functions
                                DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
                                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
                                AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
-                           };
+                               MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("MaxResizedImageSize") ?? "0"),
+            };
 
             var builder = new ContainerBuilder();
 
