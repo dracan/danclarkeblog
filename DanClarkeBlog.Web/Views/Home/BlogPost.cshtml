@@ -7,6 +7,15 @@
 <div class="blogPost">
     <h1>@Model.Post.Title</h1>
     
+    <div class="blogPostDateAndTags">
+        <span>@Model.Post.PublishDate.ToString("dd MMMM yyyy") </span>
+
+        @foreach (var tag in @Model.Post.Tags)
+        {
+            <a href="/tags/@tag.ToLower()">@(tag == Model.Post.Tags.First() ? "- " : ", ")@tag</a>
+        }
+    </div>
+
     <hr/>
 
     @Html.Raw(Model.Post.HtmlText)

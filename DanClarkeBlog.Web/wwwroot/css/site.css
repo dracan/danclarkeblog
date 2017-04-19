@@ -65,6 +65,20 @@ h1, h2, h3 {
     color: cornflowerblue;
 }
 
+.blogPost hr {
+    margin-top: 0;
+}
+
+.blogPost .blogPostDateAndTags {
+    font-size: 0; /* Remove spacing between child elements */
+}
+
+.blogPost .blogPostDateAndTags a,
+.blogPost .blogPostDateAndTags span {
+    color: cornflowerblue;
+    font-size: 14px;
+}
+
 .postListing .tag {
     font-size: 14px;
 }

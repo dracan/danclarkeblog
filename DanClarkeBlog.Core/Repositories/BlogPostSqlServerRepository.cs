@@ -106,6 +106,8 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 return await ctx.BlogPosts
                     .Where(x => conditionFunc(x))
+                    .Include(x => x.BlogPostTags)
+                    .ThenInclude(x => x.Tag)
                     .OrderByDescending(x => x.PublishDate)
                     .ToListAsync(cancellationToken);
             }
