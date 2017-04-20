@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace DanClarkeBlog.Core.Repositories
 {
     public interface IImageRepository
     {
-        Task AddAsync(string fileReference, byte[] data);
+        Task AddAsync(string fileReference, byte[] data, CancellationToken cancellationToken);
     }
 }

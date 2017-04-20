@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using Microsoft.WindowsAzure.Storage;
@@ -17,7 +19,7 @@ namespace DanClarkeBlog.Core.Repositories
 		    _logger = logger;
 	    }
 
-        public async Task AddAsync(string fileReference, byte[] data)
+        public async Task AddAsync(string fileReference, byte[] data, CancellationToken cancellationToken)
         {
             _logger.Debug($"AzureImageRepository.AddAsync called for image {fileReference}");
 
@@ -26,18 +28,38 @@ namespace DanClarkeBlog.Core.Repositories
             var blogClient = storageAccount.CreateCloudBlobClient();
 
             var container = blogClient.GetContainerReference("images");
-            await container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null);
+            await container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null, cancellationToken);
 
             var blobReference = container.GetBlockBlobReference(fileReference);
 
-            if(await blobReference.ExistsAsync())
+            var dataHash = GenerateHash(data);
+
+            if (await blobReference.ExistsAsync(cancellationToken))
             {
-                _logger.Debug("File already exists, so not attempting upload");
+                if (blobReference.Metadata.ContainsKey("CRC") && blobReference.Metadata["CRC"] == dataHash)
+                {
+                    _logger.Debug("File already exists, and hashes match, so not attempting upload");
+                    return;
+                }
+
+                _logger.Debug("File already exists, but hashes differ, so attempting upload");
             }
             else
             {
                 _logger.Debug($"File does not exist, so attempting upload (data length = {data.Length}) ...");
-                await blobReference.UploadFromByteArrayAsync(data, 0, data.Length);
+            }
+
+            await blobReference.UploadFromByteArrayAsync(data, 0, data.Length, cancellationToken);
+
+            blobReference.Metadata["CRC"] = dataHash;
+            await blobReference.SetMetadataAsync(cancellationToken);
+        }
+
+        private static string GenerateHash(byte[] source)
+        {
+            using (var sha1 = new SHA1CryptoServiceProvider())
+            {
+                return Convert.ToBase64String(sha1.ComputeHash(source));
             }
         }
 

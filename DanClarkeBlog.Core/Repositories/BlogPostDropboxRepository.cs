@@ -79,7 +79,7 @@ namespace DanClarkeBlog.Core.Repositories
 
                     var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
 
-                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
+                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent, cancellationToken);
                 }
 
                 _logger.Trace($"Reading content for {blogPost.FilePath} ...");
@@ -142,7 +142,7 @@ namespace DanClarkeBlog.Core.Repositories
 
                     var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
 
-                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent);
+                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent, cancellationToken);
                 }
 
                 _logger.Trace($"*Reading content for {blogPost.FilePath} ...");
