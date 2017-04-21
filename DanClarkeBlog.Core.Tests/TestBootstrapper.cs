@@ -18,6 +18,7 @@ namespace DanClarkeBlog.Core.Tests
                                AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
                                MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("MaxResizedImageSize") ?? "0"),
                                KeepAlivePingUri = Environment.GetEnvironmentVariable("KeepAlivePingUri"),
+                               SlackNotificationUri = Environment.GetEnvironmentVariable("SlackNotificationUri"),
                            };
 
             var builder = new ContainerBuilder();
@@ -32,6 +33,7 @@ namespace DanClarkeBlog.Core.Tests
             builder.RegisterType<SyncHelper>();
             builder.RegisterType<DropboxHelper>().As<IDropboxHelper>();
             builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
+            builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger("")));
 
             return builder.Build();

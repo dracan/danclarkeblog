@@ -6,7 +6,9 @@ Param(
     [string] $BlogSqlConnectionString,
     [string] $AzureStorageConnectionString,
     [string] $DisqusDomainName,
-    [string] $MaxResizedImageSize
+    [string] $MaxResizedImageSize,
+    [string] $SlackNotificationUri,
+    [string] $KeepAlivePingUri
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -23,5 +25,7 @@ $hash['AzureStorageConnectionString'] = $AzureStorageConnectionString
 $hash['DisqusDomainName'] = $DisqusDomainName
 $hash['PROJECT'] = $Project
 $hash['MaxResizedImageSize'] = $MaxResizedImageSize
+$hash['SlackNotificationUri'] = $SlackNotificationUri
+$hash['KeepAlivePingUri'] = $KeepAlivePingUri
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash

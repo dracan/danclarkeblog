@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using DanClarkeBlog.Core.Helpers;
@@ -14,16 +15,28 @@ namespace DanClarkeBlog.Functions.ScheduledSync
         {
             log.Info("Starting Dropbox Sync ...");
 
+            var ct = CancellationToken.None;
             var container = Bootstrapper.Init(log);
+            var notificationTarget = container.Resolve<INotificationTarget>();
 
-            var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
-            var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
+            try
+            {
+                var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
+                var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
-            var helper = container.Resolve<SyncHelper>();
+                var helper = container.Resolve<SyncHelper>();
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, CancellationToken.None);
+                await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, ct);
 
-            log.Info($"Finished dropbox sync");
+                await notificationTarget.SendMessageAsync("A full scheduled synchonization has just successfully completed", ct);
+
+                log.Info($"Finished dropbox sync");
+            }
+            catch(Exception ex)
+            {
+                await notificationTarget.SendMessageAsync($"An exception occurred in the full scheduled synchonization: {ex}", ct);
+                throw;
+            }
         }
     }
 }

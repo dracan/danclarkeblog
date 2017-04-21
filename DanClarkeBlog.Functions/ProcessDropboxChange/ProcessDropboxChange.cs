@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using DanClarkeBlog.Core.Helpers;
@@ -11,23 +12,34 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
     {
         public static async Task Run(string message, TraceWriter log)
         {
-            log.Info($"Found message on queue: {message}");
-
-            if (message != "INCREMENTAL_DROPBOX_UPDATE")
-            {
-                return;
-            }
-
+            var ct = CancellationToken.None;
             var container = Bootstrapper.Init(log);
+            var notificationTarget = container.Resolve<INotificationTarget>();
 
-            var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
-            var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
+            try
+            {
+                log.Info($"Found message on queue: {message}");
 
-            var helper = container.Resolve<SyncHelper>();
+                if (message != "INCREMENTAL_DROPBOX_UPDATE")
+                {
+                    await notificationTarget.SendMessageAsync($@"Received message on queue which wasn't ""INCREMENTAL_DROPBOX_UPDATE"" {message}", ct);
+                    return;
+                }
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, CancellationToken.None);
+                var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
+                var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
-            log.Info("Finished dropbox sync");
+                var helper = container.Resolve<SyncHelper>();
+
+                await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, CancellationToken.None);
+
+                log.Info("Finished incremental dropbox sync");
+            }
+            catch (Exception ex)
+            {
+                await notificationTarget.SendMessageAsync($"An exception occurred in the ProcessDropboxChange Azure Function: {ex}", ct);
+                throw;
+            }
         }
     }
 }
