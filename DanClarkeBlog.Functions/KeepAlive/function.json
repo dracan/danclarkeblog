@@ -1,0 +1,13 @@
+{
+    "scriptFile": "../bin/release/net46/DanClarkeBlog.Functions.dll",
+    "entryPoint": "DanClarkeBlog.Functions.KeepAlive.KeepAliveFunction.Run",
+    "bindings": [
+        {
+            "name": "myTimer",
+            "type": "timerTrigger",
+            "direction": "in",
+            "schedule": "0 */15 * * * *"
+        }
+    ],
+    "disabled": true
+}

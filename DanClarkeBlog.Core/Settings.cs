@@ -7,6 +7,7 @@
         public string AzureStorageConnectionString { get; set; }
         public string DisqusDomainName { get; set; }
         public int MaxResizedImageSize { get; set; }
+        public string KeepAlivePingUri { get; set; }
 
         /// <summary>
         /// For use locally to access Dropbox folder directly without going through the API

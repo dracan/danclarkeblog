@@ -17,6 +17,7 @@ namespace DanClarkeBlog.Core.Tests
                                BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
                                AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
                                MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("MaxResizedImageSize") ?? "0"),
+                               KeepAlivePingUri = Environment.GetEnvironmentVariable("KeepAlivePingUri"),
                            };
 
             var builder = new ContainerBuilder();
