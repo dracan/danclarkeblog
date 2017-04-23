@@ -30,7 +30,7 @@ namespace DanClarkeBlog.Core.Repositories
             var container = blogClient.GetContainerReference("images");
             await container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null, cancellationToken);
 
-            var blobReference = container.GetBlockBlobReference(fileReference);
+            var blobReference = container.GetBlockBlobReference(fileReference.ToLower());
 
             var dataHash = GenerateHash(data);
 
