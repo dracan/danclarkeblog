@@ -51,7 +51,7 @@
     <div class="container body-content">
         <div class="row">
             <div class="col-md-9">
-        @RenderBody()
+                @RenderBody()
             </div>
             <div class="col-md-3 sidemenu">
                 @await Html.PartialAsync("_RecentPosts")
@@ -63,7 +63,9 @@
         </div>
         <hr />
         <footer>
-            <p>&copy; 2016 - DanClarkeBlog</p>
+            <div class="col-md-9">
+                @await Html.PartialAsync("_Footer")
+            </div>
         </footer>
     </div>
 
