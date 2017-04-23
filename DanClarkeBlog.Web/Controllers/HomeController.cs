@@ -15,8 +15,8 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
         private readonly IFeedGenerator _feedGenerator;
-        private const int NumPostsPerPage = 10;
-        private const int NumRecentPosts = 5;
+        internal const int NumPostsPerPage = 10;
+        internal const int NumRecentPosts = 5;
 
         public HomeController(IBlogPostRepository blogPostRepository, Settings _settings, IFeedGenerator feedGenerator)
         {
@@ -88,6 +88,25 @@ namespace DanClarkeBlog.Web.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        [Route("error/404")]
+        public async Task<IActionResult> Error404(CancellationToken cancellationToken)
+        {
+            var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
+            var recentPostsTask = _blogPostRepository.GetRecentAsync(HomeController.NumRecentPosts, cancellationToken);
+            var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);
+
+            var recent = await recentPostsTask;
+            var featured = await featuredPostsTask;
+            var tags = await tagsTask;
+
+            return View(new BasicViewModel
+                        {
+                            FeaturedPosts = featured,
+                            RecentPosts = recent,
+                            Tags = tags
+                        });
         }
     }
 }
