@@ -7,7 +7,7 @@ using Microsoft.Azure.WebJobs.Host;
 
 namespace DanClarkeBlog.Functions
 {
-    internal static class Bootstrapper
+    internal static class FunctionBootstrapper
     {
         public static IContainer Init(TraceWriter traceWriter)
         {
@@ -19,6 +19,7 @@ namespace DanClarkeBlog.Functions
                                MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("MaxResizedImageSize") ?? "0"),
                                KeepAlivePingUri = Environment.GetEnvironmentVariable("KeepAlivePingUri"),
                                SlackNotificationUri = Environment.GetEnvironmentVariable("SlackNotificationUri"),
+                               SiteHomeUri = Environment.GetEnvironmentVariable("SiteHomeUri"),
             };
 
             var builder = new ContainerBuilder();
@@ -34,6 +35,7 @@ namespace DanClarkeBlog.Functions
             builder.RegisterType<DropboxHelper>().As<IDropboxHelper>();
             builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
+            builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
             builder.Register<ILogger>(x => new TraceLogLoggerImpl(traceWriter));
 
             return builder.Build();

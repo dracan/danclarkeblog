@@ -1,10 +1,8 @@
 using System;
-using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using DanClarkeBlog.Core.Helpers;
-using DanClarkeBlog.Core.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,8 +10,6 @@ using Microsoft.Extensions.Options;
 using NLog;
 using Settings = DanClarkeBlog.Core.Settings;
 using NLog.Extensions.Logging;
-using NLog.Web;
-using ILogger = DanClarkeBlog.Core.Helpers.ILogger;
 
 namespace DanClarkeBlog.Web
 {
@@ -38,7 +34,11 @@ namespace DanClarkeBlog.Web
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(config =>
+                            {
+                                config.RespectBrowserAcceptHeader = true;
+                            })
+                    .AddXmlSerializerFormatters();
 
             services.AddOptions();
             services.Configure<Settings>(Configuration);
@@ -46,22 +46,9 @@ namespace DanClarkeBlog.Web
             var sp = services.BuildServiceProvider();
             var settings = sp.GetService<IOptions<Settings>>();
 
-            // Setup Autofac
-            var builder = new ContainerBuilder();
-            builder.Register(_ => settings.Value);
+            var container = WebBootstrapper.Init(services, settings.Value, new NLogLoggerImpl(LogManager.GetLogger("")));
 
-            //if (string.IsNullOrWhiteSpace(settings.Value.BlogFileSystemRootPath))
-                builder.RegisterType<BlogPostSqlServerRepository>().As<IBlogPostRepository>();
-            //else
-            //    builder.RegisterType<BlogPostFileSystemRepository>().As<IBlogPostRepository>();
-
-            builder.RegisterType<BlogPostSummaryHelper>();
-            builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();
-            builder.RegisterType<AzureImageRepository>().As<IImageRepository>();
-            builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger("")));
-            builder.Populate(services);
-
-            return new AutofacServiceProvider(builder.Build());
+            return new AutofacServiceProvider(container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +78,16 @@ namespace DanClarkeBlog.Web
                     name: "tags",
                     template: "tags/{tag}",
                     defaults: new { Controller = "Home", Action = "Index"});
+
+                routes.MapRoute(
+                    name: "rss",
+                    template: "rss",
+                    defaults: new { Controller = "Home", Action = "RssFeed"});
+
+                routes.MapRoute(
+                    name: "atom",
+                    template: "atom",
+                    defaults: new { Controller = "Home", Action = "AtomFeed"});
 
                 routes.MapRoute(
                     name: "blogPost",

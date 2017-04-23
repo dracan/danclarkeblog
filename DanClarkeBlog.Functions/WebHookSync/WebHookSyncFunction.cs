@@ -15,7 +15,7 @@ namespace DanClarkeBlog.Functions.WebHookSync
         public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log, out string message)
         {
             var ct = CancellationToken.None;
-            var container = Bootstrapper.Init(log);
+            var container = FunctionBootstrapper.Init(log);
             var notificationTarget = container.Resolve<INotificationTarget>();
 
             try

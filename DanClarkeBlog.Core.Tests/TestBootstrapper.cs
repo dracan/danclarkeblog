@@ -11,6 +11,11 @@ namespace DanClarkeBlog.Core.Tests
     {
         public static IContainer Init()
         {
+            return Init<BlogPostSqlServerRepository>();
+        }
+
+        public static IContainer Init<TBlogPostRepository>() where TBlogPostRepository : IBlogPostRepository
+        {
             var settings = new Settings
                            {
                                DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
@@ -19,11 +24,13 @@ namespace DanClarkeBlog.Core.Tests
                                MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("MaxResizedImageSize") ?? "0"),
                                KeepAlivePingUri = Environment.GetEnvironmentVariable("KeepAlivePingUri"),
                                SlackNotificationUri = Environment.GetEnvironmentVariable("SlackNotificationUri"),
+                               SiteHomeUri = Environment.GetEnvironmentVariable("SiteHomeUri"),
                            };
 
             var builder = new ContainerBuilder();
 
             builder.Register(_ => settings);
+            builder.RegisterType<TBlogPostRepository>().As<IBlogPostRepository>();
             builder.RegisterType<BlogPostSqlServerRepository>().Named<IBlogPostRepository>("SqlServer");
             builder.RegisterType<BlogPostDropboxRepository>().Named<IBlogPostRepository>("Dropbox");
             builder.RegisterType<BlogPostSummaryHelper>();
@@ -34,6 +41,7 @@ namespace DanClarkeBlog.Core.Tests
             builder.RegisterType<DropboxHelper>().As<IDropboxHelper>();
             builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
+            builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
             builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger("")));
 
             return builder.Build();

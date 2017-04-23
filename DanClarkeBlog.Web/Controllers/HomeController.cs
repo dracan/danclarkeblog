@@ -5,6 +5,7 @@ using DanClarkeBlog.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading;
+using DanClarkeBlog.Core.Helpers;
 using Settings = DanClarkeBlog.Core.Settings;
 
 namespace DanClarkeBlog.Web.Controllers
@@ -13,13 +14,15 @@ namespace DanClarkeBlog.Web.Controllers
     {
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
+        private readonly IFeedGenerator _feedGenerator;
         private const int NumPostsPerPage = 10;
         private const int NumRecentPosts = 5;
 
-        public HomeController(IBlogPostRepository blogPostRepository, Settings _settings)
+        public HomeController(IBlogPostRepository blogPostRepository, Settings _settings, IFeedGenerator feedGenerator)
         {
             _blogPostRepository = blogPostRepository;
             this._settings = _settings;
+            _feedGenerator = feedGenerator;
         }
 
         public async Task<IActionResult> Index(string tag, int? page, CancellationToken cancellationToken)
@@ -76,11 +79,10 @@ namespace DanClarkeBlog.Web.Controllers
             });
         }
 
-        public IActionResult About()
+        [Produces("application/xml")]
+        public async Task<IActionResult> RssFeed(CancellationToken cancellationToken)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            return Ok(await _feedGenerator.GenerateRssAsync(cancellationToken));
         }
 
         public IActionResult Error()

@@ -9,6 +9,7 @@
         public int MaxResizedImageSize { get; set; }
         public string KeepAlivePingUri { get; set; }
         public string SlackNotificationUri { get; set; }
+        public string SiteHomeUri { get; set; }
 
         /// <summary>
         /// For use locally to access Dropbox folder directly without going through the API

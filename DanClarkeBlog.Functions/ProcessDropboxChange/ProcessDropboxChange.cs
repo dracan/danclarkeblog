@@ -13,7 +13,7 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
         public static async Task Run(string message, TraceWriter log)
         {
             var ct = CancellationToken.None;
-            var container = Bootstrapper.Init(log);
+            var container = FunctionBootstrapper.Init(log);
             var notificationTarget = container.Resolve<INotificationTarget>();
 
             try

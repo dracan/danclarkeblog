@@ -15,7 +15,7 @@ namespace DanClarkeBlog.Functions.KeepAlive
         public static async Task Run(TimerInfo myTimer, TraceWriter log)
         {
             var ct = CancellationToken.None;
-            var container = Bootstrapper.Init(log);
+            var container = FunctionBootstrapper.Init(log);
             var notificationTarget = container.Resolve<INotificationTarget>();
 
             try
