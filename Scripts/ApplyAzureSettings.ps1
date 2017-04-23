@@ -8,7 +8,8 @@ Param(
     [string] $DisqusDomainName,
     [string] $MaxResizedImageSize,
     [string] $SlackNotificationUri,
-    [string] $KeepAlivePingUri
+    [string] $KeepAlivePingUri,
+    [string] $SiteHomeUri
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -27,5 +28,6 @@ $hash['PROJECT'] = $Project
 $hash['MaxResizedImageSize'] = $MaxResizedImageSize
 $hash['SlackNotificationUri'] = $SlackNotificationUri
 $hash['KeepAlivePingUri'] = $KeepAlivePingUri
+$hash['SiteHomeUri'] = $SiteHomeUri
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash
