@@ -20,6 +20,7 @@ namespace DanClarkeBlog.Functions
                                KeepAlivePingUri = Environment.GetEnvironmentVariable("KeepAlivePingUri"),
                                SlackNotificationUri = Environment.GetEnvironmentVariable("SlackNotificationUri"),
                                SiteHomeUri = Environment.GetEnvironmentVariable("SiteHomeUri"),
+                               DropboxAppSecret = Environment.GetEnvironmentVariable("DropboxAppSecret"),
             };
 
             var builder = new ContainerBuilder();
@@ -36,6 +37,7 @@ namespace DanClarkeBlog.Functions
             builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
+            builder.RegisterType<HashVerify>().As<IHashVerify>();
             builder.Register<ILogger>(x => new TraceLogLoggerImpl(traceWriter));
 
             return builder.Build();

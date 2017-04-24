@@ -12,6 +12,11 @@
         public string SiteHomeUri { get; set; }
 
         /// <summary>
+        /// For verification of Dropbox webhook HMAC
+        /// </summary>
+        public string DropboxAppSecret { get; set; }
+
+        /// <summary>
         /// For use locally to access Dropbox folder directly without going through the API
         /// Ie. The BlogPostFileSystemRepository implementation
         /// </summary>

@@ -9,7 +9,8 @@ Param(
     [string] $MaxResizedImageSize,
     [string] $SlackNotificationUri,
     [string] $KeepAlivePingUri,
-    [string] $SiteHomeUri
+    [string] $SiteHomeUri,
+    [string] $DropboxAppSecret
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -29,5 +30,6 @@ $hash['MaxResizedImageSize'] = $MaxResizedImageSize
 $hash['SlackNotificationUri'] = $SlackNotificationUri
 $hash['KeepAlivePingUri'] = $KeepAlivePingUri
 $hash['SiteHomeUri'] = $SiteHomeUri
+$hash['DropboxAppSecret'] = $DropboxAppSecret
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash
