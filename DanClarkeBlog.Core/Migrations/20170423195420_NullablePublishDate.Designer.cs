@@ -8,9 +8,10 @@ using DanClarkeBlog.Core.Data;
 namespace DanClarkeBlog.Core.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20170423195420_NullablePublishDate")]
+    partial class NullablePublishDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

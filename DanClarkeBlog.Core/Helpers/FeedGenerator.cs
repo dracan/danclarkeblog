@@ -95,7 +95,7 @@ namespace DanClarkeBlog.Core.Helpers
                                Title = blogDescription
                            });
 
-            var posts = await _blogPostRepository.GetAllAsync(cancelationToken);
+            var posts = await _blogPostRepository.GetWithConditionAsync(x => x.Published, cancelationToken);
 
             var items = new List<SyndicationItem>();
 
@@ -107,9 +107,13 @@ namespace DanClarkeBlog.Core.Helpers
                            {
                                Id = postUri.ToString(),
                                Title = new TextSyndicationContent(post.Title),
-                               PublishDate = post.PublishDate,
                                Content = new TextSyndicationContent(post.HtmlText, TextSyndicationContentKind.Html)
                            };
+
+                if (post.PublishDate.HasValue)
+                {
+                    item.PublishDate = post.PublishDate.Value;
+                }
 
                 item.Links.Add(new SyndicationLink(postUri));
 

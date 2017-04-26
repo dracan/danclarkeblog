@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,8 +20,14 @@ namespace DanClarkeBlog.Core.Repositories
 		    _logger = logger;
 	    }
 
-        public async Task AddAsync(string fileReference, byte[] data, CancellationToken cancellationToken)
+        public async Task AddAsync(string destPath, string fileName, byte[] data, CancellationToken cancellationToken)
         {
+            // We only want the last part of the path, as we might have temprarily put the blog post
+            // in a sub folder (eg. a shared "WIP" Dropbox folder).
+            var leafPostFolderName = new DirectoryInfo(destPath).Name;
+
+            var fileReference = $"{leafPostFolderName.TrimStart('/')}/{fileName}";
+
             _logger.Debug($"AzureImageRepository.AddAsync called for image {fileReference}");
 
             var storageAccount = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);

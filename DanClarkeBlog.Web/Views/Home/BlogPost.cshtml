@@ -8,7 +8,7 @@
     <h1>@Model.Post.Title</h1>
     
     <div class="blogPostDateAndTags">
-        <span>@Model.Post.PublishDate.ToString("dd MMMM yyyy") </span>
+        <span>@Model.Post.PublishDate?.ToString("dd MMMM yyyy") </span>
 
         @foreach (var tag in @Model.Post.Tags)
         {

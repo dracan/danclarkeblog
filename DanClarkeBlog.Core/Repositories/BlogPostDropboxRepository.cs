@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
@@ -47,11 +46,18 @@ namespace DanClarkeBlog.Core.Repositories
             throw new NotSupportedException();
         }
 
+        //(todo) This method and the GetAllAsync are too similar. Look if it makes sense to combine them.
         public async Task<IEnumerable<BlogPost>> GetUpdatesAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
+            _logger.Debug("Processing updated files from Dropbox ...");
+
             var updatedFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
 
-            _logger.Debug("Processing updated files from Dropbox ...");
+            _logger.Trace("Files dropbox thinks has been updated:");
+            foreach (var updatedFile in updatedFiles)
+            {
+                _logger.Trace($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
+            }
 
             var blogPosts = new List<BlogPost>();
 
@@ -64,36 +70,37 @@ namespace DanClarkeBlog.Core.Repositories
             _logger.Trace($"Blog.json content was {blogJson}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
-
-            var blogPostsToUpdate = blogPostList.Where(x => updatedFiles.Any(y => y.PathLower == x.FilePath.ToLower())).ToList();
+            var blogPostsToUpdate = blogPostList.Where(x => updatedFiles.Any(y => y.PathLower == $"{x.Folder}/post.md".ToLower())).ToList();
 
             _logger.Trace($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
 
             foreach (var blogPost in blogPostsToUpdate)
             {
-                var imageFiles = (await _dropboxHelper.GetFilesAsync(blogPost.ImagePath, cancellationToken)).Where(ImageFileFilter);
+                var imagePath = $"{blogPost.Folder}/images/";
 
-                foreach (var image in imageFiles.Select(x => Path.Combine(blogPost.ImagePath, x.Name)))
+                var imageFiles = (await _dropboxHelper.GetFilesAsync(imagePath, cancellationToken)).Where(ImageFileFilter);
+
+                foreach (var image in imageFiles.Select(x => $"{imagePath}{x.Name}"))
                 {
                     var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 
                     var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
 
-                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent, cancellationToken);
+                    await _imageRepository.AddAsync(blogPost.Folder, Path.GetFileName(image), resizedImageFileContent, cancellationToken);
                 }
 
-                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
+                _logger.Trace($"Reading content for {blogPost.Folder} ...");
 
-                var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
+                var postFile = await _dropboxHelper.GetFileContentAsync($"{blogPost.Folder}/post.md", cancellationToken);
 
                 var postFileText = Encoding.UTF8.GetString(postFile);
 
                 var post = new BlogPost
                            {
                                Title = blogPost.Title,
-                               PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
-                               HtmlText = _renderer.Render(postFileText),
-                               HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText)),
+                               PublishDate = string.IsNullOrWhiteSpace(blogPost.PublishDate) ? null : (DateTime?)DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+                               HtmlText = _renderer.Render(postFileText, blogPost.Folder),
+                               HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText), blogPost.Folder),
                                Route = blogPost.Route,
                                Featured = blogPost.Featured,
                                Published = blogPost.Status.ToLower() == "published"
@@ -114,8 +121,6 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
         {
-            //var files = await _dropboxHelper.GetFilesAsync(cancellationToken);
-
             _logger.Debug("Processing files from Dropbox ...");
 
             var blogPosts = new List<BlogPost>();
@@ -134,29 +139,31 @@ namespace DanClarkeBlog.Core.Repositories
 
             foreach (var blogPost in blogPostList)
             {
-                var imageFiles = (await _dropboxHelper.GetFilesAsync(blogPost.ImagePath, cancellationToken)).Where(ImageFileFilter);
+                var imagePath = $"{blogPost.Folder}/images/";
 
-                foreach (var image in imageFiles.Select(x => Path.Combine(blogPost.ImagePath, x.Name)))
+                var imageFiles = (await _dropboxHelper.GetFilesAsync(imagePath, cancellationToken)).Where(ImageFileFilter);
+
+                foreach (var image in imageFiles.Select(x => $"{imagePath}{x.Name}"))
                 {
                     var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
 
                     var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
 
-                    await _imageRepository.AddAsync(Regex.Replace(image, @"/images/", ""), resizedImageFileContent, cancellationToken);
+                    await _imageRepository.AddAsync(blogPost.Folder, Path.GetFileName(image), resizedImageFileContent, cancellationToken);
                 }
 
-                _logger.Trace($"*Reading content for {blogPost.FilePath} ...");
+                _logger.Trace($"*Reading content for {blogPost.Folder} ...");
 
-                var postFile = await _dropboxHelper.GetFileContentAsync(blogPost.FilePath, cancellationToken);
+                var postFile = await _dropboxHelper.GetFileContentAsync($"{blogPost.Folder}/post.md", cancellationToken);
 
                 var postFileText = Encoding.UTF8.GetString(postFile);
 
                 var post = new BlogPost
                            {
                                Title = blogPost.Title,
-                               PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
-                               HtmlText = _renderer.Render(postFileText),
-                               HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText)),
+                               PublishDate = string.IsNullOrWhiteSpace(blogPost.PublishDate) ? null : (DateTime?)DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+                               HtmlText = _renderer.Render(postFileText, blogPost.Folder),
+                               HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText), blogPost.Folder),
                                Route = blogPost.Route,
                                Featured = blogPost.Featured,
                                Published = blogPost.Status.ToLower() == "published"

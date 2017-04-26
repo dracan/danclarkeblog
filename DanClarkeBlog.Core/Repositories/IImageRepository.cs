@@ -5,6 +5,6 @@ namespace DanClarkeBlog.Core.Repositories
 {
     public interface IImageRepository
     {
-        Task AddAsync(string fileReference, byte[] data, CancellationToken cancellationToken);
+        Task AddAsync(string destPath, string fileName, byte[] data, CancellationToken cancellationToken);
     }
 }

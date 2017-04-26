@@ -64,16 +64,16 @@ namespace DanClarkeBlog.Core.Repositories
 
             foreach (var blogPost in posts)
             {
-                var postFile = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, blogPost.FilePath.TrimStart('/')));
+                var postFile = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, blogPost.Folder.TrimStart('/')));
 
-                _logger.Trace($"Reading content for {blogPost.FilePath} ...");
+                _logger.Trace($"Reading content for {blogPost.Folder} ...");
 
                 var post = new BlogPost
                 {
                     Title = blogPost.Title,
                     PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
-                    HtmlText = _renderer.Render(postFile),
-                    HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFile)),
+                    HtmlText = _renderer.Render(postFile, blogPost.Folder),
+                    HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFile), blogPost.Folder),
                     Route = blogPost.Route,
                     Featured = blogPost.Featured,
                     Published = blogPost.Status.ToLower() == "published"

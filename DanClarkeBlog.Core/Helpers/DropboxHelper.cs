@@ -41,7 +41,7 @@ namespace DanClarkeBlog.Core.Helpers
 
             if (string.IsNullOrWhiteSpace(cursor?.Cursor))
             {
-                var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":""{path}""}}", _settings.DropboxAccessToken, cancellationToken);
+                var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":""{path}"", ""recursive"": true}}", _settings.DropboxAccessToken, cancellationToken);
 
                 response = JsonConvert.DeserializeObject<DropboxApiResponseListFiles>(jsonResponse);
 
@@ -89,7 +89,7 @@ namespace DanClarkeBlog.Core.Helpers
         {
             var uri = new Uri(DropboxApiUri + "/2/files/list_folder/get_latest_cursor");
 
-            var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":""""}}", _settings.DropboxAccessToken, cancellationToken);
+            var jsonResponse = await _httpClientHelper.PostAsync(uri, $@"{{""path"":"""", ""recursive"": true}}", _settings.DropboxAccessToken, cancellationToken);
 
             var response = JsonConvert.DeserializeObject<DropboxApiResponseGetCurrentCursor>(jsonResponse);
 

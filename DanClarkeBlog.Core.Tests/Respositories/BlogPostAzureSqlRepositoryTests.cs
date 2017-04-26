@@ -73,7 +73,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
             var container = TestBootstrapper.Init();
 
             var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
-            var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
+            var destRepo = (BlogPostSqlServerRepository)container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
             //destRepo.CreateDatabase();
             //await destRepo.UpdateDatabaseAsync(CancellationToken.None);
