@@ -24,7 +24,8 @@ namespace DanClarkeBlog.Functions.KeepAlive
 
                 using (var client = new HttpClient())
                 {
-                    await client.GetAsync(settings.KeepAlivePingUri, ct);
+                    var response = await client.GetAsync(settings.KeepAlivePingUri, ct);
+                    response.EnsureSuccessStatusCode();
                 }
             }
             catch (Exception ex)
