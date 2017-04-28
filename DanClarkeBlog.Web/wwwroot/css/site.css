@@ -1,8 +1,8 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
-    font-size: 14px;
-    font-family: 'Noto Serif', serif;
+    font-size: 16px;
+    font-family: segoe-ui_normal, Segoe UI, Segoe, Segoe WP, Helvetica Neue, Helvetica, sans-serif;
 }
 
 /* Wrapping element */
@@ -24,7 +24,6 @@ textarea {
 }
 
 .navbar-brand {
-    font-family: 'Open Sans', sans-serif;
     font-size: 26px;
     font-weight: bold;
     padding-top: 8px;
@@ -41,12 +40,10 @@ textarea {
 }
 
 h1, h2, h3 {
-    font-family: 'Open Sans', sans-serif;
     font-weight: bold;
 }
 
 .blogPost {
-    font-size: 16px;
     line-height: 25px;
 }
 
@@ -94,10 +91,6 @@ h1, h2, h3 {
 
 .sidemenu h3 {
     font-size: 16px;
-}
-
-.sidemenu a {
-    font-family: 'Open Sans', sans-serif;
 }
 
 .sidemenu a:link,
