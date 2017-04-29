@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using DanClarkeBlog.Core.Dropbox;
 using DanClarkeBlog.Core.Helpers;
 using Newtonsoft.Json;
@@ -14,11 +15,9 @@ namespace DanClarkeBlog.Core.Tests.Helpers
         [Fact, Trait("Category", "Unit")]
         public async Task ListFilesInSingleRequest()
         {
-            //(todo) These tests should be using the TestBootstrapper like the other tests.
-
-            var settings = new Settings { DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken") };
-
             var httpClient = Substitute.For<IHttpClientHelper>();
+
+            var container = TestBootstrapper.Init(httpClient);
 
             var dropboxResponse = new DropboxApiResponseListFiles
                                   {
@@ -28,10 +27,10 @@ namespace DanClarkeBlog.Core.Tests.Helpers
                                                 }
                                   };
 
-            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), @"{""path"":""""}", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), $@"{{""path"":"""", ""recursive"": true}}", Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(dropboxResponse)));
 
-            var sut = new DropboxHelper(settings, httpClient);
+            var sut = container.Resolve<IDropboxHelper>();
 
             var files = await sut.GetFilesAsync("", CancellationToken.None);
 
@@ -43,9 +42,9 @@ namespace DanClarkeBlog.Core.Tests.Helpers
         [Fact, Trait("Category", "Unit")]
         public async Task ListFilesOverMultipleRequests()
         {
-            var settings = new Settings { DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken") };
-
             var httpClient = Substitute.For<IHttpClientHelper>();
+
+            var container = TestBootstrapper.Init(httpClient);
 
             var dropboxResponse = new DropboxApiResponseListFiles
                                   {
@@ -70,13 +69,13 @@ namespace DanClarkeBlog.Core.Tests.Helpers
                                                 }
             };
 
-            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), @"{""path"":""""}", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), $@"{{""path"":"""", ""recursive"": true}}", Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(dropboxResponse)));
 
             httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder/continue"), @"{""cursor"": ""mycursor""}", Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(dropboxResponse2)));
 
-            var sut = new DropboxHelper(settings, httpClient);
+            var sut = container.Resolve<IDropboxHelper>();
 
             var files = await sut.GetFilesAsync("", CancellationToken.None);
 

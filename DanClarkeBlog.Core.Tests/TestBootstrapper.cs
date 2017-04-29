@@ -9,12 +9,12 @@ namespace DanClarkeBlog.Core.Tests
 {
     internal static class TestBootstrapper
     {
-        public static IContainer Init()
+        public static IContainer Init(IHttpClientHelper httpClientHelper = null)
         {
-            return Init<BlogPostSqlServerRepository>();
+            return Init<BlogPostSqlServerRepository>(httpClientHelper);
         }
 
-        public static IContainer Init<TBlogPostRepository>() where TBlogPostRepository : IBlogPostRepository
+        public static IContainer Init<TBlogPostRepository>(IHttpClientHelper httpClientHelper = null) where TBlogPostRepository : IBlogPostRepository
         {
             var settings = new Settings
                            {
@@ -39,10 +39,14 @@ namespace DanClarkeBlog.Core.Tests
             builder.RegisterType<ImageResizer>().As<IImageResizer>();
             builder.RegisterType<SyncHelper>();
             builder.RegisterType<DropboxHelper>().As<IDropboxHelper>();
-            builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
             builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger("")));
+
+            if (httpClientHelper == null)
+                builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
+            else
+                builder.Register(x => httpClientHelper).As<IHttpClientHelper>();
 
             return builder.Build();
         }
