@@ -42,20 +42,21 @@ namespace DanClarkeBlog.Core.Helpers
                 _logger.Trace($"Returned cursor {dropboxCursor.Cursor}");
             }
 
-            var destPosts = (await destRepo.GetAllAsync(cancellationToken)).ToList();
-
-            _logger.Trace($"Processing {sourcePosts.Count} source posts, and {destPosts.Count()} dest posts");
+            _logger.Trace($"Processing {sourcePosts.Count} source posts ...");
 
             foreach(var sourcePost in sourcePosts)
             {
                 await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
             }
 
-            if (!incremental) // Do not delete posts when in incremental mode
+            if (!incremental) // Do not delete posts when in incremental mode (todo) Is this comment correct? Surely as we're reading the json file even on incremental sync, we can still delete on incremental?
             {
+                //(todo) GetAllAsync filters by Published posts - we don't want this here. I think the GetAllAsync shouldn't unless explicitly requested
+                var destPosts = (await destRepo.GetAllAsync(cancellationToken)).ToList();
+
                 var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Title != d.Title)).ToList();
 
-                _logger.Trace($"Found {postsToDelete.Count} to delete");
+                _logger.Trace($"Found {postsToDelete.Count} to delete out of {destPosts.Count} posts");
 
                 await destRepo.DeleteAsync(postsToDelete, cancellationToken);
             }
