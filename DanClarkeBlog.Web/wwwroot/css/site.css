@@ -57,6 +57,10 @@ h1, h2, h3 {
     margin: 5px 0 5px 0;
 }
 
+.postListing img {
+    max-width: 100%;
+}
+
 .postListing .blogPostDate {
     font-size: 14px;
     color: cornflowerblue;
