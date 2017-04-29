@@ -1,0 +1,13 @@
+@using DanClarkeBlog.Web.ViewModels
+@model ViewModelBase
+
+@if (@Model is HomeViewModel)
+{
+    <img class="profilePic" alt="profilePic" src="@Model.ProfilePicUri"/>
+}
+
+@await Html.PartialAsync("_RecentPosts")
+<hr />
+@await Html.PartialAsync("_FeaturedPosts")
+<hr />
+@await Html.PartialAsync("_TagCloud")

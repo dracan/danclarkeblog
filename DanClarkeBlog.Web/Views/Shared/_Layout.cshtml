@@ -55,16 +55,7 @@
                 @RenderBody()
             </div>
             <div class="col-md-3 sidemenu">
-                @if (@Model is HomeViewModel)
-                {
-                    <img class="profilePic" alt="profilePic" src="@Model.ProfilePicUri"/>
-                }
-
-                @await Html.PartialAsync("_RecentPosts")
-                <hr />
-                @await Html.PartialAsync("_FeaturedPosts")
-                <hr />
-                @await Html.PartialAsync("_TagCloud")
+                @await Html.PartialAsync("_SidePanel")
             </div>
         </div>
         <hr />
