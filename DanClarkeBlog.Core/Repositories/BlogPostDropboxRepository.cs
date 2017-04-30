@@ -106,7 +106,7 @@ namespace DanClarkeBlog.Core.Repositories
                                Published = blogPost.Status.ToLower() == "published"
                            };
 
-                post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();
+                post.BlogPostTags = blogPost.Tags.Split(new [] {'|'}, StringSplitOptions.RemoveEmptyEntries).Select(x => new BlogPostTag(post, new Tag(x))).ToList();
 
                 blogPosts.Add(post);
             }
@@ -169,7 +169,7 @@ namespace DanClarkeBlog.Core.Repositories
                                Published = blogPost.Status.ToLower() == "published"
                            };
 
-                post.BlogPostTags = blogPost.Tags.Split('|').Select(x => new BlogPostTag(post, new Tag(x))).ToList();
+                post.BlogPostTags = blogPost.Tags.Split(new [] {'|'}, StringSplitOptions.RemoveEmptyEntries).Select(x => new BlogPostTag(post, new Tag(x))).ToList();
 
                 blogPosts.Add(post);
             }
@@ -203,6 +203,11 @@ namespace DanClarkeBlog.Core.Repositories
         }
 
         public Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
+        public Task RemoveUnusedTagsAsync(CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }

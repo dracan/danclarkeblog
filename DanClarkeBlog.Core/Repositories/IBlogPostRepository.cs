@@ -20,6 +20,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         // Tags
         Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken);
+        Task RemoveUnusedTagsAsync(CancellationToken cancellationToken);
 
         Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken);
         Task<string> GetDropboxCursorAsync(CancellationToken cancellationToken);

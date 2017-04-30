@@ -39,6 +39,8 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 return await ctx.BlogPosts
                     .Where(x => x.Published)
+                    .Include(x => x.BlogPostTags)
+                    .ThenInclude(x => x.Tag)
                     .OrderByDescending(x => x.PublishDate)
                     .ToListAsync(cancellationToken);
             }
@@ -139,7 +141,7 @@ namespace DanClarkeBlog.Core.Repositories
                 {
                     existing.UpdateFrom(post);
 
-                    await UpdateTagsAsync(ctx, post, existing.BlogPostTags.Select(x => x.Tag.Name).ToList());
+                    await UpdateTagsAsync(ctx, existing, post.BlogPostTags.Select(x => x.Tag.Name).ToList());
                 }
 
                 await ctx.SaveChangesAsync(cancellationToken);
@@ -149,8 +151,8 @@ namespace DanClarkeBlog.Core.Repositories
         private Task UpdateTagsAsync(DataContext ctx, BlogPost post, IReadOnlyCollection<string> expectedTags)
         {
             // ReSharper disable SimplifyLinqExpression
-            var newTags = expectedTags.Where(et => !post.BlogPostTags.Any(t => t.Tag.Name == et));
-            var tagsToRemove = post.BlogPostTags.Where(t => !expectedTags.Any(et => et == t.Tag.Name));
+            var newTags = expectedTags.Where(et => !post.BlogPostTags.Any(t => t.Tag.Name == et)).ToList();
+            var tagsToRemove = post.BlogPostTags.Where(t => !expectedTags.Any(et => et == t.Tag.Name)).ToArray();
             // ReSharper restore SimplifyLinqExpression
 
             foreach (var newTag in newTags)
@@ -162,7 +164,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             foreach (var tagToRemove in tagsToRemove)
             {
-                post.BlogPostTags.Remove(new BlogPostTag(post, tagToRemove.Tag));
+                post.BlogPostTags.Remove(tagToRemove);
             }
 
             return Task.FromResult(true);
@@ -197,6 +199,15 @@ namespace DanClarkeBlog.Core.Repositories
                                 .OrderByDescending(x => x.Count())
                                 .Select(x => new TagCount(x.Key, x.Count()))
                                 .ToListAsync(cancellationToken);
+            }
+        }
+
+        public async Task RemoveUnusedTagsAsync(CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
+            {
+                ctx.Tags.RemoveRange(await ctx.Tags.Where(x => !x.BlogPostTags.Any()).ToListAsync(cancellationToken));
+                await ctx.SaveChangesAsync(cancellationToken);
             }
         }
 

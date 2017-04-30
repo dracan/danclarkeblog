@@ -60,6 +60,8 @@ namespace DanClarkeBlog.Core.Helpers
                 await destRepo.DeleteAsync(postsToDelete, cancellationToken);
             }
 
+            await destRepo.RemoveUnusedTagsAsync(cancellationToken);
+
             if (incremental)
 	        {
                 _logger.Trace($"Saving new Dropbox cursor: {dropboxCursor.Cursor}");

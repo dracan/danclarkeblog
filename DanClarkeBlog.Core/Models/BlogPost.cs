@@ -32,8 +32,6 @@ namespace DanClarkeBlog.Core.Models
             HtmlShortText = post.HtmlShortText;
             Featured = post.Featured;
             Published = post.Published;
-
-            //(todo) Update tags here too
         }
     }
 }

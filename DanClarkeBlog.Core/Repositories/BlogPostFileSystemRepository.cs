@@ -131,6 +131,11 @@ namespace DanClarkeBlog.Core.Repositories
             throw new NotSupportedException();
         }
 
+        public Task RemoveUnusedTagsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotSupportedException();
+        }
+
         public Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
