@@ -17,7 +17,7 @@ namespace DanClarkeBlog.Core.Helpers
             _dropboxHelper = dropboxHelper;
         }
 
-        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo, IBlogPostRepository destRepo, bool incremental, CancellationToken cancellationToken)
+        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo, IBlogPostRepository destRepo, bool incremental, string overrideCursor, CancellationToken cancellationToken)
         {
             _logger.Trace($"SynchronizeBlogPostsAsync with incremental = {incremental}");
 
@@ -26,7 +26,7 @@ namespace DanClarkeBlog.Core.Helpers
             if (incremental)
             {
                 // Try to get a persisted cursor from our SQL database, if that's null (so we haven't got one), then we'll do a full update
-                dropboxCursor.Cursor = await destRepo.GetDropboxCursorAsync(cancellationToken);
+                dropboxCursor.Cursor = overrideCursor ?? await destRepo.GetDropboxCursorAsync(cancellationToken);
 
                 _logger.Trace($"Cursor = {dropboxCursor.Cursor}");
             }

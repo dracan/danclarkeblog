@@ -31,7 +31,7 @@ namespace DanClarkeBlog.Functions.ProcessDropboxChange
 
                 var helper = container.Resolve<SyncHelper>();
 
-                await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, CancellationToken.None);
+                await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, null, CancellationToken.None);
 
                 log.Info("Finished incremental dropbox sync");
             }

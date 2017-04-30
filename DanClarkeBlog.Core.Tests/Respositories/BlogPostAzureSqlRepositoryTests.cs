@@ -80,7 +80,29 @@ namespace DanClarkeBlog.Core.Tests.Respositories
 
             var helper = container.Resolve<SyncHelper>();
 
-            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, CancellationToken.None);
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, null, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
+        /// </summary>
+        [Fact, Trait("Category", "Manual")]
+        public async Task IncrementalSyncTest()
+        {
+            var container = TestBootstrapper.Init();
+
+            var sourceRepo = container.ResolveNamed<IBlogPostRepository>("Dropbox");
+            var destRepo = (BlogPostSqlServerRepository)container.ResolveNamed<IBlogPostRepository>("SqlServer");
+
+            //destRepo.CreateDatabase();
+            //await destRepo.UpdateDatabaseAsync(CancellationToken.None);
+
+            var helper = container.Resolve<SyncHelper>();
+
+            // Grab this from the database, then make a change in Dropbox to manually test the incremental sync
+            const string testCursor = "AAEr_QdeOumu08_iV7Ah9wDoQ8zbWmBs2dtILwYs3e9ij-ZmBIT-93Ova_DP37JJG3sPeetCRZDYICDWc0BtmLAP03LvTw6oqHhSI8EF_YLZxInkyEr9-G5fhpLdVTiO4Rui9FmZTnEAakQB8437HUBb";
+
+            await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, true, testCursor, CancellationToken.None);
         }
     }
 }

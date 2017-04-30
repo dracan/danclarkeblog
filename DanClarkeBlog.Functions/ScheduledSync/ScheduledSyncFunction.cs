@@ -26,7 +26,7 @@ namespace DanClarkeBlog.Functions.ScheduledSync
 
                 var helper = container.Resolve<SyncHelper>();
 
-                await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, ct);
+                await helper.SynchronizeBlogPostsAsync(sourceRepo, destRepo, false, null, ct);
 
                 await notificationTarget.SendMessageAsync("A full scheduled synchonization has just successfully completed", ct);
 
