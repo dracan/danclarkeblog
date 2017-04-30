@@ -10,6 +10,7 @@
         public string KeepAlivePingUri { get; set; }
         public string SlackNotificationUri { get; set; }
         public string SiteHomeUri { get; set; }
+        public string ProfilePicUri { get; set; }
 
         /// <summary>
         /// For verification of Dropbox webhook HMAC

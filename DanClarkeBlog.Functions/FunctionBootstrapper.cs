@@ -21,6 +21,7 @@ namespace DanClarkeBlog.Functions
                                SlackNotificationUri = Environment.GetEnvironmentVariable("SlackNotificationUri"),
                                SiteHomeUri = Environment.GetEnvironmentVariable("SiteHomeUri"),
                                DropboxAppSecret = Environment.GetEnvironmentVariable("DropboxAppSecret"),
+                               ProfilePicUri = Environment.GetEnvironmentVariable("ProfilePicUri"),
             };
 
             var builder = new ContainerBuilder();

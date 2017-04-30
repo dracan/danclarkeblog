@@ -46,7 +46,8 @@ namespace DanClarkeBlog.Web.Controllers
                 Posts = pagedPostsResults.Posts,
                 Tags = tags,
                 PageNumber = page ?? 1,
-                TotalPages = (int)Math.Ceiling((decimal)pagedPostsResults.TotalPosts / NumPostsPerPage)
+                TotalPages = (int)Math.Ceiling((decimal)pagedPostsResults.TotalPosts / NumPostsPerPage),
+                ProfilePicUri = _settings.ProfilePicUri,
             });
         }
 
@@ -75,7 +76,8 @@ namespace DanClarkeBlog.Web.Controllers
                 RecentPosts = recent,
                 Post = post,
                 DisqusDomainName = _settings.DisqusDomainName,
-                Tags = tags
+                Tags = tags,
+                ProfilePicUri = _settings.ProfilePicUri,
             });
         }
 
@@ -105,7 +107,8 @@ namespace DanClarkeBlog.Web.Controllers
                         {
                             FeaturedPosts = featured,
                             RecentPosts = recent,
-                            Tags = tags
+                            Tags = tags,
+                            ProfilePicUri = _settings.ProfilePicUri,
                         });
         }
     }

@@ -1,4 +1,5 @@
-﻿@model DanClarkeBlog.Web.ViewModels.ViewModelBase
+﻿@using DanClarkeBlog.Web.ViewModels
+@model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
 <!DOCTYPE html>
 <html>
@@ -54,6 +55,11 @@
                 @RenderBody()
             </div>
             <div class="col-md-3 sidemenu">
+                @if (@Model is HomeViewModel)
+                {
+                    <img class="profilePic" alt="profilePic" src="@Model.ProfilePicUri"/>
+                }
+
                 @await Html.PartialAsync("_RecentPosts")
                 <hr />
                 @await Html.PartialAsync("_FeaturedPosts")

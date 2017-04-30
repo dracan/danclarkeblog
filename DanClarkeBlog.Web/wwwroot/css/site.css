@@ -97,6 +97,11 @@ h1, h2, h3 {
     font-size: 16px;
 }
 
+.sidemenu img.profilePic {
+    margin: 20px 10px 10px 10px;
+    width: 75%;
+}
+
 .sidemenu a:link,
 .sidemenu a:visited,
 .sidemenu a:hover {

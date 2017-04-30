@@ -10,7 +10,8 @@ Param(
     [string] $SlackNotificationUri,
     [string] $KeepAlivePingUri,
     [string] $SiteHomeUri,
-    [string] $DropboxAppSecret
+    [string] $DropboxAppSecret,
+    [string] $ProfilePicUri
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -31,5 +32,6 @@ $hash['SlackNotificationUri'] = $SlackNotificationUri
 $hash['KeepAlivePingUri'] = $KeepAlivePingUri
 $hash['SiteHomeUri'] = $SiteHomeUri
 $hash['DropboxAppSecret'] = $DropboxAppSecret
+$hash['ProfilePicUri'] = $ProfilePicUri
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash
