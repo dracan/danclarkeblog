@@ -3,6 +3,8 @@ using Autofac;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
 using NLog;
+using NLog.Config;
+using NLog.Targets;
 using ILogger = DanClarkeBlog.Core.Helpers.ILogger;
 
 namespace DanClarkeBlog.Core.Tests
@@ -16,6 +18,8 @@ namespace DanClarkeBlog.Core.Tests
 
         public static IContainer Init<TBlogPostRepository>(IHttpClientHelper httpClientHelper = null) where TBlogPostRepository : IBlogPostRepository
         {
+            ConfigureNLog();
+
             var settings = new Settings
                            {
                                DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
@@ -41,7 +45,7 @@ namespace DanClarkeBlog.Core.Tests
             builder.RegisterType<DropboxHelper>().As<IDropboxHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
-            builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger("")));
+            builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger(""))).InstancePerDependency();
 
             if (httpClientHelper == null)
                 builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
@@ -49,6 +53,20 @@ namespace DanClarkeBlog.Core.Tests
                 builder.Register(x => httpClientHelper).As<IHttpClientHelper>();
 
             return builder.Build();
+        }
+
+        private static void ConfigureNLog()
+        {
+            var config = new LoggingConfiguration();
+
+            // Console rule
+            var target = new ConsoleTarget();
+            config.AddTarget("console", target);
+            var consoleRule = new LoggingRule("*", LogLevel.Trace, target);
+
+            config.LoggingRules.Add(consoleRule);
+
+            LogManager.Configuration = config;
         }
     }
 }
