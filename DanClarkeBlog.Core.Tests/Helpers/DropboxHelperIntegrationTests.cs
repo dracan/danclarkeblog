@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using DanClarkeBlog.Core.Helpers;
 using Xunit;
 
@@ -11,10 +11,10 @@ namespace DanClarkeBlog.Core.Tests.Helpers
         [Fact, Trait("Category", "Integration")]
         public async Task ListFiles()
         {
-            var settings = new Settings { DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken") };
             var httpClient = new HttpClientHelper();
+            var container = TestBootstrapper.Init(httpClient);
 
-            var sut = new DropboxHelper(settings, httpClient);
+            var sut = container.Resolve<IDropboxHelper>();
 
             var files = await sut.GetFilesAsync("", CancellationToken.None);
 

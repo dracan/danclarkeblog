@@ -22,13 +22,13 @@ namespace DanClarkeBlog.Core.Tests
 
             var settings = new Settings
                            {
-                               DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
-                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
-                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
-                               MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("MaxResizedImageSize") ?? "0"),
-                               KeepAlivePingUri = Environment.GetEnvironmentVariable("KeepAlivePingUri"),
-                               SlackNotificationUri = Environment.GetEnvironmentVariable("SlackNotificationUri"),
-                               SiteHomeUri = Environment.GetEnvironmentVariable("SiteHomeUri"),
+                               DropboxAccessToken = Environment.GetEnvironmentVariable("Blog:DropboxAccessToken"),
+                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("Blog:BlogSqlConnectionString"),
+                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("Blog:AzureStorageConnectionString"),
+                               MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("Blog:MaxResizedImageSize") ?? "0"),
+                               KeepAlivePingUri = Environment.GetEnvironmentVariable("Blog:KeepAlivePingUri"),
+                               SlackNotificationUri = Environment.GetEnvironmentVariable("Blog:SlackNotificationUri"),
+                               SiteHomeUri = Environment.GetEnvironmentVariable("Blog:SiteHomeUri"),
                            };
 
             var builder = new ContainerBuilder();

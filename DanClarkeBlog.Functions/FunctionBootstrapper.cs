@@ -13,15 +13,15 @@ namespace DanClarkeBlog.Functions
         {
             var settings = new Settings
                            {
-                               DropboxAccessToken = Environment.GetEnvironmentVariable("DropboxAccessToken"),
-                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("BlogSqlConnectionString"),
-                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString"),
-                               MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("MaxResizedImageSize") ?? "0"),
-                               KeepAlivePingUri = Environment.GetEnvironmentVariable("KeepAlivePingUri"),
-                               SlackNotificationUri = Environment.GetEnvironmentVariable("SlackNotificationUri"),
-                               SiteHomeUri = Environment.GetEnvironmentVariable("SiteHomeUri"),
-                               DropboxAppSecret = Environment.GetEnvironmentVariable("DropboxAppSecret"),
-                               ProfilePicUri = Environment.GetEnvironmentVariable("ProfilePicUri"),
+                               DropboxAccessToken = Environment.GetEnvironmentVariable("Blog:DropboxAccessToken"),
+                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("Blog:BlogSqlConnectionString"),
+                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("Blog:AzureStorageConnectionString"),
+                               MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("Blog:MaxResizedImageSize") ?? "0"),
+                               KeepAlivePingUri = Environment.GetEnvironmentVariable("Blog:KeepAlivePingUri"),
+                               SlackNotificationUri = Environment.GetEnvironmentVariable("Blog:SlackNotificationUri"),
+                               SiteHomeUri = Environment.GetEnvironmentVariable("Blog:SiteHomeUri"),
+                               DropboxAppSecret = Environment.GetEnvironmentVariable("Blog:DropboxAppSecret"),
+                               ProfilePicUri = Environment.GetEnvironmentVariable("Blog:ProfilePicUri"),
             };
 
             var builder = new ContainerBuilder();

@@ -2,8 +2,6 @@ using System;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,7 +40,7 @@ namespace DanClarkeBlog.Web
                     .AddXmlSerializerFormatters();
 
             services.AddOptions();
-            services.Configure<Settings>(Configuration);
+            services.Configure<Settings>(Configuration.GetSection("Blog"));
 
             var sp = services.BuildServiceProvider();
             var settings = sp.GetService<IOptions<Settings>>();

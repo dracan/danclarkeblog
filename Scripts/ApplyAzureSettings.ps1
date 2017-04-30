@@ -22,16 +22,16 @@ ForEach ($kvp in $appSettingList) {
     $hash[$kvp.Name] = $kvp.Value
 }
 
-$hash['DropboxAccessToken'] = $DropboxAccessToken
-$hash['BlogSqlConnectionString'] = $BlogSqlConnectionString
-$hash['AzureStorageConnectionString'] = $AzureStorageConnectionString
-$hash['DisqusDomainName'] = $DisqusDomainName
 $hash['PROJECT'] = $Project
-$hash['MaxResizedImageSize'] = $MaxResizedImageSize
-$hash['SlackNotificationUri'] = $SlackNotificationUri
-$hash['KeepAlivePingUri'] = $KeepAlivePingUri
-$hash['SiteHomeUri'] = $SiteHomeUri
-$hash['DropboxAppSecret'] = $DropboxAppSecret
-$hash['ProfilePicUri'] = $ProfilePicUri
+$hash['Blog:DropboxAccessToken'] = $DropboxAccessToken
+$hash['Blog:BlogSqlConnectionString'] = $BlogSqlConnectionString
+$hash['Blog:AzureStorageConnectionString'] = $AzureStorageConnectionString
+$hash['Blog:DisqusDomainName'] = $DisqusDomainName
+$hash['Blog:MaxResizedImageSize'] = $MaxResizedImageSize
+$hash['Blog:SlackNotificationUri'] = $SlackNotificationUri
+$hash['Blog:KeepAlivePingUri'] = $KeepAlivePingUri
+$hash['Blog:SiteHomeUri'] = $SiteHomeUri
+$hash['Blog:DropboxAppSecret'] = $DropboxAppSecret
+$hash['Blog:ProfilePicUri'] = $ProfilePicUri
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash
