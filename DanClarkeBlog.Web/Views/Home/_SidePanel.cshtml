@@ -6,6 +6,8 @@
     <img class="profilePic" alt="profilePic" src="@Model.ProfilePicUri"/>
 }
 
+@await Html.PartialAsync("_DotNetOxford")
+<hr />
 @await Html.PartialAsync("_RecentPosts")
 <hr />
 @await Html.PartialAsync("_FeaturedPosts")
