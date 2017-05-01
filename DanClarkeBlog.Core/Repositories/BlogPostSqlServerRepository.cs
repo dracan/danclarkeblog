@@ -195,6 +195,7 @@ namespace DanClarkeBlog.Core.Repositories
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 return await ctx.BlogPostTags
+                                .Where(x => x.BlogPost.Published)
                                 .GroupBy(x => x.Tag.Name)
                                 .OrderByDescending(x => x.Count())
                                 .Select(x => new TagCount(x.Key, x.Count()))
