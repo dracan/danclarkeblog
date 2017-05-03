@@ -29,7 +29,7 @@ namespace DanClarkeBlog.Core.Repositories
 	        _logger = logger;
         }
 
-        public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
             return (await GetAllAsync(null, null, null, cancellationToken)).Posts;
         }
@@ -91,19 +91,14 @@ namespace DanClarkeBlog.Core.Repositories
             });
         }
 
-        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(CursorContainer cursor, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
         {
-            return (await GetAllAsync(cancellationToken)).Where(x => x.Featured).ToList();
+            return (await GetAllAsync(null, cancellationToken)).Where(x => x.Featured).ToList();
         }
 
         public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
         {
-            return (await GetAllAsync(cancellationToken)).Where(conditionFunc).ToList();
+            return (await GetAllAsync(null, cancellationToken)).Where(conditionFunc).ToList();
         }
 
         public Task AddAsync(BlogPost post, CancellationToken cancellationToken)
@@ -123,7 +118,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken)
         {
-            return (await GetAllAsync(cancellationToken)).Take(numRecent).ToList();
+            return (await GetAllAsync(null, cancellationToken)).Take(numRecent).ToList();
         }
 
         public Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)

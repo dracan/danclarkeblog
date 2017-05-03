@@ -43,7 +43,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
 
             var repo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
-            var posts = await repo.GetAllAsync(CancellationToken.None);
+            var posts = await repo.GetAllAsync(null, CancellationToken.None);
 
             foreach(var post in posts)
             {

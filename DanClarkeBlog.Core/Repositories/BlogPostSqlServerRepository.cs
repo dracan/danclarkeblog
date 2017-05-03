@@ -31,7 +31,7 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
-        public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
             _logger.Trace("Get all async");
 
@@ -83,12 +83,6 @@ namespace DanClarkeBlog.Core.Repositories
                            TotalPosts = totalPosts
                        };
             }
-        }
-
-        public Task<IEnumerable<BlogPost>> GetUpdatesAsync(CursorContainer cursor, CancellationToken cancellationToken)
-        {
-            _logger.Error("Trying to call unsupported GetUpdatesAsync on SQL Server implementation");
-            throw new NotSupportedException();
         }
 
         public async Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)

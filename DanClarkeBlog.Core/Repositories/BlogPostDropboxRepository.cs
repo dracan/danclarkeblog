@@ -46,17 +46,30 @@ namespace DanClarkeBlog.Core.Repositories
             throw new NotSupportedException();
         }
 
-        //(todo) This method and the GetAllAsync are too similar. Look if it makes sense to combine them.
-        public async Task<IEnumerable<BlogPost>> GetUpdatesAsync(CursorContainer cursor, CancellationToken cancellationToken)
+        public Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("Processing updated files from Dropbox ...");
+            throw new NotSupportedException();
+        }
 
-            var updatedFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
+        public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
+        {
+            List<DropboxFileModel> dropboxFiles = null;
 
-            _logger.Trace("Files dropbox thinks has been updated:");
-            foreach (var updatedFile in updatedFiles)
+            if (cursor == null)
             {
-                _logger.Trace($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
+                _logger.Debug("Processing files from Dropbox ...");
+            }
+            else
+            {
+                _logger.Debug("Processing updated files from Dropbox ...");
+
+                dropboxFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
+
+                _logger.Trace("Files dropbox thinks has been updated:");
+                foreach (var updatedFile in dropboxFiles)
+                {
+                    _logger.Trace($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
+                }
             }
 
             var blogPosts = new List<BlogPost>();
@@ -70,7 +83,10 @@ namespace DanClarkeBlog.Core.Repositories
             _logger.Trace($"Blog.json content was {blogJson}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
-            var blogPostsToUpdate = blogPostList.Where(x => updatedFiles.Any(y => y.PathLower == $"{x.Folder}/post.md".ToLower())).ToList();
+
+            var blogPostsToUpdate = cursor == null
+                ? blogPostList
+                : blogPostList.Where(x => dropboxFiles.Any(y => y.PathLower == $"{x.Folder}/post.md".ToLower())).ToList();
 
             _logger.Trace($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
 
@@ -106,70 +122,7 @@ namespace DanClarkeBlog.Core.Repositories
                                Published = blogPost.Status.ToLower() == "published"
                            };
 
-                post.BlogPostTags = blogPost.Tags.Split(new [] {'|'}, StringSplitOptions.RemoveEmptyEntries).Select(x => new BlogPostTag(post, new Tag(x))).ToList();
-
-                blogPosts.Add(post);
-            }
-
-            return blogPosts;
-        }
-
-        public Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException();
-        }
-
-        public async Task<IEnumerable<BlogPost>> GetAllAsync(CancellationToken cancellationToken)
-        {
-            _logger.Debug("Processing files from Dropbox ...");
-
-            var blogPosts = new List<BlogPost>();
-
-            _logger.Debug("Reading blog.json ...");
-
-            var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
-
-            var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
-
-            _logger.Trace($"Blog.json content was {blogJson}");
-
-            var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
-
-            _logger.Trace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
-
-            foreach (var blogPost in blogPostList)
-            {
-                var imagePath = $"{blogPost.Folder}/images/";
-
-                var imageFiles = (await _dropboxHelper.GetFilesAsync(imagePath, cancellationToken)).Where(ImageFileFilter);
-
-                foreach (var image in imageFiles.Select(x => $"{imagePath}{x.Name}"))
-                {
-                    var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
-
-                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
-
-                    await _imageRepository.AddAsync(blogPost.Folder, Path.GetFileName(image), resizedImageFileContent, cancellationToken);
-                }
-
-                _logger.Trace($"*Reading content for {blogPost.Folder} ...");
-
-                var postFile = await _dropboxHelper.GetFileContentAsync($"{blogPost.Folder}/post.md", cancellationToken);
-
-                var postFileText = Encoding.UTF8.GetString(postFile);
-
-                var post = new BlogPost
-                           {
-                               Title = blogPost.Title,
-                               PublishDate = string.IsNullOrWhiteSpace(blogPost.PublishDate) ? null : (DateTime?)DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
-                               HtmlText = _renderer.Render(postFileText, blogPost.Folder),
-                               HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText), blogPost.Folder),
-                               Route = blogPost.Route,
-                               Featured = blogPost.Featured,
-                               Published = blogPost.Status.ToLower() == "published"
-                           };
-
-                post.BlogPostTags = blogPost.Tags.Split(new [] {'|'}, StringSplitOptions.RemoveEmptyEntries).Select(x => new BlogPostTag(post, new Tag(x))).ToList();
+                post.BlogPostTags = blogPost.Tags.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(x => new BlogPostTag(post, new Tag(x))).ToList();
 
                 blogPosts.Add(post);
             }
