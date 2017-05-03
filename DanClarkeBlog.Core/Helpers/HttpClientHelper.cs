@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Polly;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -21,13 +22,15 @@ namespace DanClarkeBlog.Core.Helpers
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
                 }
 
-                //todo: Add retry logic here (Polly)
-
-                var response = await client.PostAsync(uri, new StringContent(requestJson, Encoding.UTF8, "application/json"), cancellationToken);
-
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadAsStringAsync();
+                return await Policy.Handle<HttpRequestException>()
+                            .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(1))
+                            .ExecuteAsync(async () =>
+                                          {
+                                              // ReSharper disable once AccessToDisposedClosure
+                                              var response = await client.PostAsync(uri, new StringContent(requestJson, Encoding.UTF8, "application/json"), cancellationToken);
+                                              response.EnsureSuccessStatusCode();
+                                              return await response.Content.ReadAsStringAsync();
+                                          });
             }
         }
 
@@ -59,13 +62,15 @@ namespace DanClarkeBlog.Core.Helpers
                     client.DefaultRequestHeaders.Add(header.Key, header.Value);
                 }
 
-                //todo: Add retry logic here (Polly)
-
-                var response = await client.GetAsync(uri, cancellationToken);
-
-                response.EnsureSuccessStatusCode();
-
-                return response;
+                return await Policy.Handle<HttpRequestException>()
+                                   .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(1))
+                                   .ExecuteAsync(async () =>
+                                                 {
+                                                     // ReSharper disable once AccessToDisposedClosure
+                                                     var response = await client.GetAsync(uri, cancellationToken);
+                                                     response.EnsureSuccessStatusCode();
+                                                     return response;
+                                                 });
             }
         }
     }
