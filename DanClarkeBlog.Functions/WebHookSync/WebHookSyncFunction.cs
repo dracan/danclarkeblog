@@ -27,18 +27,6 @@ namespace DanClarkeBlog.Functions.WebHookSync
 
             try
             {
-                var signature = req.Headers.GetValues("X-Dropbox-Signature").FirstOrDefault();
-                var body = await req.Content.ReadAsStringAsync();
-
-                using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(settings.DropboxAppSecret)))
-                {
-                    if (!hashVerify.VerifySha256Hash(hmac, body, signature))
-                    {
-                        await notificationTarget.SendMessageAsync("Webhook request from Dropbox failed HMAC check", ct);
-                        return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    }
-                }
-
                 // req.GetQueryNameValuePairs doesn't seem to exist in this version of the libraries - so use regex instead
                 var challengeMatch = Regex.Match(req.RequestUri.Query, @".*[?&]challenge=(.*?)[&$]");
 
@@ -56,6 +44,18 @@ namespace DanClarkeBlog.Functions.WebHookSync
                            {
                                Content = new StringContent(challenge, Encoding.UTF8, "text/plain")
                            };
+                }
+
+                var signature = req.Headers.GetValues("X-Dropbox-Signature").FirstOrDefault();
+                var body = await req.Content.ReadAsStringAsync();
+
+                using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(settings.DropboxAppSecret)))
+                {
+                    if (!hashVerify.VerifySha256Hash(hmac, body, signature))
+                    {
+                        await notificationTarget.SendMessageAsync("Webhook request from Dropbox failed HMAC check", ct);
+                        return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                    }
                 }
 
                 await message.AddAsync("INCREMENTAL_DROPBOX_UPDATE", ct);
