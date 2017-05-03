@@ -5,11 +5,13 @@ namespace DanClarkeBlog.Core.Helpers
 {
     public class BlogPostSummaryHelper
     {
-        private const int SummaryLength = 200; // (dan) Make me a setting
+        private const int SummaryLength = 200; // (todo) Make me a setting
+
+        internal static string ManualSplitterText => "<--->";
 
         public string GetSummaryText(string content)
         {
-            var indexOfSplitter = content.IndexOf("-----", StringComparison.Ordinal);
+            var indexOfSplitter = content.IndexOf(ManualSplitterText, StringComparison.Ordinal);
 
             if (indexOfSplitter == -1)
             {
