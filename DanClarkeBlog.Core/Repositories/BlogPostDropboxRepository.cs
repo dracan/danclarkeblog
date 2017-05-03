@@ -30,7 +30,7 @@ namespace DanClarkeBlog.Core.Repositories
                                          IImageRepository imageRepository,
                                          IDropboxHelper dropboxHelper,
                                          IImageResizer imageResizer,
-										ILogger logger)
+                                         ILogger logger)
         {
             _renderer = renderer;
             _settings = settings;
@@ -41,7 +41,7 @@ namespace DanClarkeBlog.Core.Repositories
 	        _logger = logger;
         }
 
-        public Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
+        public Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }

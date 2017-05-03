@@ -38,7 +38,6 @@ namespace DanClarkeBlog.Core.Repositories
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 return await ctx.BlogPosts
-                    .Where(x => x.Published)
                     .Include(x => x.BlogPostTags)
                     .ThenInclude(x => x.Tag)
                     .OrderByDescending(x => x.PublishDate)
@@ -46,7 +45,7 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
-        public async Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
+        public async Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
             _logger.Trace($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
 

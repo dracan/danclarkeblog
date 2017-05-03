@@ -50,7 +50,6 @@ namespace DanClarkeBlog.Core.Helpers
 
             if (!incremental) // Do not delete posts when in incremental mode (todo) Is this comment correct? Surely as we're reading the json file even on incremental sync, we can still delete on incremental?
             {
-                //(todo) GetAllAsync filters by Published posts - we don't want this here. I think the GetAllAsync shouldn't unless explicitly requested
                 var destPosts = (await destRepo.GetAllAsync(null, cancellationToken)).ToList();
 
                 var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Title != d.Title)).ToList();

@@ -29,7 +29,7 @@ namespace DanClarkeBlog.Web.Controllers
         {
             var offset = ((page ?? 1) - 1) * NumPostsPerPage;
 
-            var pagedPostsTask = _blogPostRepository.GetAllAsync(tag, offset, NumPostsPerPage, cancellationToken);
+            var pagedPostsTask = _blogPostRepository.GetPublishedAsync(tag, offset, NumPostsPerPage, cancellationToken);
             var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
             var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
             var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);

@@ -21,7 +21,7 @@ namespace DanClarkeBlog.Core.Repositories
 	    public BlogPostFileSystemRepository(IBlogPostRenderer renderer,
                                             Settings settings,
                                             BlogPostSummaryHelper blogPostSummaryHelper,
-											ILogger logger)
+                                            ILogger logger)
         {
             _renderer = renderer;
             _settings = settings;
@@ -31,10 +31,10 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
-            return (await GetAllAsync(null, null, null, cancellationToken)).Posts;
+            return (await GetPublishedAsync(null, null, null, cancellationToken)).Posts;
         }
 
-        public Task<BlogPostListing> GetAllAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
+        public Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
             _logger.Debug($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
 
