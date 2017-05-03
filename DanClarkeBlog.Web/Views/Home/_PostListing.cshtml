@@ -9,7 +9,7 @@
 
         foreach (var tag in post.Tags)
         {
-            <a class="tag" href="/tags/@tag.ToLower()">@tag</a>
+            <a class="tag" href="/tags/@tag.ToLower()">@tag@(tag == post.Tags.Last() ? "" : ", ")</a>
         }
 
         <hr />
