@@ -51,18 +51,17 @@ namespace DanClarkeBlog.Web.Controllers
             });
         }
 
-        public async Task<IActionResult> BlogPost(string route, CancellationToken cancellationToken)
+        public async Task<IActionResult> BlogPost(string route, CancellationTokenSource cts)
         {
-            var postTask = _blogPostRepository.GetWithConditionAsync(x => x.Route.TrimStart('/') == route.TrimStart('/'), cancellationToken);
-            var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
-            var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
-            var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);
+            var postTask = _blogPostRepository.GetWithConditionAsync(x => x.Route.TrimStart('/') == route.TrimStart('/'), cts.Token);
+            var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cts.Token);
+            var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cts.Token);
+            var tagsTask = _blogPostRepository.GetTagCountsAsync(cts.Token);
 
             var post = (await postTask).SingleOrDefault();
             if (post == null)
             {
-                //todo: Cancel the other tasks here?
-
+                cts.Cancel();
                 return NotFound();
             }
 
