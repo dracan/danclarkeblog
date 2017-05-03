@@ -3,7 +3,7 @@
 
 @if (@Model is HomeViewModel)
 {
-    <img class="profilePic" alt="profilePic" src="@Model.ProfilePicUri"/>
+    <img class="profilePic hidden-xs hidden-sm" alt="profilePic" src="@Model.ProfilePicUri"/>
 }
 
 @await Html.PartialAsync("_DotNetOxford")
