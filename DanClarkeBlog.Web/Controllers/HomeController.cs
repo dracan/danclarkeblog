@@ -39,6 +39,8 @@ namespace DanClarkeBlog.Web.Controllers
             var recentPosts = await recentPostsTask;
             var tags = await tagsTask;
 
+            ViewData["Title"] = tag ?? "";
+
             return View(new HomeViewModel
             {
                 FeaturedPosts = featuredPosts,
