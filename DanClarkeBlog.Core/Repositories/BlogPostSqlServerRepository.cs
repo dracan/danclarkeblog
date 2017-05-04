@@ -51,20 +51,19 @@ namespace DanClarkeBlog.Core.Repositories
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
-                var totalPosts = await ctx.BlogPosts.CountAsync(cancellationToken);
-
                 var query = ctx.BlogPosts.Where(x => x.Published);
+                var totalPostsQuery = ctx.BlogPosts.Where(x => x.Published);
 
                 if (tag != null)
                 {
                     var lowerTag = tag.ToLower();
                     query = query.Where(x => x.BlogPostTags.Any(y => y.Tag.Name == lowerTag));
+                    totalPostsQuery = totalPostsQuery.Where(x => x.BlogPostTags.Any(y => y.Tag.Name == lowerTag));
                 }
 
-                query = query
-                    .Include(x => x.BlogPostTags)
-                    .ThenInclude(x => x.Tag)
-                    .AsQueryable();
+                var totalPostsTask = totalPostsQuery.CountAsync(cancellationToken);
+
+                query = query.OrderByDescending(x => x.PublishDate);
 
                 if (offset.HasValue)
                 {
@@ -76,10 +75,15 @@ namespace DanClarkeBlog.Core.Repositories
                     query = query.Take(maxResults.Value);
                 }
 
+                var postsTask = query
+                    .Include(x => x.BlogPostTags)
+                    .ThenInclude(x => x.Tag)
+                    .ToListAsync(cancellationToken);
+
                 return new BlogPostListing
                        {
-                           Posts = await query.OrderByDescending(x => x.PublishDate).ToListAsync(cancellationToken),
-                           TotalPosts = totalPosts
+                           Posts = await postsTask,
+                           TotalPosts = await totalPostsTask,
                        };
             }
         }
