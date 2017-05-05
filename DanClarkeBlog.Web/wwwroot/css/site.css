@@ -91,6 +91,7 @@ h1, h2, h3 {
 
 .sidemenu .postTag {
     font-size: 14px;
+    white-space: nowrap;
 }
 
 .sidemenu h3 {
