@@ -11,7 +11,8 @@ Param(
     [string] $KeepAlivePingUri,
     [string] $SiteHomeUri,
     [string] $DropboxAppSecret,
-    [string] $ProfilePicUri
+    [string] $ProfilePicUri,
+    [string] $ApplicationInsightsInstrumentationKey
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -33,5 +34,6 @@ $hash['Blog:KeepAlivePingUri'] = $KeepAlivePingUri
 $hash['Blog:SiteHomeUri'] = $SiteHomeUri
 $hash['Blog:DropboxAppSecret'] = $DropboxAppSecret
 $hash['Blog:ProfilePicUri'] = $ProfilePicUri
+$hash['Blog:ApplicationInsightsInstrumentationKey'] = $ApplicationInsightsInstrumentationKey
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash

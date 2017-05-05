@@ -45,6 +45,12 @@ namespace DanClarkeBlog.Web
             var sp = services.BuildServiceProvider();
             var settings = sp.GetService<IOptions<Settings>>();
 
+            services.AddApplicationInsightsTelemetry(options =>
+                {
+                    options.DeveloperMode = true; //(todo) Temp
+                    options.InstrumentationKey = settings.Value.ApplicationInsightsInstrumentationKey;
+                });
+
             var container = WebBootstrapper.Init(services, settings.Value, new NLogLoggerImpl(LogManager.GetLogger("")));
 
             return new AutofacServiceProvider(container);

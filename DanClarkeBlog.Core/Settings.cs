@@ -11,6 +11,7 @@
         public string SlackNotificationUri { get; set; }
         public string SiteHomeUri { get; set; }
         public string ProfilePicUri { get; set; }
+        public string ApplicationInsightsInstrumentationKey { get; set; }
 
         /// <summary>
         /// For verification of Dropbox webhook HMAC
