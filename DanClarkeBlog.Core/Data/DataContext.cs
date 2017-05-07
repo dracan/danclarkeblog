@@ -36,6 +36,10 @@ namespace DanClarkeBlog.Core.Data
                    .HasOne(t => t.Tag)
                    .WithMany(t => t.BlogPostTags)
                    .HasForeignKey(t => t.TagId);
+
+            builder.Entity<Tag>()
+                    .HasAlternateKey(c => c.Name)
+                    .HasName("AlternateKey_TagName");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
