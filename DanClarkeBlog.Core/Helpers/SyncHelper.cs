@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,14 +11,28 @@ namespace DanClarkeBlog.Core.Helpers
     {
         private readonly ILogger _logger;
         private readonly IDropboxHelper _dropboxHelper;
+        private readonly IImageRepository _imageRepository;
+        private readonly IImageResizer _imageResizer;
+        private readonly Settings _settings;
 
-        public SyncHelper(ILogger logger, IDropboxHelper dropboxHelper)
+        public SyncHelper(ILogger logger,
+                          IDropboxHelper dropboxHelper,
+                          IImageRepository imageRepository,
+                          IImageResizer imageResizer,
+                          Settings settings)
         {
             _logger = logger;
             _dropboxHelper = dropboxHelper;
+            _imageRepository = imageRepository;
+            _imageResizer = imageResizer;
+            _settings = settings;
         }
 
-        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo, IBlogPostRepository destRepo, bool incremental, string overrideCursor, CancellationToken cancellationToken)
+        public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo,
+                                                    IBlogPostRepository destRepo,
+                                                    bool incremental,
+                                                    string overrideCursor,
+                                                    CancellationToken cancellationToken)
         {
             _logger.Trace($"SynchronizeBlogPostsAsync with incremental = {incremental}");
 
@@ -43,10 +58,21 @@ namespace DanClarkeBlog.Core.Helpers
 
             _logger.Trace($"Processing {sourcePosts.Count} source posts ...");
 
+            var tasks = new List<Task>();
+
             foreach(var sourcePost in sourcePosts)
             {
-                await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
+                tasks.Add(destRepo.AddOrUpdateAsync(sourcePost, cancellationToken));
+
+                foreach (var imageData in sourcePost.ImageData)
+                {
+                    var imageContent = await imageData.ImageDataTask;
+                    var resizedImageFileContent = _imageResizer.Resize(imageContent, _settings.MaxResizedImageSize);
+                    tasks.Add(_imageRepository.AddAsync(imageData.PostFolder, imageData.FileName, resizedImageFileContent, cancellationToken));
+                }
             }
+
+            await Task.WhenAll(tasks);
 
             if (!incremental) // Do not delete posts when in incremental mode (todo) Is this comment correct? Surely as we're reading the json file even on incremental sync, we can still delete on incremental?
             {

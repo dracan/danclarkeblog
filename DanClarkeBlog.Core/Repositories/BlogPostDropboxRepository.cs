@@ -15,29 +15,20 @@ namespace DanClarkeBlog.Core.Repositories
     public class BlogPostDropboxRepository : IBlogPostRepository
     {
         private readonly IBlogPostRenderer _renderer;
-        private readonly Settings _settings;
         private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
-        private readonly IImageRepository _imageRepository;
         private readonly IDropboxHelper _dropboxHelper;
-        private readonly IImageResizer _imageResizer;
 	    private readonly ILogger _logger;
 
 	    private static readonly Func<DropboxFileModel, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Name.Contains);
 
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
-                                         Settings settings,
                                          BlogPostSummaryHelper blogPostSummaryHelper,
-                                         IImageRepository imageRepository,
                                          IDropboxHelper dropboxHelper,
-                                         IImageResizer imageResizer,
                                          ILogger logger)
         {
             _renderer = renderer;
-            _settings = settings;
             _blogPostSummaryHelper = blogPostSummaryHelper;
-            _imageRepository = imageRepository;
             _dropboxHelper = dropboxHelper;
-            _imageResizer = imageResizer;
 	        _logger = logger;
         }
 
@@ -94,16 +85,16 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var imagePath = $"{blogPost.Folder}/images/";
 
-                var imageFiles = (await _dropboxHelper.GetFilesAsync(imagePath, cancellationToken)).Where(ImageFileFilter);
+                //(todo) Refactor so that in the case of an incremental sync, I'm only getting images that have changed since the cursor.
 
-                foreach (var image in imageFiles.Select(x => $"{imagePath}{x.Name}"))
-                {
-                    var imageFileContent = await _dropboxHelper.GetFileContentAsync(image, cancellationToken);
-
-                    var resizedImageFileContent = _imageResizer.Resize(imageFileContent, _settings.MaxResizedImageSize);
-
-                    await _imageRepository.AddAsync(blogPost.Folder, Path.GetFileName(image), resizedImageFileContent, cancellationToken);
-                }
+                var images = (await _dropboxHelper.GetFilesAsync(imagePath, cancellationToken)).Where(ImageFileFilter)
+                    .Select(x => $"{imagePath}{x.Name}")
+                    .Select(i => new BlogImageData
+                    {
+                        FileName = Path.GetFileName(i),
+                        PostFolder = blogPost.Folder,
+                        ImageDataTask = _dropboxHelper.GetFileContentAsync(i, cancellationToken),
+                    }).ToList();
 
                 _logger.Trace($"Reading content for {blogPost.Folder} ...");
 
@@ -119,7 +110,8 @@ namespace DanClarkeBlog.Core.Repositories
                                HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText), blogPost.Folder),
                                Route = blogPost.Route,
                                Featured = blogPost.Featured,
-                               Published = blogPost.Status.ToLower() == "published"
+                               Published = blogPost.Status.ToLower() == "published",
+                               ImageData = images
                            };
 
                 post.BlogPostTags = blogPost.Tags.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(x => new BlogPostTag(post, new Tag(x))).ToList();

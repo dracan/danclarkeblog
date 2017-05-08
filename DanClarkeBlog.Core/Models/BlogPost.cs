@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using DanClarkeBlog.Core.Repositories;
 
 namespace DanClarkeBlog.Core.Models
 {
@@ -17,6 +19,9 @@ namespace DanClarkeBlog.Core.Models
         public virtual ICollection<BlogPostTag> BlogPostTags { get; set; }
 
         public List<string> Tags => BlogPostTags.Where(x => x.Tag != null).Select(x => x.Tag.Name).ToList();
+
+        [NotMapped]
+        public List<BlogImageData> ImageData { get; set; }
 
         public BlogPost()
         {
