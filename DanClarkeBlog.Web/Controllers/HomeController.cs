@@ -44,7 +44,9 @@ namespace DanClarkeBlog.Web.Controllers
                 return NotFound();
             }
 
-            ViewData["Title"] = tag ?? "";
+            // Use the tag name from the database, not from the query string to preserve case
+            ViewData["Title"] = string.IsNullOrWhiteSpace(tag)
+                ? "" : pagedPostsResults.Posts.FirstOrDefault()?.Tags.SingleOrDefault(x => string.Equals(x, tag, StringComparison.CurrentCultureIgnoreCase)) ?? "";
 
             return View(new HomeViewModel
             {
