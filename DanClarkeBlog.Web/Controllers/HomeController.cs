@@ -39,6 +39,11 @@ namespace DanClarkeBlog.Web.Controllers
             var recentPosts = await recentPostsTask;
             var tags = await tagsTask;
 
+            if (!string.IsNullOrWhiteSpace(tag) && pagedPostsResults.TotalPosts == 0) // 404 on a tag listing page with an invalid tag 
+            {
+                return NotFound();
+            }
+
             ViewData["Title"] = tag ?? "";
 
             return View(new HomeViewModel
