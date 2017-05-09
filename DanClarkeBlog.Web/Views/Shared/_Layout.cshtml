@@ -1,6 +1,8 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
 @model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
+@* ReSharper disable Mvc.PartialViewNotResolved *@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,3 +94,5 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+@* ReSharper restore Mvc.PartialViewNotResolved *@
