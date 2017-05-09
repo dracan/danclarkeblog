@@ -1,13 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.0
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CEF8AFD-28C8-432C-A787-5319778B3437}"
-	ProjectSection(SolutionItems) = preProject
-		..\global.json = ..\global.json
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanClarkeBlog.Web", "DanClarkeBlog.Web\DanClarkeBlog.Web.csproj", "{C2AC090A-57D7-49DE-8E8F-278CA13022B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DanClarkeBlog.Core", "DanClarkeBlog.Core\DanClarkeBlog.Core.csproj", "{CC675CD9-5AD5-4D9E-8782-2431C227E099}"
