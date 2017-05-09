@@ -10,6 +10,8 @@ using DanClarkeBlog.Core.Repositories;
 
 namespace DanClarkeBlog.Core.Helpers
 {
+    //(todo) A lot of hardcoded strings specific to my blog here need making into settings
+
     public class FeedGenerator : IFeedGenerator
     {
         private readonly IBlogPostRepository _blogPostRepository;
@@ -65,7 +67,7 @@ namespace DanClarkeBlog.Core.Helpers
 
         private async Task<SyndicationFeed> GenerateInternalAsync(CancellationToken cancelationToken)
         {
-            var blogDescription = "Dan Clarke's Blog"; //(todo) Make this a setting
+            var blogDescription = "Dan Clarke's Blog";
 
             var feed = new SyndicationFeed
                        {

@@ -22,6 +22,8 @@ namespace DanClarkeBlog.Functions
                                SiteHomeUri = Environment.GetEnvironmentVariable("Blog:SiteHomeUri"),
                                DropboxAppSecret = Environment.GetEnvironmentVariable("Blog:DropboxAppSecret"),
                                ProfilePicUri = Environment.GetEnvironmentVariable("Blog:ProfilePicUri"),
+                               PostPreviewLength = int.Parse(Environment.GetEnvironmentVariable("Blog:PostPreviewLength") ?? "200"),
+                               BaseImageUri  = Environment.GetEnvironmentVariable("Blog:BaseImageUri"),
             };
 
             var builder = new ContainerBuilder();

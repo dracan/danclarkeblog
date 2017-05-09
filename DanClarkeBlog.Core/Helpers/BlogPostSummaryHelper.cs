@@ -5,7 +5,12 @@ namespace DanClarkeBlog.Core.Helpers
 {
     public class BlogPostSummaryHelper
     {
-        private const int SummaryLength = 200; // (todo) Make me a setting
+        private readonly Settings _settings;
+
+        public BlogPostSummaryHelper(Settings _settings)
+        {
+            this._settings = _settings;
+        }
 
         internal static string ManualSplitterText => "<--->";
 
@@ -19,14 +24,14 @@ namespace DanClarkeBlog.Core.Helpers
                 indexOfSplitter = match.Success ? match.Index : -1;
             }
 
-            if (content.Length < SummaryLength)
+            if (content.Length < _settings.PostPreviewLength)
             {
                 return content;
             }
 
             if (indexOfSplitter == -1)
             {
-                indexOfSplitter = SummaryLength;
+                indexOfSplitter = _settings.PostPreviewLength;
             }
 
             //(todo) Splitting by this Summary Length should really only break on whole words or sentences.

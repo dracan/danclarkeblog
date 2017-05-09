@@ -29,7 +29,9 @@ namespace DanClarkeBlog.Core.Tests
                                KeepAlivePingUri = Environment.GetEnvironmentVariable("Blog:KeepAlivePingUri"),
                                SlackNotificationUri = Environment.GetEnvironmentVariable("Blog:SlackNotificationUri"),
                                SiteHomeUri = Environment.GetEnvironmentVariable("Blog:SiteHomeUri"),
-                           };
+                               PostPreviewLength = int.Parse(Environment.GetEnvironmentVariable("Blog:PostPreviewLength") ?? "200"),
+                               BaseImageUri = Environment.GetEnvironmentVariable("Blog:BaseImageUri"),
+            };
 
             var builder = new ContainerBuilder();
 

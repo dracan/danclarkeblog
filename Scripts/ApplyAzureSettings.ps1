@@ -12,7 +12,10 @@ Param(
     [string] $SiteHomeUri,
     [string] $DropboxAppSecret,
     [string] $ProfilePicUri,
-    [string] $ApplicationInsightsInstrumentationKey
+    [string] $ApplicationInsightsInstrumentationKey,
+    [string] $ApplicationInsightsDeveloperMode,
+    [string] $PostPreviewLength,
+    [string] $BaseImageUri
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -35,5 +38,8 @@ $hash['Blog:SiteHomeUri'] = $SiteHomeUri
 $hash['Blog:DropboxAppSecret'] = $DropboxAppSecret
 $hash['Blog:ProfilePicUri'] = $ProfilePicUri
 $hash['Blog:ApplicationInsightsInstrumentationKey'] = $ApplicationInsightsInstrumentationKey
+$hash['Blog:ApplicationInsightsDeveloperMode'] = $ApplicationInsightsDeveloperMode
+$hash['Blog:PostPreviewLength'] = $PostPreviewLength
+$hash['Blog:BaseImageUri'] = $BaseImageUri
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash

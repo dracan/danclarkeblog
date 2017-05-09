@@ -1,4 +1,5 @@
-﻿using DanClarkeBlog.Core.Helpers;
+﻿using Autofac;
+using DanClarkeBlog.Core.Helpers;
 using Xunit;
 
 namespace DanClarkeBlog.Core.Tests.Helpers
@@ -13,7 +14,10 @@ namespace DanClarkeBlog.Core.Tests.Helpers
         [InlineData(@"![](images/Banner.jpg)", "/Shared/SomePostDir", "![](https://danclarkeblog.blob.core.windows.net/images/somepostdir/banner.jpg)")]
         public void UpdateImagePathsTests(string source, string imageFolder, string expectedResult)
         {
-            var result = BlogPostMarkdownRenderer.UpdateImagePaths(source, imageFolder);
+            var container = TestBootstrapper.Init();
+            var renderer = container.Resolve<IBlogPostRenderer>() as BlogPostMarkdownRenderer;
+
+            var result = renderer?.UpdateImagePaths(source, imageFolder);
             Assert.Equal(expectedResult, result);
         }
     }

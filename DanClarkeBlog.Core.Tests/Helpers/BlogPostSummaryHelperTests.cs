@@ -1,4 +1,5 @@
-﻿using DanClarkeBlog.Core.Helpers;
+﻿using Autofac;
+using DanClarkeBlog.Core.Helpers;
 using Xunit;
 
 namespace DanClarkeBlog.Core.Tests.Helpers
@@ -10,7 +11,11 @@ namespace DanClarkeBlog.Core.Tests.Helpers
         [Fact, Trait("Category", "Unit")]
         public void GetSummaryText_WhenContentIsLessThanSummarySize()
         {
-            var sut = new BlogPostSummaryHelper();
+            var container = TestBootstrapper.Init();
+
+            var settings = container.Resolve<Settings>();
+
+            var sut = new BlogPostSummaryHelper(settings);
             var result = sut.GetSummaryText("abc");
             Assert.Equal("abc", result);
         }

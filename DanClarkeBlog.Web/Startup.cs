@@ -47,7 +47,7 @@ namespace DanClarkeBlog.Web
 
             services.AddApplicationInsightsTelemetry(options =>
                 {
-                    options.DeveloperMode = true; //(todo) Temp
+                    options.DeveloperMode = settings.Value.ApplicationInsightsDeveloperMode;
                     options.InstrumentationKey = settings.Value.ApplicationInsightsInstrumentationKey;
                 });
 
