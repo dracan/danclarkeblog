@@ -33,7 +33,7 @@ namespace DanClarkeBlog.Core.Helpers
 
             // The regular expression is to convert the relative path on the filesystem to path that will work on the web.
             // This allows editing the local Markdown files and being able to see the images in your markdown editor.
-            return Regex.Replace(source, @"(!\[.*?\]\()images/(.*?\))", x => $"{x.Groups[1].Value}{_settings.BaseImageUri}/{leafPostFolderName}/{x.Groups[2].Value}".ToLower()); //(todo) Don't hardcode this
+            return Regex.Replace(source, @"(!\[.*?\]\()images/(.*?\))", x => $"{x.Groups[1].Value}{_settings.BaseImageUri}/{leafPostFolderName}/{x.Groups[2].Value}".ToLower());
         }
     }
 }
