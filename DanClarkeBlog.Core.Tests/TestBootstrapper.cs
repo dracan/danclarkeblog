@@ -47,6 +47,7 @@ namespace DanClarkeBlog.Core.Tests
             builder.RegisterType<DropboxHelper>().As<IDropboxHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
+            builder.RegisterType<AzureBlobLockRepository>().As<ILockRepository>();
             builder.Register<ILogger>(x => new NLogLoggerImpl(LogManager.GetLogger(""))).InstancePerDependency();
 
             if (httpClientHelper == null)
