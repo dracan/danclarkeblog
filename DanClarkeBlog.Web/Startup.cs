@@ -79,7 +79,7 @@ namespace DanClarkeBlog.Web
 
             // ReSharper disable once UnusedVariable
             var options = new RewriteOptions()
-                .AddRedirectToHttps();
+                .AddRedirectToHttps(301);
 
             app.UseRewriter(options);
 
