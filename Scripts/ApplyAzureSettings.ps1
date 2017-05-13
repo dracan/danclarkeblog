@@ -15,7 +15,8 @@ Param(
     [string] $ApplicationInsightsInstrumentationKey,
     [string] $ApplicationInsightsDeveloperMode,
     [string] $PostPreviewLength,
-    [string] $BaseImageUri
+    [string] $BaseImageUri,
+    [string] $GoogleAnalyticsTrackingId
 )
 
 $webApp = Get-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName
@@ -41,5 +42,6 @@ $hash['Blog:ApplicationInsightsInstrumentationKey'] = $ApplicationInsightsInstru
 $hash['Blog:ApplicationInsightsDeveloperMode'] = $ApplicationInsightsDeveloperMode
 $hash['Blog:PostPreviewLength'] = $PostPreviewLength
 $hash['Blog:BaseImageUri'] = $BaseImageUri
+$hash['Blog:GoogleAnalyticsTrackingId'] = $GoogleAnalyticsTrackingId
 
 Set-AzureRMWebApp -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash

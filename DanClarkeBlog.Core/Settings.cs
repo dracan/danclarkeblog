@@ -15,6 +15,7 @@
         public bool ApplicationInsightsDeveloperMode { get; set; } = false;
         public int PostPreviewLength { get; set; } = 200;
         public string BaseImageUri { get; set; }
+        public string GoogleAnalyticsTrackingId { get; set; }
 
         /// <summary>
         /// For verification of Dropbox webhook HMAC

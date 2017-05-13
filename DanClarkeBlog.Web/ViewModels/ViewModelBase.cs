@@ -9,5 +9,6 @@ namespace DanClarkeBlog.Web.ViewModels
         public List<BlogPost> RecentPosts { get; set; }
         public List<TagCount> Tags { get; set; }
         public string ProfilePicUri { get; set; }
+        public string GoogleAnalyticsTrackingId { get; set; }
     }
 }

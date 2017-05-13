@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
+    <AssemblyName>DanClarkeBlog.Web</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

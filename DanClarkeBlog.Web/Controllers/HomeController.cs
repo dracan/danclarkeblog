@@ -57,6 +57,7 @@ namespace DanClarkeBlog.Web.Controllers
                 PageNumber = page ?? 1,
                 TotalPages = (int)Math.Ceiling((decimal)pagedPostsResults.TotalPosts / NumPostsPerPage),
                 ProfilePicUri = _settings.ProfilePicUri,
+                GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
             });
         }
 
@@ -86,6 +87,7 @@ namespace DanClarkeBlog.Web.Controllers
                 DisqusDomainName = _settings.DisqusDomainName,
                 Tags = tags,
                 ProfilePicUri = _settings.ProfilePicUri,
+                GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
             });
         }
 
@@ -117,6 +119,7 @@ namespace DanClarkeBlog.Web.Controllers
                             RecentPosts = recent,
                             Tags = tags,
                             ProfilePicUri = _settings.ProfilePicUri,
+                            GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
                         });
         }
     }

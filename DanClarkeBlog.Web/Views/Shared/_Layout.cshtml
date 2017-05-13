@@ -1,6 +1,8 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
 @model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
+@addTagHelper *, DanClarkeBlog.Web
+
 @* ReSharper disable Mvc.PartialViewNotResolved *@
 
 <!DOCTYPE html>
@@ -90,6 +92,10 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+   
+    <environment names="Staging,Production">
+        <google-analytics></google-analytics>
+    </environment>
 
     @RenderSection("Scripts", required: false)
 </body>
