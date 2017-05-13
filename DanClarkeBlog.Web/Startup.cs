@@ -2,10 +2,12 @@ using System;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Rewrite;
 using NLog;
 using Settings = DanClarkeBlog.Core.Settings;
 using NLog.Extensions.Logging;
@@ -36,6 +38,7 @@ namespace DanClarkeBlog.Web
             services.AddMvc(config =>
                             {
                                 config.RespectBrowserAcceptHeader = true;
+                                config.Filters.Add(new RequireHttpsAttribute());
                             })
                     .AddXmlSerializerFormatters();
 
@@ -57,7 +60,7 @@ namespace DanClarkeBlog.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app,IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddNLog();
 
@@ -73,6 +76,12 @@ namespace DanClarkeBlog.Web
 
             app.UseStaticFiles();
             app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+            // ReSharper disable once UnusedVariable
+            var options = new RewriteOptions()
+                .AddRedirectToHttps();
+
+            app.UseRewriter(options);
 
             app.UseMvc(routes =>
             {
