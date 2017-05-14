@@ -21,7 +21,7 @@ namespace DanClarkeBlog.Core.Repositories
             _settings = settings;
         }
 
-        public async Task AcquireLockAsync(string key, int numRetries, TimeSpan lockTimeout, CancellationToken cancellationToken)
+        public async Task AcquireLockAsync(string key, int numRetries, TimeSpan waitBetweenRetries, TimeSpan lockTimeout, CancellationToken cancellationToken)
         {
            _logger.Debug($"Acquiring lock for key {key} ...");
 
@@ -31,9 +31,10 @@ namespace DanClarkeBlog.Core.Repositories
             await _storageContainer.CreateIfNotExistsAsync(cancellationToken);
             await _storageContainer.FetchAttributesAsync(cancellationToken);
 
-            await Policy.Handle<StorageException>().RetryAsync(numRetries, (e, n) =>
+            await Policy.Handle<StorageException>().WaitAndRetryAsync(numRetries, n =>
                {
-                   _logger.Debug($"Failed to acquire lock ({e.Message}). Retrying ... (retry count {n})");
+                   _logger.Debug($"Failed to acquire lock. Retrying ... (retry count {n})");
+                   return waitBetweenRetries;
                }).ExecuteAsync(async () =>
                {
                    _leaseId = await _storageContainer.AcquireLeaseAsync(lockTimeout);

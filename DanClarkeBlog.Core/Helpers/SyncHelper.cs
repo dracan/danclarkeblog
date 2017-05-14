@@ -40,7 +40,7 @@ namespace DanClarkeBlog.Core.Helpers
         {
             try
             {
-                await _lockRepository.AcquireLockAsync("synchelperlock", 10, TimeSpan.FromMinutes(1), cancellationToken);
+                await _lockRepository.AcquireLockAsync("synchelperlock", 10, TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(1), cancellationToken);
 
                 _logger.Trace($"SynchronizeBlogPostsAsync with incremental = {incremental}");
 
