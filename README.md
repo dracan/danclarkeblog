@@ -1,39 +1,13 @@
-# Welcome to ASP.NET Core
+## Dan Clarke's Blog
 
-We've made some big updates in this release, so it’s **important** that you spend a few minutes to learn what’s new.
+This repository contains the source code that runs my blog, which can be found at https://www.danclarke.com.
 
-You've created a new ASP.NET Core project. [Learn what's new](https://go.microsoft.com/fwlink/?LinkId=518016)
+My post talking about it can [be found here](https://www.danclarke.com/blog-rewrite).
 
-## This application consists of:
+It's worthing pointing out, that whilst you're free to clone this repository and do whatever you like with it - I am not planning on supporting backwards compatibility. This is ***not*** a *supported* blogging platform - it's just the source code that drives my blog.
 
-*   Sample pages using ASP.NET Core MVC
-*   [Bower](https://go.microsoft.com/fwlink/?LinkId=518004) for managing client-side libraries
-*   Theming using [Bootstrap](https://go.microsoft.com/fwlink/?LinkID=398939)
+That said, I've exposed all the settings - eg. Dropbox access token, connection strings, hostname, etc - so that they can be set via either environment variables or application settings - so that I don't have any secrets stored in Git, ***but also*** so that other people can use this if they wish, and reference their own Dropbox and Azure accounts.
 
-## How to
+I'll also document in this repository's wiki how to set this up, how the Dropbox directory structure should be laid out, how to setup [VSTS](https://www.visualstudio.com/team-services/) and Azure to build/deploy/host this solution.
 
-*   [Add a Controller and View](https://go.microsoft.com/fwlink/?LinkID=398600)
-*   [Add an appsetting in config and access it in app.](https://go.microsoft.com/fwlink/?LinkID=699562)
-*   [Manage User Secrets using Secret Manager.](https://go.microsoft.com/fwlink/?LinkId=699315)
-*   [Use logging to log a message.](https://go.microsoft.com/fwlink/?LinkId=699316)
-*   [Add packages using NuGet.](https://go.microsoft.com/fwlink/?LinkId=699317)
-*   [Add client packages using Bower.](https://go.microsoft.com/fwlink/?LinkId=699318)
-*   [Target development, staging or production environment.](https://go.microsoft.com/fwlink/?LinkId=699319)
-
-## Overview
-
-*   [Conceptual overview of what is ASP.NET Core](https://go.microsoft.com/fwlink/?LinkId=518008)
-*   [Fundamentals of ASP.NET Core such as Startup and middleware.](https://go.microsoft.com/fwlink/?LinkId=699320)
-*   [Working with Data](https://go.microsoft.com/fwlink/?LinkId=398602)
-*   [Security](https://go.microsoft.com/fwlink/?LinkId=398603)
-*   [Client side development](https://go.microsoft.com/fwlink/?LinkID=699321)
-*   [Develop on different platforms](https://go.microsoft.com/fwlink/?LinkID=699322)
-*   [Read more on the documentation site](https://go.microsoft.com/fwlink/?LinkID=699323)
-
-## Run & Deploy
-
-*   [Run your app](https://go.microsoft.com/fwlink/?LinkID=517851)
-*   [Run tools such as EF migrations and more](https://go.microsoft.com/fwlink/?LinkID=517853)
-*   [Publish to Microsoft Azure Web Apps](https://go.microsoft.com/fwlink/?LinkID=398609)
-
-We would love to hear your [feedback](https://go.microsoft.com/fwlink/?LinkId=518015)
+Happy Blogging! :)
