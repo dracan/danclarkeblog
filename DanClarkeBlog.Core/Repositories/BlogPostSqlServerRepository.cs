@@ -132,6 +132,22 @@ namespace DanClarkeBlog.Core.Repositories
 
                 if (existing == null)
                 {
+                    // Update tag references where the tag already exists, so that EF doesn't try to insert a duplicate.
+                    // (todo) A better solution would be for the Tag table to not contain an ID and just use the 'Name' field
+                    // as the primary key (which it's an additional primary key currently anyway). That way, I can just
+                    // attach the entity and let EF handle it. For now though, I'll do it this way to avoid changing the database schema.
+
+                    var tagList = new List<BlogPostTag>();
+
+                    foreach (var postTag in post.BlogPostTags)
+                    {
+                        var existingTag = await ctx.Tags.SingleOrDefaultAsync(t => t.Name == postTag.Tag.Name, cancellationToken);
+                        postTag.Tag = existingTag ?? postTag.Tag;
+                        tagList.Add(postTag);
+                    }
+
+                    post.BlogPostTags = tagList;
+
                     await ctx.BlogPosts.AddAsync(post, cancellationToken);
                 }
                 else
@@ -145,7 +161,7 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
-        private Task UpdateTagsAsync(DataContext ctx, BlogPost post, IReadOnlyCollection<string> expectedTags)
+        private async Task UpdateTagsAsync(DataContext ctx, BlogPost post, IReadOnlyCollection<string> expectedTags)
         {
             // ReSharper disable SimplifyLinqExpression
             var newTags = expectedTags.Where(et => !post.BlogPostTags.Any(t => t.Tag.Name == et)).ToList();
@@ -154,7 +170,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             foreach (var newTag in newTags)
             {
-                var tag = ctx.Tags.SingleOrDefault(t => t.Name == newTag) ?? new Tag(newTag);
+                var tag = await ctx.Tags.SingleOrDefaultAsync(t => t.Name == newTag) ?? new Tag(newTag);
 
                 post.BlogPostTags.Add(new BlogPostTag(post, tag));
             }
@@ -163,8 +179,6 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 post.BlogPostTags.Remove(tagToRemove);
             }
-
-            return Task.FromResult(true);
         }
 
         public async Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken)
