@@ -195,6 +195,7 @@ namespace DanClarkeBlog.Core.Repositories
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 return await ctx.BlogPosts
+                    .Where(x => x.Published)
                     .OrderByDescending(x => x.PublishDate)
                     .Take(numRecent)
                     .ToListAsync(cancellationToken);
