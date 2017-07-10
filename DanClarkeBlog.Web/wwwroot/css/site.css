@@ -152,3 +152,7 @@ footer {
 .p404 {
     text-align: center;
 }
+
+code {
+    color: darkslategrey;
+}
