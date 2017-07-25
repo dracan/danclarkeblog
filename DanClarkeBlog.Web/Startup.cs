@@ -67,7 +67,7 @@ namespace DanClarkeBlog.Web
             if (!_isDevelopment)
             {
                 Log.Logger = new LoggerConfiguration()
-                    .MinimumLevel.Debug()
+                    .MinimumLevel.Information()
                     .Enrich.FromLogContext()
                     .WriteTo.ApplicationInsightsTraces(settings.Value.ApplicationInsightsInstrumentationKey)
                     .CreateLogger();
