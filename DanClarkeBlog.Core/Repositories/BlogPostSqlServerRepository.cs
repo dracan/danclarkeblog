@@ -4,26 +4,24 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Data;
-using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
     public class BlogPostSqlServerRepository : IBlogPostRepository
     {
         private readonly Settings _setting;
-        private readonly ILogger _logger;
 
-        public BlogPostSqlServerRepository(Settings setting, ILogger logger)
+        public BlogPostSqlServerRepository(Settings setting)
         {
             _setting = setting;
-            _logger = logger;
         }
 
         public void CreateDatabase()
         {
-            _logger.Trace("CreateDatabase");
+            Log.Verbose("CreateDatabase");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -33,7 +31,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
-            _logger.Trace("Get all async");
+            Log.Verbose("Get all async");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -47,7 +45,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            _logger.Trace($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
+            Log.Verbose($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -226,7 +224,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
         {
-            _logger.Trace($"Setting dropbox cursor to {cursor}");
+            Log.Verbose($"Setting dropbox cursor to {cursor}");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {

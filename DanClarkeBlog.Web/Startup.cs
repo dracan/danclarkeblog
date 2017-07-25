@@ -8,23 +8,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Rewrite;
-using NLog;
+using Serilog;
 using Settings = DanClarkeBlog.Core.Settings;
-using NLog.Extensions.Logging;
 
 namespace DanClarkeBlog.Web
 {
     public class Startup
     {
+        private readonly bool _isDevelopment;
+
         public Startup(IHostingEnvironment env)
         {
-            //env.ConfigureNLog("nlog.config");
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            _isDevelopment = env.IsDevelopment();
+
+            if (env.IsDevelopment())
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Debug()
+                    .Enrich.FromLogContext()
+                    .WriteTo.LiterateConsole()
+                    .CreateLogger();
+            }
 
             Configuration = builder.Build();
         }
@@ -54,7 +64,16 @@ namespace DanClarkeBlog.Web
                     options.InstrumentationKey = settings.Value.ApplicationInsightsInstrumentationKey;
                 });
 
-            var container = WebBootstrapper.Init(services, settings.Value, new NLogLoggerImpl(LogManager.GetLogger("")));
+            if (!_isDevelopment)
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Debug()
+                    .Enrich.FromLogContext()
+                    .WriteTo.ApplicationInsightsTraces(settings.Value.ApplicationInsightsInstrumentationKey)
+                    .CreateLogger();
+            }
+
+            var container = WebBootstrapper.Init(services, settings.Value);
 
             return new AutofacServiceProvider(container);
         }
@@ -62,7 +81,7 @@ namespace DanClarkeBlog.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddNLog();
+            loggerFactory.AddSerilog();
 
             if (env.IsDevelopment())
             {

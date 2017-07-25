@@ -42,7 +42,6 @@ namespace DanClarkeBlog.Functions
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
             builder.RegisterType<HashVerify>().As<IHashVerify>();
             builder.RegisterType<AzureBlobLockRepository>().As<ILockRepository>();
-            builder.Register<ILogger>(x => new TraceLogLoggerImpl(traceWriter));
 
             return builder.Build();
         }

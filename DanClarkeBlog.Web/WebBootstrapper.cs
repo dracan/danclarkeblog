@@ -9,7 +9,7 @@ namespace DanClarkeBlog.Web
 {
     internal static class WebBootstrapper
     {
-        public static IContainer Init(IServiceCollection services, Settings settings, ILogger logger)
+        public static IContainer Init(IServiceCollection services, Settings settings)
         {
             var builder = new ContainerBuilder();
 
@@ -24,7 +24,6 @@ namespace DanClarkeBlog.Web
             builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
-            builder.Register(x => logger);
 
             builder.Populate(services);
 
