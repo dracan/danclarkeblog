@@ -73,7 +73,11 @@ namespace DanClarkeBlog.Core.Helpers
                     foreach (var imageData in sourcePost.ImageData)
                     {
                         var imageContent = await imageData.ImageDataTask;
-                        var resizedImageFileContent = _imageResizer.Resize(imageContent, _settings.MaxResizedImageSize);
+
+                        var resizedImageFileContent = imageData.FileName.ToLower().Contains("noresize")
+                            ? imageContent
+                            : _imageResizer.Resize(imageContent, _settings.MaxResizedImageSize);
+
                         tasks.Add(_imageRepository.AddAsync(imageData.PostFolder, imageData.FileName, resizedImageFileContent, cancellationToken));
                     }
                 }
