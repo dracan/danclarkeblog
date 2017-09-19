@@ -1,7 +1,7 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
-    font-size: 16px;
+    font-size: 15px;
     font-family: segoe-ui_normal, Segoe UI, Segoe, Segoe WP, Helvetica Neue, Helvetica, sans-serif;
 }
 
@@ -37,6 +37,8 @@ textarea {
 
 .postListing {
     margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 h1, h2, h3 {
@@ -49,6 +51,8 @@ h1, h2, h3 {
 
 .blogPost {
     line-height: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .blogPost img {
@@ -57,7 +61,7 @@ h1, h2, h3 {
 }
 
 .postListing h1 {
-    font-size: 24px;
+    font-size: 22px;
     margin: 5px 0 5px 0;
 }
 
@@ -76,6 +80,10 @@ h1, h2, h3 {
 
 .blogPost .blogPostDateAndTags {
     font-size: 0; /* Remove spacing between child elements */
+}
+
+.blogPost h1 {
+    font-size: 32px;
 }
 
 .blogPost .blogPostDateAndTags a,
