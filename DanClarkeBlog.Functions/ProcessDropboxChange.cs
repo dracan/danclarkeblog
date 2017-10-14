@@ -14,7 +14,7 @@ namespace DanClarkeBlog.Functions
     public static class ProcessDropboxChange
     {
         [FunctionName("ProcessDropboxChange")]
-        public static async Task Run([ServiceBusTrigger("dropboxupdates", AccessRights.Listen)] string message, TraceWriter log)
+        public static async Task Run([ServiceBusTrigger("dropboxupdates", AccessRights.Listen, Connection = "danclarkeblog")] string message, TraceWriter log)
         {
             var ct = CancellationToken.None;
             var container = FunctionBootstrapper.Init(log);

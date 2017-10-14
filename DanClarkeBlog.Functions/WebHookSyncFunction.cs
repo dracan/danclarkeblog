@@ -20,7 +20,7 @@ namespace DanClarkeBlog.Functions
     public static class WebHookSyncFunction
     {
         [FunctionName("WebHookSyncFunction")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log, [ServiceBus("dropboxupdates", AccessRights.Listen)] IAsyncCollector<string> message)
+        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log, [ServiceBus("dropboxupdates", AccessRights.Listen, Connection = "danclarkeblog")] IAsyncCollector<string> message)
         {
             var ct = CancellationToken.None;
             var container = FunctionBootstrapper.Init(log);
