@@ -11,10 +11,12 @@ namespace DanClarkeBlog.Core.Tests.Respositories
 {
     public class BlogPostAzureSqlRepositoryTests
     {
+        private const string skipText = "Manual"; // Make me null temporarily to run these tests. Ensure pointing at local database!
+
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact, Trait("Category", "Manual")]
+        [Fact(Skip = skipText), Trait("Category", "Manual")]
         public async Task AddPost()
         {
             var container = TestBootstrapper.Init();
@@ -36,7 +38,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact, Trait("Category", "Manual")]
+        [Fact(Skip = skipText), Trait("Category", "Manual")]
         public async Task GetPosts()
         {
             var container = TestBootstrapper.Init();
@@ -54,7 +56,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact, Trait("Category", "Manual")]
+        [Fact(Skip = skipText), Trait("Category", "Manual")]
         public async Task MigrateAsync()
         {
             var container = TestBootstrapper.Init();
@@ -67,7 +69,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact, Trait("Category", "Manual")]
+        [Fact(Skip = skipText), Trait("Category", "Manual")]
         public async Task RunSync()
         {
             var container = TestBootstrapper.Init();
@@ -86,7 +88,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact, Trait("Category", "Manual")]
+        [Fact(Skip = skipText), Trait("Category", "Manual")]
         public async Task IncrementalSyncTest()
         {
             var container = TestBootstrapper.Init();
