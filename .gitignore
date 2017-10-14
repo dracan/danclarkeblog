@@ -274,3 +274,5 @@ __pycache__/
 
 !DanClarkeBlog.Functions/ScheduledSync/bin/
 !DanClarkeBlog.Functions/WebHookSync/bin/
+
+tools/
