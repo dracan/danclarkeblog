@@ -1,8 +1,8 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
+﻿using System.IO;
 using DanClarkeBlog.Core.Helpers;
+using SixLabors.ImageSharp;
 using Xunit;
+using Img = SixLabors.ImageSharp.Image;
 
 namespace DanClarkeBlog.Core.Tests.Helpers
 {
@@ -16,25 +16,24 @@ namespace DanClarkeBlog.Core.Tests.Helpers
         {
             var sut = new ImageResizer();
 
-            Image sourceImage = new Bitmap(sourceWidth, sourceHeight, PixelFormat.Format24bppRgb);
-
-            using (var sourceImageStream = new MemoryStream())
+            using (var image = new Image<Rgba32>(sourceWidth, sourceHeight))
             {
-                sourceImage.Save(sourceImageStream, ImageFormat.Png);
-
-                var sourceImageData = sourceImageStream.ToArray();
-
-                var destImageData = sut.Resize(sourceImageData, maxWidth);
-
-                Assert.NotNull(destImageData);
-
-                using (var ms = new MemoryStream(destImageData))
+                using (var sourceImageStream = new MemoryStream())
                 {
-                    var destImage = Image.FromStream(ms);
+                    image.SaveAsPng(sourceImageStream);
 
-                    Assert.NotNull(destImage);
-                    Assert.Equal(expectedWidth, destImage.Width);
-                    Assert.Equal(expectedHeight, destImage.Height);
+                    var sourceImageBytes = sourceImageStream.ToArray();
+
+                    var destImageData = sut.Resize(sourceImageBytes, maxWidth);
+
+                    Assert.NotNull(destImageData);
+
+                    using (var destImage = Img.Load<Rgba32>(destImageData))
+                    {
+                        Assert.NotNull(destImage);
+                        Assert.Equal(expectedWidth, destImage.Width);
+                        Assert.Equal(expectedHeight, destImage.Height);
+                    }
                 }
             }
         }

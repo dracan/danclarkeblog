@@ -1,7 +1,5 @@
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
+using SixLabors.ImageSharp;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -9,45 +7,29 @@ namespace DanClarkeBlog.Core.Helpers
     {
         public byte[] Resize(byte[] source, int width)
         {
-            using (var stream = new MemoryStream(source))
+            using (var image = Image.Load(source))
             {
-                using (var image = Image.FromStream(stream))
+                var originalWidth = image.Width;
+                var originalHeight = image.Height;
+
+                if (originalWidth <= width)
                 {
-                    var resizedImaged = ResizeImage(image, width);
+                    return source;
+                }
 
-                    using (var destStream = new MemoryStream())
-                    {
-                        resizedImaged.Save(destStream, ImageFormat.Png);
+                var percentWidth = width / (float) originalWidth;
+                var newWidth = (int) (originalWidth * percentWidth);
+                var newHeight = (int) (originalHeight * percentWidth);
 
-                        return destStream.ToArray();
-                    }
+                image.Mutate(x => x.Resize(newWidth, newHeight));
+
+                using (var outputStream = new MemoryStream())
+                {
+                    image.Save(outputStream, Image.DetectFormat(source));
+
+                    return outputStream.ToArray();
                 }
             }
-        }
-
-        private static Image ResizeImage(Image image, int maxWidth)
-        {
-            var originalWidth = image.Width;
-            var originalHeight = image.Height;
-
-            if (originalWidth <= maxWidth)
-            {
-                return image;
-            }
-
-            var percentWidth = maxWidth / (float)originalWidth;
-            var newWidth = (int)(originalWidth * percentWidth);
-            var newHeight = (int)(originalHeight * percentWidth);
-
-            Image newImage = new Bitmap(newWidth, newHeight);
-
-            using (var graphicsHandle = Graphics.FromImage(newImage))
-            {
-                graphicsHandle.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphicsHandle.DrawImage(image, 0, 0, newWidth, newHeight);
-            }
-
-            return newImage;
         }
     }
 }
