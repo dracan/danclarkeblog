@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.ServiceModel.Syndication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using DanClarkeBlog.Core.Repositories;
+using Terradue.ServiceModel.Syndication;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -70,32 +70,32 @@ namespace DanClarkeBlog.Core.Helpers
             var blogDescription = "Dan Clarke's Blog";
 
             var feed = new SyndicationFeed
-                       {
-                           Id = _settings.SiteHomeUri,
-                           Title = new TextSyndicationContent(blogDescription),
-                           Description = new TextSyndicationContent(blogDescription),
-                           LastUpdatedTime = DateTimeOffset.Now,
-                           Copyright = new TextSyndicationContent($"Copyright {DateTime.Now.Year}"),
-                           Generator = "Dan Clarke's Blog Platform",
-                           Language = "en-gb",
-                           Categories = { new SyndicationCategory("Programming") },
-                       };
+            {
+                Id = _settings.SiteHomeUri,
+                Title = new TextSyndicationContent(blogDescription),
+                Description = new TextSyndicationContent(blogDescription),
+                LastUpdatedTime = DateTimeOffset.Now,
+                Copyright = new TextSyndicationContent($"Copyright {DateTime.Now.Year}"),
+                Generator = "Dan Clarke's Blog Platform",
+                Language = "en-gb",
+                Categories = { new SyndicationCategory("Programming") },
+            };
 
             feed.Authors.Add(new SyndicationPerson("", "Dan Clarke", _settings.SiteHomeUri));
             feed.Categories.Add(new SyndicationCategory("FeedCategory", "CategoryScheme", "CategoryLabel"));
 
             feed.Links.Add(new SyndicationLink(new Uri(new Uri(_settings.SiteHomeUri), "/rss"))
-                           {
-                               RelationshipType = "self",
-                               MediaType = "text/html",
-                               Title = blogDescription
-                           });
+            {
+                RelationshipType = "self",
+                MediaType = "text/html",
+                Title = blogDescription
+            });
 
             feed.Links.Add(new SyndicationLink(new Uri(_settings.SiteHomeUri))
-                           {
-                               MediaType = "text/html",
-                               Title = blogDescription
-                           });
+            {
+                MediaType = "text/html",
+                Title = blogDescription
+            });
 
             var posts = await _blogPostRepository.GetWithConditionAsync(x => x.Published, cancelationToken);
 
@@ -106,11 +106,11 @@ namespace DanClarkeBlog.Core.Helpers
                 var postUri = new Uri(new Uri(_settings.SiteHomeUri), post.Route);
 
                 var item = new SyndicationItem
-                           {
-                               Id = postUri.ToString(),
-                               Title = new TextSyndicationContent(post.Title),
-                               Content = new TextSyndicationContent(post.HtmlText, TextSyndicationContentKind.Html)
-                           };
+                {
+                    Id = postUri.ToString(),
+                    Title = new TextSyndicationContent(post.Title),
+                    Content = new TextSyndicationContent(post.HtmlText, TextSyndicationContentKind.Html)
+                };
 
                 if (post.PublishDate.HasValue)
                 {
