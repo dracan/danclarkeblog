@@ -1,23 +1,26 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
 using DanClarkeBlog.Core;
 using DanClarkeBlog.Core.Helpers;
-using Microsoft.Azure.WebJobs;
+using Autofac;
+using Microsoft.ServiceBus.Messaging;
 
-namespace DanClarkeBlog.Functions.WebHookSync
+namespace DanClarkeBlog.Functions
 {
-    public class WebHookSyncFunction
+    public static class WebHookSyncFunction
     {
-        public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log, IAsyncCollector<string> message)
+        [FunctionName("WebHookSyncFunction")]
+        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log, [ServiceBus("dropboxupdates", AccessRights.Listen)] IAsyncCollector<string> message)
         {
             var ct = CancellationToken.None;
             var container = FunctionBootstrapper.Init(log);
@@ -41,9 +44,9 @@ namespace DanClarkeBlog.Functions.WebHookSync
                     await notificationTarget.SendMessageAsync("Received a challenge request from Dropbox. Replying to accept.", ct);
 
                     return new HttpResponseMessage(HttpStatusCode.OK)
-                           {
-                               Content = new StringContent(challenge, Encoding.UTF8, "text/plain")
-                           };
+                    {
+                        Content = new StringContent(challenge, Encoding.UTF8, "text/plain")
+                    };
                 }
 
                 var signature = req.Headers.GetValues("X-Dropbox-Signature").FirstOrDefault();

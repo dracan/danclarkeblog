@@ -1,16 +1,20 @@
-﻿using System;
+using System;
+using System.IO;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
+using Microsoft.ServiceBus.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
-using Microsoft.Azure.WebJobs.Host;
 
-namespace DanClarkeBlog.Functions.ProcessDropboxChange
+namespace DanClarkeBlog.Functions
 {
-    public class ProcessDropboxChangeFunction
+    public static class ProcessDropboxChange
     {
-        public static async Task Run(string message, TraceWriter log)
+        [FunctionName("ProcessDropboxChange")]
+        public static async Task Run([ServiceBusTrigger("dropboxupdates", AccessRights.Listen)] string message, TraceWriter log)
         {
             var ct = CancellationToken.None;
             var container = FunctionBootstrapper.Init(log);
