@@ -94,7 +94,8 @@ namespace DanClarkeBlog.Web.Controllers
         [Produces("application/xml")]
         public async Task<IActionResult> RssFeed(CancellationToken cancellationToken)
         {
-            return Ok(await _feedGenerator.GenerateRssAsync(cancellationToken));
+            var xml = await _feedGenerator.GenerateRssAsync(cancellationToken);
+            return Content(xml, "application/xml");
         }
 
         public IActionResult Error()

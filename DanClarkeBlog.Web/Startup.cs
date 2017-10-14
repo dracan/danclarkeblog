@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,8 @@ namespace DanClarkeBlog.Web
                     .Enrich.FromLogContext()
                     .WriteTo.LiterateConsole()
                     .CreateLogger();
+
+                Log.Information("*** Process ID: {ProcessId}", Process.GetCurrentProcess().Id);
             }
 
             Configuration = builder.Build();
@@ -46,11 +49,11 @@ namespace DanClarkeBlog.Web
         {
             // Add framework services.
             services.AddMvc(config =>
-                            {
-                                config.RespectBrowserAcceptHeader = true;
-                                config.Filters.Add(new RequireHttpsAttribute());
-                            })
-                    .AddXmlSerializerFormatters();
+                {
+                    config.RespectBrowserAcceptHeader = true;
+                    config.Filters.Add(new RequireHttpsAttribute());
+                })
+                .AddXmlSerializerFormatters();
 
             services.AddOptions();
             services.Configure<Settings>(Configuration.GetSection("Blog"));
@@ -86,7 +89,6 @@ namespace DanClarkeBlog.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {

@@ -39,7 +39,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var dataHash = GenerateHash(data);
 
-            if (await blobReference.ExistsAsync(cancellationToken))
+            if (await blobReference.ExistsAsync())
             {
                 if (blobReference.Metadata.ContainsKey("CRC") && blobReference.Metadata["CRC"] == dataHash)
                 {
@@ -54,10 +54,10 @@ namespace DanClarkeBlog.Core.Repositories
                 Log.Debug($"File does not exist, so attempting upload (data length = {data.Length}) ...");
             }
 
-            await blobReference.UploadFromByteArrayAsync(data, 0, data.Length, cancellationToken);
+            await blobReference.UploadFromByteArrayAsync(data, 0, data.Length);
 
             blobReference.Metadata["CRC"] = dataHash;
-            await blobReference.SetMetadataAsync(cancellationToken);
+            await blobReference.SetMetadataAsync();
         }
 
         private static string GenerateHash(byte[] source)

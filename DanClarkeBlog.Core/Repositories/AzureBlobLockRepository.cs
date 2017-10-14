@@ -26,8 +26,8 @@ namespace DanClarkeBlog.Core.Repositories
             var storage = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
             var storageClient = storage.CreateCloudBlobClient();
             _storageContainer = storageClient.GetContainerReference(key);
-            await _storageContainer.CreateIfNotExistsAsync(cancellationToken);
-            await _storageContainer.FetchAttributesAsync(cancellationToken);
+            await _storageContainer.CreateIfNotExistsAsync();
+            await _storageContainer.FetchAttributesAsync();
 
             await Policy.Handle<StorageException>().WaitAndRetryAsync(numRetries, n =>
                {
@@ -43,8 +43,8 @@ namespace DanClarkeBlog.Core.Repositories
         {
             if (!string.IsNullOrWhiteSpace(_leaseId))
             {
-               Log.Debug("Releasing lock ...");
-                await _storageContainer.ReleaseLeaseAsync(AccessCondition.GenerateLeaseCondition(_leaseId), cancellationToken);
+                Log.Debug("Releasing lock ...");
+                await _storageContainer.ReleaseLeaseAsync(AccessCondition.GenerateLeaseCondition(_leaseId));
             }
         }
 
