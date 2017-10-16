@@ -9,8 +9,23 @@ namespace DanClarkeBlog.Functions
 {
     internal static class FunctionBootstrapper
     {
+        private static bool _isStarted = false;
+        private static readonly object _syncLock = new object();
+
         public static IContainer Init(TraceWriter traceWriter)
         {
+            if (!_isStarted)
+            {
+                lock (_syncLock)
+                {
+                    if (!_isStarted)
+                    {
+                        AssemblyBindingRedirectHelper.ConfigureBindingRedirects();
+                        _isStarted = true;
+                    }
+                }
+            }
+
             var settings = new Settings
                            {
                                DropboxAccessToken = Environment.GetEnvironmentVariable("Blog:DropboxAccessToken"),
