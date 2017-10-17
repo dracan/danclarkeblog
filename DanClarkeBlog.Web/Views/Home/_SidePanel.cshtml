@@ -4,7 +4,13 @@
 @if (@Model is HomeViewModel)
 {
     <img class="profilePic hidden-xs hidden-sm" alt="profilePic" src="@Model.ProfilePicUri"/>
+    <hr />
 }
+
+<form action="http://eepurl.com/c7WGFX" target="_blank">
+    <input class="btn btn-primary" type="submit" value="Subscribe for Email Updates" />
+</form>
+<hr />
 
 @await Html.PartialAsync("_DotNetOxford")
 <hr />
