@@ -18,8 +18,6 @@ namespace DanClarkeBlog.Core.Models
         public bool Published { get; set; }
         public virtual ICollection<BlogPostTag> BlogPostTags { get; set; }
 
-        public List<string> Tags => BlogPostTags.Where(x => x.Tag != null).Select(x => x.Tag.Name).ToList();
-
         [NotMapped]
         public List<BlogImageData> ImageData { get; set; }
 

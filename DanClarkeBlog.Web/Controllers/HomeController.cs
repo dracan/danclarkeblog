@@ -18,10 +18,10 @@ namespace DanClarkeBlog.Web.Controllers
         internal const int NumPostsPerPage = 10;
         internal const int NumRecentPosts = 5;
 
-        public HomeController(IBlogPostRepository blogPostRepository, Settings _settings, IFeedGenerator feedGenerator)
+        public HomeController(IBlogPostRepository blogPostRepository, Settings settings, IFeedGenerator feedGenerator)
         {
             _blogPostRepository = blogPostRepository;
-            this._settings = _settings;
+            _settings = settings;
             _feedGenerator = feedGenerator;
         }
 
@@ -39,14 +39,14 @@ namespace DanClarkeBlog.Web.Controllers
             var recentPosts = await recentPostsTask;
             var tags = await tagsTask;
 
-            if (!string.IsNullOrWhiteSpace(tag) && pagedPostsResults.TotalPosts == 0) // 404 on a tag listing page with an invalid tag 
+            if (!string.IsNullOrWhiteSpace(tag) && pagedPostsResults.TotalPosts == 0) // 404 on a tag listing page with an invalid tag
             {
                 return NotFound();
             }
 
             // Use the tag name from the database, not from the query string to preserve case
             ViewData["Title"] = string.IsNullOrWhiteSpace(tag)
-                ? "" : pagedPostsResults.Posts.FirstOrDefault()?.Tags.SingleOrDefault(x => string.Equals(x, tag, StringComparison.CurrentCultureIgnoreCase)) ?? "";
+                ? "" : pagedPostsResults.Posts.FirstOrDefault()?.BlogPostTags.SingleOrDefault(x => string.Equals(x.TagName, tag, StringComparison.CurrentCultureIgnoreCase)).TagName ?? "";
 
             return View(new HomeViewModel
             {

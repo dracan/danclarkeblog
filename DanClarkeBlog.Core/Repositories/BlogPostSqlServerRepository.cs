@@ -55,8 +55,8 @@ namespace DanClarkeBlog.Core.Repositories
                 if (tag != null)
                 {
                     var lowerTag = tag.ToLower();
-                    query = query.Where(x => x.BlogPostTags.Any(y => y.Tag.Name == lowerTag));
-                    totalPostsQuery = totalPostsQuery.Where(x => x.BlogPostTags.Any(y => y.Tag.Name == lowerTag));
+                    query = query.Where(x => x.BlogPostTags.Any(y => y.TagName.ToLower() == lowerTag));
+                    totalPostsQuery = totalPostsQuery.Where(x => x.BlogPostTags.Any(y => y.TagName.ToLower() == lowerTag));
                 }
 
                 var totalPostsTask = totalPostsQuery.CountAsync(cancellationToken);
@@ -121,6 +121,8 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
+            Log.Debug("Adding/updating post: '{Title}' ...", post.Title);
+
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
                 var existing = await ctx.BlogPosts
@@ -131,15 +133,12 @@ namespace DanClarkeBlog.Core.Repositories
                 if (existing == null)
                 {
                     // Update tag references where the tag already exists, so that EF doesn't try to insert a duplicate.
-                    // (todo) A better solution would be for the Tag table to not contain an ID and just use the 'Name' field
-                    // as the primary key (which it's an additional primary key currently anyway). That way, I can just
-                    // attach the entity and let EF handle it. For now though, I'll do it this way to avoid changing the database schema.
 
                     var tagList = new List<BlogPostTag>();
 
                     foreach (var postTag in post.BlogPostTags)
                     {
-                        var existingTag = await ctx.Tags.SingleOrDefaultAsync(t => t.Name == postTag.Tag.Name, cancellationToken);
+                        var existingTag = await ctx.Tags.SingleOrDefaultAsync(t => t.Name.ToLower() == postTag.Tag.Name.ToLower(), cancellationToken);
                         postTag.Tag = existingTag ?? postTag.Tag;
                         tagList.Add(postTag);
                     }

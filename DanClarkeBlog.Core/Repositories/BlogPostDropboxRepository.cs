@@ -77,7 +77,7 @@ namespace DanClarkeBlog.Core.Repositories
                 ? blogPostList
                 : blogPostList.Where(x => dropboxFiles.Any(y => y.PathLower == $"{x.Folder}/post.md".ToLower())).ToList();
 
-            Log.Verbose($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
+            Log.Debug($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
 
             foreach (var blogPost in blogPostsToUpdate)
             {
@@ -94,7 +94,7 @@ namespace DanClarkeBlog.Core.Repositories
                         ImageDataTask = _dropboxHelper.GetFileContentAsync(i, cancellationToken),
                     }).ToList();
 
-                Log.Verbose($"Reading content for {blogPost.Folder} ...");
+                Log.Debug($"Reading content for {blogPost.Folder} ...");
 
                 var postFile = await _dropboxHelper.GetFileContentAsync($"{blogPost.Folder}/post.md", cancellationToken);
 

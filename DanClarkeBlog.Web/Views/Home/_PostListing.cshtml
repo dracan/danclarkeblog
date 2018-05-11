@@ -7,9 +7,9 @@
         <h1><a href="@post.Route">@post.Title</a></h1>
         <div>@Html.Raw(post.HtmlShortText)</div>
 
-        foreach (var tag in post.Tags)
+        foreach (var tag in post.BlogPostTags.Select(x => x.TagName))
         {
-            <a class="tag" href="/tags/@tag.ToLower()">@tag@(tag == post.Tags.Last() ? "" : ", ")</a>
+            <a class="tag" href="/tags/@tag.ToLower()">@tag@(tag == post.BlogPostTags.Last().TagName ? "" : ", ")</a>
         }
 
         <hr />

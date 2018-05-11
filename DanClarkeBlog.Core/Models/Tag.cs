@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DanClarkeBlog.Core.Models
 {
     public class Tag
     {
-        public Guid Id { get; set; }
+        [Key]
         public string Name { get; set; }
 
         public virtual ICollection<BlogPostTag> BlogPostTags { get; set; }
