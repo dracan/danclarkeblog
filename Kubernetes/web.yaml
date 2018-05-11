@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: eu.gcr.io/composed-region-200213/blog:1.0.27
+        image: eu.gcr.io/composed-region-200213/blog:2.0.0
         envFrom:
         - configMapRef:
             name: web-config
