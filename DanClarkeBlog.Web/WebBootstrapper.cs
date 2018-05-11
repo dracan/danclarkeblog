@@ -24,6 +24,8 @@ namespace DanClarkeBlog.Web
             builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
+            builder.RegisterType<HashVerify>().As<IHashVerify>();
+            builder.RegisterType<RabbitMqMessageQueue>().As<IMessageQueue>();
 
             builder.Populate(services);
 

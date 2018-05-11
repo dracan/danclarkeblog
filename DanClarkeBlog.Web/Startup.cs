@@ -9,15 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Rewrite;
-using Serilog;
 using Settings = DanClarkeBlog.Core.Settings;
 
 namespace DanClarkeBlog.Web
 {
     public class Startup
     {
-        private readonly bool _isDevelopment;
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -25,19 +22,6 @@ namespace DanClarkeBlog.Web
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-
-            _isDevelopment = env.IsDevelopment();
-
-            if (env.IsDevelopment())
-            {
-                Log.Logger = new LoggerConfiguration()
-                    .MinimumLevel.Debug()
-                    .Enrich.FromLogContext()
-                    .WriteTo.LiterateConsole()
-                    .CreateLogger();
-
-                Log.Information("*** Process ID: {ProcessId}", Process.GetCurrentProcess().Id);
-            }
 
             Configuration = builder.Build();
         }
@@ -51,7 +35,6 @@ namespace DanClarkeBlog.Web
             services.AddMvc(config =>
                 {
                     config.RespectBrowserAcceptHeader = true;
-                    config.Filters.Add(new RequireHttpsAttribute());
                 })
                 .AddXmlSerializerFormatters();
 
@@ -61,31 +44,14 @@ namespace DanClarkeBlog.Web
             var sp = services.BuildServiceProvider();
             var settings = sp.GetService<IOptions<Settings>>();
 
-            services.AddApplicationInsightsTelemetry(options =>
-                {
-                    options.DeveloperMode = settings.Value.ApplicationInsightsDeveloperMode;
-                    options.InstrumentationKey = settings.Value.ApplicationInsightsInstrumentationKey;
-                });
-
-            if (!_isDevelopment)
-            {
-                Log.Logger = new LoggerConfiguration()
-                    .MinimumLevel.Information()
-                    .Enrich.FromLogContext()
-                    .WriteTo.ApplicationInsightsTraces(settings.Value.ApplicationInsightsInstrumentationKey)
-                    .CreateLogger();
-            }
-
             var container = WebBootstrapper.Init(services, settings.Value);
 
             return new AutofacServiceProvider(container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddSerilog();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -97,12 +63,6 @@ namespace DanClarkeBlog.Web
 
             app.UseStaticFiles();
             app.UseStatusCodePagesWithReExecute("/error/{0}");
-
-            // ReSharper disable once UnusedVariable
-            var options = new RewriteOptions()
-                .AddRedirectToHttps(301);
-
-            app.UseRewriter(options);
 
             app.UseMvc(routes =>
             {

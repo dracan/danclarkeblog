@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web
+  namespace: blog
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: web
+        swap: left
+    spec:
+      containers:
+      - name: web
+        image: eu.gcr.io/composed-region-200213/blog:1.0.27
+        envFrom:
+        - configMapRef:
+            name: web-config
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: blog
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    swap: left
+    name: web

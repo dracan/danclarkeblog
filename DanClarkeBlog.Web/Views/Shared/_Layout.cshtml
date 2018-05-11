@@ -1,5 +1,4 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
-@model DanClarkeBlog.Web.ViewModels.ViewModelBase
+﻿@model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
 @addTagHelper *, DanClarkeBlog.Web
 
@@ -22,11 +21,10 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    
+
     <link rel="alternate" type="application/rss+xml" title="Dan Clarke's Blog" href="http://www.danclarke.com/rss" />
 
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
-    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -92,7 +90,7 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-   
+
     <environment names="Staging,Production">
         <google-analytics></google-analytics>
     </environment>

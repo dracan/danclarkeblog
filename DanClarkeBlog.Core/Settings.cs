@@ -11,11 +11,13 @@
         public string SlackNotificationUri { get; set; }
         public string SiteHomeUri { get; set; }
         public string ProfilePicUri { get; set; }
-        public string ApplicationInsightsInstrumentationKey { get; set; }
-        public bool ApplicationInsightsDeveloperMode { get; set; } = false;
         public int PostPreviewLength { get; set; } = 200;
         public string BaseImageUri { get; set; }
         public string GoogleAnalyticsTrackingId { get; set; }
+
+        public string RabbitMQServer { get; set; }
+        public string RabbitMQUser { get; set; }
+        public string RabbitMQPass { get; set; }
 
         /// <summary>
         /// For verification of Dropbox webhook HMAC

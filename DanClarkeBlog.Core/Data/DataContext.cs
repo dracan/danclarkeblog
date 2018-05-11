@@ -25,7 +25,7 @@ namespace DanClarkeBlog.Core.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<BlogPostTag>()
-                   .HasKey(t => new {t.BlogPostId, t.TagId});
+                   .HasKey(t => new {t.BlogPostId, t.TagName});
 
             builder.Entity<BlogPostTag>()
                    .HasOne(t => t.BlogPost)
@@ -35,7 +35,7 @@ namespace DanClarkeBlog.Core.Data
             builder.Entity<BlogPostTag>()
                    .HasOne(t => t.Tag)
                    .WithMany(t => t.BlogPostTags)
-                   .HasForeignKey(t => t.TagId);
+                   .HasForeignKey(t => t.TagName);
 
             builder.Entity<Tag>()
                     .HasAlternateKey(c => c.Name)
@@ -44,7 +44,7 @@ namespace DanClarkeBlog.Core.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            optionsBuilder.UseNpgsql(_connectionString);
         }
     }
 }

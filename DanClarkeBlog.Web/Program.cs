@@ -1,6 +1,9 @@
 ﻿using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Events;
 
 namespace DanClarkeBlog.Web
 {
@@ -8,21 +11,35 @@ namespace DanClarkeBlog.Web
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .AddEnvironmentVariables(prefix: "ASPNETCORE_")
-                .Build();
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddEnvironmentVariables()
+                    .Build();
 
-            var host = new WebHostBuilder()
-                .UseConfiguration(config)
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                //.UseSetting("detailedErrors", "true")
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .CaptureStartupErrors(true)
-                .Build();
+                var builder = WebHost.CreateDefaultBuilder(args)
+                    .UseStartup<Startup>()
+                    .UseSerilog()
+                    .UseConfiguration(configuration);
 
-            host.Run();
+                InitLogging();
+
+                builder.Build().Run();
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+
+        private static void InitLogging()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Verbose)
+                .Enrich.FromLogContext()
+                .WriteTo.LiterateConsole()
+                .CreateLogger();
         }
     }
 }

@@ -64,12 +64,10 @@ namespace DanClarkeBlog.Core.Helpers
 
                 Log.Verbose($"Processing {sourcePosts.Count} source posts ...");
 
-                var tasks = new List<Task>();
+                var imageTasks = new List<Task>();
 
                 foreach (var sourcePost in sourcePosts)
                 {
-                    tasks.Add(destRepo.AddOrUpdateAsync(sourcePost, cancellationToken));
-
                     foreach (var imageData in sourcePost.ImageData)
                     {
                         var imageContent = await imageData.ImageDataTask;
@@ -78,11 +76,16 @@ namespace DanClarkeBlog.Core.Helpers
                             ? imageContent
                             : _imageResizer.Resize(imageContent, _settings.MaxResizedImageSize);
 
-                        tasks.Add(_imageRepository.AddAsync(imageData.PostFolder, imageData.FileName, resizedImageFileContent, cancellationToken));
+                        imageTasks.Add(_imageRepository.AddAsync(imageData.PostFolder, imageData.FileName, resizedImageFileContent, cancellationToken));
                     }
                 }
 
-                await Task.WhenAll(tasks);
+                foreach (var sourcePost in sourcePosts)
+                {
+                    await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
+                }
+
+                await Task.WhenAll(imageTasks);
 
                 if (!incremental) // Do not delete posts when in incremental mode (todo) Is this comment correct? Surely as we're reading the json file even on incremental sync, we can still delete on incremental?
                 {

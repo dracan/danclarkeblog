@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tasks
+  namespace: blog
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: tasks
+    spec:
+      containers:
+      - name: tasks
+        image: eu.gcr.io/composed-region-200213/blog-tasks:1.0.27
+        envFrom:
+        - configMapRef:
+            name: tasks-config
