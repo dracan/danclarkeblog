@@ -158,10 +158,21 @@ Task("K8sApplyTasks")
         StartProcess("kubectl.exe", "apply -f Kubernetes/tasks.yaml");
     });
 
-Task("Default")
+Task("DeployAll")
+    .IsDependentOn("DockerPushWeb")
+    .IsDependentOn("DockerPushTasks")
+    .Does(() => {
+    });
+
+Task("ApplyAll")
     .IsDependentOn("K8sApplyWeb")
     .IsDependentOn("K8sApplyTasks")
     .Does(() => {
+    });
+
+Task("Default")
+    .Does(() => {
+        Warning("No default task - explicitly choose DeployAll or ApplyAll. Remember at this time, ApplyAll doesn't handle zero down time swaps!");
     });
 
 RunTarget(target);
