@@ -135,7 +135,6 @@ Task("DockerPushTasks")
     });
 
 Task("K8sApplyConfig")
-    .IsDependentOn("UpdateK8sVersions")
     .Does(() =>
     {
         StartProcess("kubectl.exe", $"apply -f {System.IO.Path.Combine(configDirectory, "danclarkeblog-config.yaml")}");
