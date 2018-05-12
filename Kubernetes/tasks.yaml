@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: tasks
-        image: eu.gcr.io/composed-region-200213/blog-tasks:2.0.0
+        image: eu.gcr.io/composed-region-200213/blog-tasks:2.0.2
         envFrom:
         - configMapRef:
             name: tasks-config
