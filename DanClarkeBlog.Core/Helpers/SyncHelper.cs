@@ -62,7 +62,14 @@ namespace DanClarkeBlog.Core.Helpers
                     Log.Verbose($"Returned cursor {dropboxCursor.Cursor}");
                 }
 
-                Log.Verbose($"Processing {sourcePosts.Count} source posts ...");
+                Log.Debug($"Processing {sourcePosts.Count} source posts ...");
+
+                foreach (var sourcePost in sourcePosts)
+                {
+                    await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
+                }
+
+                Log.Debug($"Processing images ...");
 
                 var imageTasks = new List<Task>();
 
@@ -78,11 +85,6 @@ namespace DanClarkeBlog.Core.Helpers
 
                         imageTasks.Add(_imageRepository.AddAsync(imageData.PostFolder, imageData.FileName, resizedImageFileContent, cancellationToken));
                     }
-                }
-
-                foreach (var sourcePost in sourcePosts)
-                {
-                    await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
                 }
 
                 await Task.WhenAll(imageTasks);
