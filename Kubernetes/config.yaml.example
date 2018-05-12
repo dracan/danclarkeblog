@@ -12,6 +12,10 @@ data:
   Blog__SiteHomeUri: https://www.danclarke.com
   Blog__ProfilePicUri: https://danclarkeblog.blob.core.windows.net/images/about/danprofile.png
   Blog__GoogleAnalyticsTrackingId: PLACEHOLDER
+  Blog__RabbitMQServer: rabbitmq
+  Blog__RabbitMQUser: PLACEHOLDER
+  Blog__RabbitMQPass: PLACEHOLDER
+  Blog__DropboxAppSecret: PLACEHOLDER
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -29,7 +33,6 @@ data:
   Blog__RabbitMQServer: rabbitmq
   Blog__RabbitMQUser: PLACEHOLDER
   Blog__RabbitMQPass: PLACEHOLDER
-  Blog__DropboxAppSecret: PLACEHOLDER
   Blog__PostPreviewLength: "200"
 ---
 apiVersion: v1

@@ -20,7 +20,6 @@ namespace DanClarkeBlog.Tasks
                 MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("Blog__MaxResizedImageSize") ?? "0"),
                 KeepAlivePingUri = Environment.GetEnvironmentVariable("Blog__KeepAlivePingUri"),
                 SlackNotificationUri = Environment.GetEnvironmentVariable("Blog__SlackNotificationUri"),
-                DropboxAppSecret = Environment.GetEnvironmentVariable("Blog__DropboxAppSecret"),
                 PostPreviewLength = int.Parse(Environment.GetEnvironmentVariable("Blog__PostPreviewLength") ?? "200"),
                 BaseImageUri  = Environment.GetEnvironmentVariable("Blog__BaseImageUri"),
                 RabbitMQServer = Environment.GetEnvironmentVariable("Blog__RabbitMQServer"),
