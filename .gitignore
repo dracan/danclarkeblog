@@ -278,3 +278,4 @@ __pycache__/
 tools/
 
 artifacts_web/
+/Scripts/SetEnvVariables_nocommit.ps1
