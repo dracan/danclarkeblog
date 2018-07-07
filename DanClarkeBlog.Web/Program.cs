@@ -35,8 +35,8 @@ namespace DanClarkeBlog.Web
         private static void InitLogging()
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Verbose)
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.LiterateConsole()
                 .CreateLogger();
