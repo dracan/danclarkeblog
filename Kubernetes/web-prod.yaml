@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: eu.gcr.io/composed-region-200213/blog:2.0.2
+        image: everstack.azurecr.io/blog:2.0.4
         envFrom:
         - configMapRef:
             name: web-config

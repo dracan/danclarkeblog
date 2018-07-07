@@ -107,7 +107,7 @@ Task("DockerBuildWeb")
     .IsDependentOn("PublishWeb")
     .Does(() =>
     {
-        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"eu.gcr.io/composed-region-200213/blog:{version}" }, }, "DanClarkeBlog.Web");
+        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"everstack.azurecr.io/blog:{version}" }, }, "DanClarkeBlog.Web");
     });
 
 Task("DockerBuildTasks")
@@ -115,7 +115,7 @@ Task("DockerBuildTasks")
     .IsDependentOn("PublishTasks")
     .Does(() =>
     {
-        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"eu.gcr.io/composed-region-200213/blog-tasks:{version}" }, }, "DanClarkeBlog.Tasks");
+        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"everstack.azurecr.io/blog-tasks:{version}" }, }, "DanClarkeBlog.Tasks");
     });
 
 Task("DockerPushWeb")
@@ -123,7 +123,7 @@ Task("DockerPushWeb")
     .IsDependentOn("DockerBuildWeb")
     .Does(() =>
     {
-        DockerPush($"eu.gcr.io/composed-region-200213/blog:{version}");
+        DockerPush($"everstack.azurecr.io/blog:{version}");
     });
 
 Task("DockerPushTasks")
@@ -131,7 +131,7 @@ Task("DockerPushTasks")
     .IsDependentOn("DockerBuildTasks")
     .Does(() =>
     {
-        DockerPush($"eu.gcr.io/composed-region-200213/blog-tasks:{version}");
+        DockerPush($"everstack.azurecr.io/blog-tasks:{version}");
     });
 
 Task("K8sApplyConfig")
