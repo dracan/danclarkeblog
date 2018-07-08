@@ -9,8 +9,6 @@ var configuration = Argument("configuration", "Release");
 
 string version;
 
-var configDirectory = EnvironmentVariable("Blog__KubernetesConfigDirectory");
-
 Task("CalculateVersionNumber")
     .Does(() => {
         GitVersion assertedVersions = GitVersion(new GitVersionSettings { OutputType = GitVersionOutput.Json });
@@ -38,9 +36,9 @@ Task("UpdateK8sVersions")
     .IsDependentOn("CalculateVersionNumber")
     .Does(() => {
         DoInDirectory(@"Kubernetes", () => {
-            var yaml = System.IO.File.ReadAllText("web-uat.yaml");
+            var yaml = System.IO.File.ReadAllText("web-prod.yaml");
             yaml = System.Text.RegularExpressions.Regex.Replace(yaml, $@"(image: .*/blog):(\d+\.\d+\.\d+)", $"$1:{version}");
-            System.IO.File.WriteAllText("web-uat.yaml", yaml);
+            System.IO.File.WriteAllText("web-prod.yaml", yaml);
 
             yaml = System.IO.File.ReadAllText("tasks.yaml");
             yaml = System.Text.RegularExpressions.Regex.Replace(yaml, $@"(image: .*/blog-tasks):(\d+\.\d+\.\d+)", $"$1:{version}");
@@ -137,7 +135,7 @@ Task("DockerPushTasks")
 Task("K8sApplyConfig")
     .Does(() =>
     {
-        StartProcess("kubectl.exe", $"apply -f {System.IO.Path.Combine(configDirectory, "danclarkeblog-config.yaml")}");
+        StartProcess("kubectl.exe", $"apply -f /Kubernetes/config.yaml");
     });
 
 Task("K8sApplyWeb")
@@ -146,7 +144,7 @@ Task("K8sApplyWeb")
     .IsDependentOn("K8sApplyConfig")
     .Does(() =>
     {
-        StartProcess("kubectl.exe", "apply -f Kubernetes/web-uat.yaml");
+        StartProcess("kubectl.exe", "apply -f Kubernetes/web-prod.yaml");
     });
 
 Task("K8sApplyTasks")
