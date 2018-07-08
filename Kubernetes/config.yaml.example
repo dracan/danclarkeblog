@@ -20,7 +20,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tasks_config
+  name: tasks-config
   namespace: blog
 data:
   Blog__DropboxAccessToken: PLACEHOLDER
