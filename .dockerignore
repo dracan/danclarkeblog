@@ -1,7 +1,10 @@
 *
 !DanClarkeBlog.Core/
+!DanClarkeBlog.Web/
 !DanClarkeBlog.Tasks/
 DanClarkeBlog.Core/bin/
 DanClarkeBlog.Core/obj/
+DanClarkeBlog.Web/bin/
+DanClarkeBlog.Web/obj/
 DanClarkeBlog.Tasks/bin/
 DanClarkeBlog.Tasks/obj/
