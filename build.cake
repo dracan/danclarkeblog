@@ -106,15 +106,10 @@ Task("DeployAll")
     .Does(() => {
     });
 
-Task("ApplyAll")
+Task("Default")
     .IsDependentOn("K8sApplyWeb")
     .IsDependentOn("K8sApplyTasks")
     .Does(() => {
-    });
-
-Task("Default")
-    .Does(() => {
-        Warning("No default task - explicitly choose DeployAll or ApplyAll. Remember at this time, ApplyAll doesn't handle zero down time swaps!");
     });
 
 RunTarget(target);
