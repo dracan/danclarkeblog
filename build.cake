@@ -46,74 +46,18 @@ Task("UpdateK8sVersions")
         });
     });
 
-Task("NuGetRestoreWeb")
-    .Does(() => {
-        DoInDirectory(@"DanClarkeBlog.Web", () => {
-            DotNetCoreRestore("DanClarkeBlog.Web.csproj");
-        });
-    });
-
-Task("NuGetRestoreTasks")
-    .Does(() => {
-        DoInDirectory(@"DanClarkeBlog.Tasks", () => {
-            DotNetCoreRestore("DanClarkeBlog.Tasks.csproj");
-        });
-    });
-
-Task("BuildWeb")
-    .IsDependentOn("NuGetRestoreWeb")
-    .Does(() => {
-        DoInDirectory(@"DanClarkeBlog.Web", () => {
-            DotNetCoreBuild("DanClarkeBlog.Web.csproj", new DotNetCoreBuildSettings
-            {
-                Configuration = configuration,
-            });
-        });
-    });
-
-Task("BuildTasks")
-    .IsDependentOn("NuGetRestoreTasks")
-    .Does(() => {
-        DoInDirectory(@"DanClarkeBlog.Tasks", () => {
-            DotNetCoreBuild("DanClarkeBlog.Tasks.csproj", new DotNetCoreBuildSettings
-            {
-                Configuration = configuration,
-            });
-        });
-    });
-
-Task("PublishWeb")
-    .IsDependentOn("BuildWeb")
-    .Does(() => {
-        DotNetCorePublish("./DanClarkeBlog.Web/DanClarkeBlog.Web.csproj", new DotNetCorePublishSettings
-        {
-            Configuration = configuration,
-        });
-    });
-
-Task("PublishTasks")
-    .IsDependentOn("BuildTasks")
-    .Does(() => {
-        DotNetCorePublish("./DanClarkeBlog.Tasks/DanClarkeBlog.Tasks.csproj", new DotNetCorePublishSettings
-        {
-            Configuration = configuration,
-        });
-    });
-
 Task("DockerBuildWeb")
     .IsDependentOn("UpdateDockerFileVersions")
-    .IsDependentOn("PublishWeb")
     .Does(() =>
     {
-        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"everstack.azurecr.io/blog:{version}" }, }, "DanClarkeBlog.Web");
+        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"everstack.azurecr.io/blog:{version}" }, File = "DanClarkeBlog.Web/Dockerfile" }, ".");
     });
 
 Task("DockerBuildTasks")
     .IsDependentOn("UpdateDockerFileVersions")
-    .IsDependentOn("PublishTasks")
     .Does(() =>
     {
-        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"everstack.azurecr.io/blog-tasks:{version}" }, }, "DanClarkeBlog.Tasks");
+        DockerBuild(new DockerImageBuildSettings { Tag = new[] { $"everstack.azurecr.io/blog-tasks:{version}" }, File = "DanClarkeBlog.Tasks/Dockerfile" }, ".");
     });
 
 Task("DockerPushWeb")
