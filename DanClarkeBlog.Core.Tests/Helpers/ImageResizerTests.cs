@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using DanClarkeBlog.Core.Helpers;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using Xunit;
 using Img = SixLabors.ImageSharp.Image;
 
