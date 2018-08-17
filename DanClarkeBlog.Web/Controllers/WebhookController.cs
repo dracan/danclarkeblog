@@ -1,14 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using DanClarkeBlog.Core.Repositories;
-using DanClarkeBlog.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading;
 using DanClarkeBlog.Core.Helpers;
 using Settings = DanClarkeBlog.Core.Settings;
-using DanClarkeBlog.Core;
-using System.Text.RegularExpressions;
 using Serilog;
 using System.Net.Http;
 using System.Net;

@@ -27,7 +27,7 @@ namespace DanClarkeBlog.Core.Tests.Helpers
                                                 }
                                   };
 
-            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), $@"{{""path"":"""", ""recursive"": true}}", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), @"{{""path"":"""", ""recursive"": true}}", Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(dropboxResponse)));
 
             var sut = container.Resolve<IDropboxHelper>();
@@ -69,7 +69,7 @@ namespace DanClarkeBlog.Core.Tests.Helpers
                                                 }
             };
 
-            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), $@"{{""path"":"""", ""recursive"": true}}", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder"), @"{{""path"":"""", ""recursive"": true}}", Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(dropboxResponse)));
 
             httpClient.PostAsync(new Uri("https://api.dropboxapi.com/2/files/list_folder/continue"), @"{""cursor"": ""mycursor""}", Arg.Any<string>(), Arg.Any<CancellationToken>())

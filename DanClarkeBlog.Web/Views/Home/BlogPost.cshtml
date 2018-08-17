@@ -1,7 +1,7 @@
 @model DanClarkeBlog.Web.ViewModels.PostViewModel
 
 @{
-    ViewData["Title"] = @Model.Post.Title;
+    ViewData["Title"] = Model.Post.Title;
 }
 
 <div class="blogPost">
@@ -10,7 +10,7 @@
     <div class="blogPostDateAndTags">
         <span>@Model.Post.PublishDate?.ToString("dd MMMM yyyy") </span>
 
-        @foreach (var tag in @Model.Post.BlogPostTags.Select(x => x.TagName))
+        @foreach (var tag in Model.Post.BlogPostTags.Select(x => x.TagName))
         {
             <a href="/tags/@tag.ToLower()">@(tag == Model.Post.BlogPostTags.First().TagName ? "- " : ", ")@tag</a>
         }
@@ -37,7 +37,7 @@
     */
     (function() { // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
-        s.src = 'https://" + @Model.DisqusDomainName + @"/embed.js';
+        s.src = 'https://" + Model.DisqusDomainName + @"/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

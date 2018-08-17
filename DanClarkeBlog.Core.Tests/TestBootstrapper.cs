@@ -13,7 +13,7 @@ namespace DanClarkeBlog.Core.Tests
             return Init<BlogPostSqlServerRepository>(httpClientHelper);
         }
 
-        public static IContainer Init<TBlogPostRepository>(IHttpClientHelper httpClientHelper = null) where TBlogPostRepository : IBlogPostRepository
+        private static IContainer Init<TBlogPostRepository>(IHttpClientHelper httpClientHelper = null) where TBlogPostRepository : IBlogPostRepository
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()

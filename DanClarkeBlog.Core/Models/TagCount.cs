@@ -2,8 +2,8 @@ namespace DanClarkeBlog.Core.Models
 {
     public class TagCount
     {
-        public string TagName { get; private set; }
-        public int Count { get; private set; }
+        public string TagName { get; }
+        public int Count { get; }
 
         public TagCount(string tagName, int count)
         {

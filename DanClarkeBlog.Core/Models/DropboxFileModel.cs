@@ -2,8 +2,8 @@
 {
     public class DropboxFileModel
     {
-        public string Name { get; private set; }
-        public string PathLower { get; private set; }
+        public string Name { get; }
+        public string PathLower { get; }
 
         public DropboxFileModel(string name, string pathLower)
         {

@@ -15,8 +15,8 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
         private readonly IFeedGenerator _feedGenerator;
-        internal const int NumPostsPerPage = 10;
-        internal const int NumRecentPosts = 5;
+        private const int NumPostsPerPage = 10;
+        private const int NumRecentPosts = 5;
 
         public HomeController(IBlogPostRepository blogPostRepository, Settings settings, IFeedGenerator feedGenerator)
         {
@@ -46,16 +46,16 @@ namespace DanClarkeBlog.Web.Controllers
 
             // Use the tag name from the database, not from the query string to preserve case
             ViewData["Title"] = string.IsNullOrWhiteSpace(tag)
-                ? "" : pagedPostsResults.Posts.FirstOrDefault()?.BlogPostTags.SingleOrDefault(x => string.Equals(x.TagName, tag, StringComparison.CurrentCultureIgnoreCase)).TagName ?? "";
+                ? "" : pagedPostsResults?.Posts?.FirstOrDefault()?.BlogPostTags?.SingleOrDefault(x => string.Equals(x.TagName, tag, StringComparison.CurrentCultureIgnoreCase))?.TagName ?? "";
 
             return View(new HomeViewModel
             {
                 FeaturedPosts = featuredPosts,
                 RecentPosts = recentPosts,
-                Posts = pagedPostsResults.Posts,
+                Posts = pagedPostsResults?.Posts,
                 Tags = tags,
                 PageNumber = page ?? 1,
-                TotalPages = (int)Math.Ceiling((decimal)pagedPostsResults.TotalPosts / NumPostsPerPage),
+                TotalPages = (int)Math.Ceiling((decimal)(pagedPostsResults?.TotalPosts ?? 0) / NumPostsPerPage),
                 ProfilePicUri = _settings.ProfilePicUri,
                 GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
             });
@@ -107,7 +107,7 @@ namespace DanClarkeBlog.Web.Controllers
         public async Task<IActionResult> Error404(CancellationToken cancellationToken)
         {
             var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
-            var recentPostsTask = _blogPostRepository.GetRecentAsync(HomeController.NumRecentPosts, cancellationToken);
+            var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
             var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);
 
             var recent = await recentPostsTask;

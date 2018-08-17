@@ -23,7 +23,7 @@ namespace DanClarkeBlog.Core.Helpers
 
             using (var client = new HttpClient())
             {
-                await client.PostAsync(_settings.SlackNotificationUri, new StringContent(json, Encoding.UTF8, "application/json"));
+                await client.PostAsync(_settings.SlackNotificationUri, new StringContent(json, Encoding.UTF8, "application/json"), cancellationToken);
             }
         }
     }

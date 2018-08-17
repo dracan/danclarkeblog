@@ -57,7 +57,7 @@ namespace DanClarkeBlog.Core.Helpers
 
                 if (incremental && string.IsNullOrWhiteSpace(dropboxCursor.Cursor))
                 {
-                    Log.Verbose($"First incremental run, so explicitly requesting current cursor ...");
+                    Log.Verbose("First incremental run, so explicitly requesting current cursor ...");
                     dropboxCursor.Cursor = await _dropboxHelper.GetCurrentCursorAsync(cancellationToken);
                     Log.Verbose($"Returned cursor {dropboxCursor.Cursor}");
                 }
@@ -69,7 +69,7 @@ namespace DanClarkeBlog.Core.Helpers
                     await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
                 }
 
-                Log.Debug($"Processing images ...");
+                Log.Debug("Processing images ...");
 
                 var imageTasks = new List<Task>();
 

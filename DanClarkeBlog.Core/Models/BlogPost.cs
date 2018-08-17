@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using DanClarkeBlog.Core.Repositories;
 
 namespace DanClarkeBlog.Core.Models
 {
