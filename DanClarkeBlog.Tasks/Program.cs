@@ -6,7 +6,7 @@ using DanClarkeBlog.Tasks.Tasks;
 
 namespace DanClarkeBlog.Tasks
 {
-    class Program
+    internal static class Program
     {
         static void Main()
         {

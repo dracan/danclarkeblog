@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Dropbox;
 using DanClarkeBlog.Core.Models;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace DanClarkeBlog.Core.Helpers
@@ -12,6 +13,7 @@ namespace DanClarkeBlog.Core.Helpers
     // See following link for reference (and live testing) of all the API endpoints
     // https://dropbox.github.io/dropbox-api-v2-explorer/
 
+    [UsedImplicitly]
     public class DropboxHelper : IDropboxHelper
     {
         private readonly Settings _settings;

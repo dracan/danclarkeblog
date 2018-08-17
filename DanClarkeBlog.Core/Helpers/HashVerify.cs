@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace DanClarkeBlog.Core.Helpers
 {
+    [UsedImplicitly]
     public class HashVerify : IHashVerify
     {
         public bool VerifySha256Hash(HashAlgorithm sha256Hash, string input, string hash)

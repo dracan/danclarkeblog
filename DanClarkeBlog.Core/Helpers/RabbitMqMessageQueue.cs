@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Serilog;
 
 namespace DanClarkeBlog.Core.Helpers
 {
+    [UsedImplicitly]
     public class RabbitMqMessageQueue : IMessageQueue
     {
         private readonly IConnection _connection;

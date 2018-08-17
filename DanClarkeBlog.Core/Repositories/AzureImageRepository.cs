@@ -3,12 +3,14 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
+    [UsedImplicitly]
     public class AzureImageRepository : IImageRepository
     {
         private readonly Settings _settings;

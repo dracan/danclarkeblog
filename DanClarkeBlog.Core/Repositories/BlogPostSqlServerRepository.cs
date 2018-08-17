@@ -5,11 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Data;
 using DanClarkeBlog.Core.Models;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
+    [UsedImplicitly]
     public class BlogPostSqlServerRepository : IBlogPostRepository
     {
         private readonly Settings _setting;

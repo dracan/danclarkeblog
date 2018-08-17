@@ -1,8 +1,10 @@
 ﻿using DanClarkeBlog.Core;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace DanClarkeBlog.Web.TagHelpers
 {
+    [UsedImplicitly]
     public class GoogleAnalyticsTagHelper : TagHelper
     {
         private readonly Settings _settings;

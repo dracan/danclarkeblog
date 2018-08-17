@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Polly;
@@ -8,6 +9,7 @@ using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
+    [UsedImplicitly]
     public class AzureBlobLockRepository : ILockRepository
     {
         private readonly Settings _settings;

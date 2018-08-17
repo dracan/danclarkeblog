@@ -1,8 +1,10 @@
 using System.IO;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 
 namespace DanClarkeBlog.Core.Helpers
 {
+    [UsedImplicitly]
     public class BlogPostMarkdownRenderer : IBlogPostRenderer
     {
         private readonly Settings _settings;

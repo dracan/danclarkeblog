@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace DanClarkeBlog.Core.Models
 {
+    [UsedImplicitly]
     public class BlogJsonItem
     {
         public string Title { get; set; }

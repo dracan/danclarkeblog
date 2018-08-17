@@ -5,11 +5,13 @@ using Autofac;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
 using DanClarkeBlog.Tasks.Models;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Serilog;
 
 namespace DanClarkeBlog.Tasks.Tasks
 {
+    [UsedImplicitly]
     public class SyncTask : ITask
     {
         private readonly INotificationTarget _notificationTarget;

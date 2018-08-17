@@ -8,11 +8,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
+    [UsedImplicitly]
     public class BlogPostDropboxRepository : IBlogPostRepository
     {
         private readonly IBlogPostRenderer _renderer;

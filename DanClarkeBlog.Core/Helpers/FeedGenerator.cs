@@ -6,12 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using DanClarkeBlog.Core.Repositories;
+using JetBrains.Annotations;
 using Terradue.ServiceModel.Syndication;
 
 namespace DanClarkeBlog.Core.Helpers
 {
     //(todo) A lot of hardcoded strings specific to my blog here need making into settings
 
+    [UsedImplicitly]
     public class FeedGenerator : IFeedGenerator
     {
         private readonly IBlogPostRepository _blogPostRepository;

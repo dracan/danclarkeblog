@@ -5,10 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Models;
 using DanClarkeBlog.Core.Repositories;
+using JetBrains.Annotations;
 using Serilog;
 
 namespace DanClarkeBlog.Core.Helpers
 {
+    [UsedImplicitly]
     public class SyncHelper
     {
         private readonly IDropboxHelper _dropboxHelper;

@@ -1,5 +1,6 @@
 using System;
 using Autofac.Extensions.DependencyInjection;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ using Settings = DanClarkeBlog.Core.Settings;
 
 namespace DanClarkeBlog.Web
 {
+    [UsedImplicitly]
     public class Startup
     {
         public Startup(IHostingEnvironment env)

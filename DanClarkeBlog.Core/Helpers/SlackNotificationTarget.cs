@@ -2,10 +2,12 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace DanClarkeBlog.Core.Helpers
 {
+    [UsedImplicitly]
     public class SlackNotificationTarget : INotificationTarget
     {
         private readonly Settings _settings;
