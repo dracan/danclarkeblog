@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: tasks
-        image: everstack.azurecr.io/blog-tasks:2.0.7
+        image: everstack.azurecr.io/blog-tasks:2.0.8
         envFrom:
         - configMapRef:
             name: tasks-config
