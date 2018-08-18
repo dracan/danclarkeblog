@@ -1,5 +1,3 @@
 k config use-context blog
-gcloud config configurations activate everstack
-#gcloud auth configure-docker
-docker-credential-gcr configure-docker
-az acr login --name everstack
+az account set --subscription Everstack
+az acr login --name everstack --resource-group Everstack
