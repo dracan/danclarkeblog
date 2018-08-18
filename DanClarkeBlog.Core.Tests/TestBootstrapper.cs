@@ -22,15 +22,15 @@ namespace DanClarkeBlog.Core.Tests
 
             var settings = new Settings
                            {
-                               DropboxAccessToken = Environment.GetEnvironmentVariable("Blog:DropboxAccessToken"),
-                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("Blog:BlogSqlConnectionString"),
-                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("Blog:AzureStorageConnectionString"),
-                               MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("Blog:MaxResizedImageSize") ?? "0"),
-                               KeepAlivePingUri = Environment.GetEnvironmentVariable("Blog:KeepAlivePingUri"),
-                               SlackNotificationUri = Environment.GetEnvironmentVariable("Blog:SlackNotificationUri"),
-                               SiteHomeUri = Environment.GetEnvironmentVariable("Blog:SiteHomeUri"),
-                               PostPreviewLength = int.Parse(Environment.GetEnvironmentVariable("Blog:PostPreviewLength") ?? "200"),
-                               BaseImageUri = Environment.GetEnvironmentVariable("Blog:BaseImageUri"),
+                               DropboxAccessToken = Environment.GetEnvironmentVariable("Blog__DropboxAccessToken"),
+                               BlogSqlConnectionString = Environment.GetEnvironmentVariable("Blog__BlogSqlConnectionString"),
+                               AzureStorageConnectionString = Environment.GetEnvironmentVariable("Blog__AzureStorageConnectionString"),
+                               MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("Blog__MaxResizedImageSize") ?? "0"),
+                               KeepAlivePingUri = Environment.GetEnvironmentVariable("Blog__KeepAlivePingUri"),
+                               SlackNotificationUri = Environment.GetEnvironmentVariable("Blog__SlackNotificationUri"),
+                               SiteHomeUri = Environment.GetEnvironmentVariable("Blog__SiteHomeUri"),
+                               PostPreviewLength = int.Parse(Environment.GetEnvironmentVariable("Blog__PostPreviewLength") ?? "200"),
+                               BaseImageUri = Environment.GetEnvironmentVariable("Blog__BaseImageUri"),
             };
 
             var builder = new ContainerBuilder();
