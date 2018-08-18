@@ -104,6 +104,7 @@ namespace DanClarkeBlog.Core.Repositories
 
                 var post = new BlogPost
                            {
+                               Id= blogPost.Id,
                                Title = blogPost.Title,
                                PublishDate = string.IsNullOrWhiteSpace(blogPost.PublishDate) ? null : (DateTime?)DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
                                HtmlText = _renderer.Render(postFileText, blogPost.Folder),

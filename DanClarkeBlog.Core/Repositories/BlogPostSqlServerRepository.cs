@@ -130,7 +130,7 @@ namespace DanClarkeBlog.Core.Repositories
                 var existing = await ctx.BlogPosts
                     .Include(x => x.BlogPostTags)
                     .ThenInclude(t => t.Tag)
-                    .FirstOrDefaultAsync(x => x.Title == post.Title, cancellationToken);
+                    .FirstOrDefaultAsync(x => x.Id == post.Id, cancellationToken);
 
                 if (existing == null)
                 {
