@@ -68,7 +68,6 @@ namespace DanClarkeBlog.Core.Repositories
 
                 var post = new BlogPost
                 {
-                    Id= blogPost.Id,
                     Title = blogPost.Title,
                     PublishDate = DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
                     HtmlText = _renderer.Render(postFile, blogPost.Folder),

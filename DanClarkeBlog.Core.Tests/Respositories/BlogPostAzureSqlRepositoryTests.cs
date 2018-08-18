@@ -23,7 +23,6 @@ namespace DanClarkeBlog.Core.Tests.Respositories
 
             var post = new BlogPost
                        {
-                           Id = Guid.NewGuid(),
                            Title = "My Post",
                            Route = "/mypost",
                            HtmlText = "<body>Post Body</body>",

@@ -109,8 +109,7 @@ namespace DanClarkeBlog.Core.Helpers
 
                 var item = new SyndicationItem
                 {
-                    Id = postUri.ToString(), // Now that we have GUID IDs in the blogposts.json file, it would be
-                    // nice if this used this ID. But I don't want to break past posts that RSS readers already know about.
+                    Id = postUri.ToString(),
                     Title = new TextSyndicationContent(post.Title),
                     Content = new TextSyndicationContent(post.HtmlText, TextSyndicationContentKind.Html)
                 };
