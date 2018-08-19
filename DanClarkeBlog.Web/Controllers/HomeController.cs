@@ -63,7 +63,7 @@ namespace DanClarkeBlog.Web.Controllers
 
         public async Task<IActionResult> BlogPost(string route, CancellationTokenSource cts)
         {
-            var postTask = _blogPostRepository.GetWithConditionAsync(x => x.Route.TrimStart('/') == route.TrimStart('/'), cts.Token);
+            var postTask = _blogPostRepository.GetWithConditionAsync(x => x.Published ? (x.Route.TrimStart('/') == route.TrimStart('/')) : x.Id.ToString() == route.TrimStart('/'), cts.Token);
             var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cts.Token);
             var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cts.Token);
             var tagsTask = _blogPostRepository.GetTagCountsAsync(cts.Token);
