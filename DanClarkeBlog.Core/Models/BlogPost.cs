@@ -19,13 +19,9 @@ namespace DanClarkeBlog.Core.Models
         [NotMapped]
         public List<BlogImageData> ImageData { get; set; }
 
-        public BlogPost()
-        {
-            Id = Guid.NewGuid();
-        }
-
         public void UpdateFrom(BlogPost post)
         {
+            Id = post.Id;
             Title = post.Title;
             Route = post.Route;
             PublishDate = post.PublishDate;

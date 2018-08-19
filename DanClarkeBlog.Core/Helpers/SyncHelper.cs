@@ -95,7 +95,7 @@ namespace DanClarkeBlog.Core.Helpers
                 {
                     var destPosts = (await destRepo.GetAllAsync(null, cancellationToken)).ToList();
 
-                    var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Title != d.Title)).ToList();
+                    var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Id != d.Id)).ToList();
 
                     Log.Verbose($"Found {postsToDelete.Count} to delete out of {destPosts.Count} posts");
 
