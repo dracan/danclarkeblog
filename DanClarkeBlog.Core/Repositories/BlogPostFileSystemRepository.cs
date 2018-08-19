@@ -100,11 +100,6 @@ namespace DanClarkeBlog.Core.Repositories
             return (await GetAllAsync(null, cancellationToken)).Where(conditionFunc).ToList();
         }
 
-        public Task AddAsync(BlogPost post, CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException();
-        }
-
         public Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();

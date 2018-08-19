@@ -104,7 +104,7 @@ namespace DanClarkeBlog.Core.Repositories
 
                 var post = new BlogPost
                            {
-                               Id= blogPost.Id,
+                               Id = blogPost.Id,
                                Title = blogPost.Title,
                                PublishDate = string.IsNullOrWhiteSpace(blogPost.PublishDate) ? null : (DateTime?)DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
                                HtmlText = _renderer.Render(postFileText, blogPost.Folder),
@@ -126,11 +126,6 @@ namespace DanClarkeBlog.Core.Repositories
         public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
-        }
-
-        public Task AddAsync(BlogPost post, CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException();
         }
 
         public Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)

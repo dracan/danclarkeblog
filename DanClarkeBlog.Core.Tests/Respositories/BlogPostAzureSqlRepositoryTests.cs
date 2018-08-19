@@ -33,7 +33,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
 
             var repo = container.ResolveNamed<IBlogPostRepository>("SqlServer");
 
-            await repo.AddAsync(post, CancellationToken.None);
+            await repo.AddOrUpdateAsync(post, CancellationToken.None);
         }
 
         /// <summary>

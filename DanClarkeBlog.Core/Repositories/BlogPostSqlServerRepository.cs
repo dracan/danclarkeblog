@@ -112,15 +112,6 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
-        public async Task AddAsync(BlogPost post, CancellationToken cancellationToken)
-        {
-            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
-            {
-                await ctx.BlogPosts.AddAsync(post, cancellationToken);
-                await ctx.SaveChangesAsync(cancellationToken);
-            }
-        }
-
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
             Log.Debug("Adding/updating post: '{Title}' ...", post.Title);
