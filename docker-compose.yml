@@ -16,7 +16,7 @@ services:
     volumes:
       - ./DanClarkeBlog.Core:/src/DanClarkeBlog.Core
       - ./DanClarkeBlog.Web:/src/DanClarkeBlog.Web
-    restart: on-failure
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - Blog__BlogSqlConnectionString
@@ -46,7 +46,7 @@ services:
     volumes:
       - ./DanClarkeBlog.Core:/src/DanClarkeBlog.Core
       - ./DanClarkeBlog.Tasks:/src/DanClarkeBlog.Tasks
-    restart: on-failure
+    restart: always
     environment:
       - Blog__BlogSqlConnectionString
       - Blog__AzureStorageConnectionString
@@ -64,14 +64,14 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    restart: on-failure
+    restart: always
     ports:
       - 8080:15672
       - 5672:5672
 
   postgres:
     image: postgres
-    restart: on-failure
+    restart: always
     ports:
       - 5432:5432
     environment:
