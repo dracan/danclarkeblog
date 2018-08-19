@@ -1,0 +1,79 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: DanClarkeBlog.Web/dev.Dockerfile
+    ports:
+      - 12311:80
+    links:
+      - rabbitmq
+      - postgres
+    depends_on:
+      - rabbitmq
+      - postgres
+    volumes:
+      - ./DanClarkeBlog.Core:/src/DanClarkeBlog.Core
+      - ./DanClarkeBlog.Web:/src/DanClarkeBlog.Web
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Blog__BlogSqlConnectionString
+      - Blog__AzureStorageConnectionString
+      - Blog__DisqusDomainName
+      - Blog__SlackNotificationUri
+      - Blog__SiteHomeUri
+      - Blog__ProfilePicUri
+      - Blog__GoogleAnalyticsTracking
+      - Blog__RabbitMQServer
+      - Blog__RabbitMQUser
+      - Blog__RabbitMQPass
+      - Blog__DropboxAccessToken
+      - Blog__DropboxAppSecret
+      - Blog__MaxResizedImageSize
+
+  tasks:
+    build:
+      context: .
+      dockerfile: DanClarkeBlog.Tasks/dev.Dockerfile
+    links:
+      - rabbitmq
+      - postgres
+    depends_on:
+      - rabbitmq
+      - postgres
+    volumes:
+      - ./DanClarkeBlog.Core:/src/DanClarkeBlog.Core
+      - ./DanClarkeBlog.Tasks:/src/DanClarkeBlog.Tasks
+    restart: on-failure
+    environment:
+      - Blog__BlogSqlConnectionString
+      - Blog__AzureStorageConnectionString
+      - Blog__DisqusDomainName
+      - Blog__SlackNotificationUri
+      - Blog__SiteHomeUri
+      - Blog__ProfilePicUri
+      - Blog__GoogleAnalyticsTracking
+      - Blog__RabbitMQServer
+      - Blog__RabbitMQUser
+      - Blog__RabbitMQPass
+      - Blog__DropboxAccessToken
+      - Blog__DropboxAppSecret
+      - Blog__MaxResizedImageSize
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: on-failure
+    ports:
+      - 8080:15672
+      - 5672:5672
+
+  postgres:
+    image: postgres
+    restart: on-failure
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=blog
+      - POSTGRES_PASSWORD=password1
