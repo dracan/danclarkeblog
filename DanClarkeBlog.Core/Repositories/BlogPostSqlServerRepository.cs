@@ -114,7 +114,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
-            Log.Debug("Adding/updating post: '{Title}' ...", post.Title);
+            Log.Debug("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
