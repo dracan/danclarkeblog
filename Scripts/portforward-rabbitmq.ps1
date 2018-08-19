@@ -1,0 +1,1 @@
+k port-forward $(k get po -o jsonpath="{range .items[*]}{@.metadata.name}{end}" -l name=rabbitmq) 5672:5672
