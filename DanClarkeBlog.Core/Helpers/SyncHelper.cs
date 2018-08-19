@@ -57,9 +57,9 @@ namespace DanClarkeBlog.Core.Helpers
                 var cursor = incremental && !string.IsNullOrWhiteSpace(dropboxCursor.Cursor) ? dropboxCursor : null;
                 var sourcePosts = (await sourceRepo.GetAllAsync(cursor, cancellationToken)).ToList();
 
-                if (incremental && string.IsNullOrWhiteSpace(dropboxCursor.Cursor))
+                if (string.IsNullOrWhiteSpace(dropboxCursor.Cursor))
                 {
-                    Log.Verbose("First incremental run, so explicitly requesting current cursor ...");
+                    Log.Verbose("No current dropbox cursor, so explicitly requesting current cursor ...");
                     dropboxCursor.Cursor = await _dropboxHelper.GetCurrentCursorAsync(cancellationToken);
                     Log.Verbose($"Returned cursor {dropboxCursor.Cursor}");
                 }
@@ -104,12 +104,9 @@ namespace DanClarkeBlog.Core.Helpers
 
                 await destRepo.RemoveUnusedTagsAsync(cancellationToken);
 
-                if (incremental)
-                {
-                    Log.Verbose($"Saving new Dropbox cursor: {dropboxCursor.Cursor}");
+                Log.Verbose($"Saving new Dropbox cursor: {dropboxCursor.Cursor}");
 
-                    await destRepo.SetDropboxCursorAsync(dropboxCursor.Cursor, cancellationToken);
-                }
+                await destRepo.SetDropboxCursorAsync(dropboxCursor.Cursor, cancellationToken);
             }
             finally
             {
