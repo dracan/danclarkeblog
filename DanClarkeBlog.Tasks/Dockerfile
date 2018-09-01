@@ -10,5 +10,5 @@ FROM microsoft/dotnet:2.1-runtime
 WORKDIR /app
 COPY --from=build /src/DanClarkeBlog.Tasks/bin/Release/netcoreapp2.1/publish .
 EXPOSE 80
-LABEL version="2.0.9"
+LABEL version="2.0.10"
 ENTRYPOINT dotnet DanClarkeBlog.Tasks.dll
