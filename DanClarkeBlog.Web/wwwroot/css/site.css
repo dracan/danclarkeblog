@@ -168,3 +168,9 @@ footer {
 code {
     color: darkslategrey;
 }
+
+blockquote {
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.4em;
+}
