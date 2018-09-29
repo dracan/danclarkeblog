@@ -56,8 +56,6 @@ namespace DanClarkeBlog.Web.Controllers
             {
                 Log.Information("Received Dropbox change notification");
 
-                await _notificationTarget.SendMessageAsync("Received Dropbox change notification", cancellationToken);
-
                 HttpContext.Request.Headers.TryGetValue("X-Dropbox-Signature", out var signature);
 
                 string body;
