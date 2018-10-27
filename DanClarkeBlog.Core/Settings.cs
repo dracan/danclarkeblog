@@ -19,6 +19,8 @@
         public string RabbitMQUser { get; set; }
         public string RabbitMQPass { get; set; }
 
+        public string VersionNumber { get; set; }
+
         /// <summary>
         /// For verification of Dropbox webhook HMAC
         /// </summary>

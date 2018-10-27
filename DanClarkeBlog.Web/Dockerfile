@@ -8,7 +8,9 @@ RUN dotnet publish -c Release
 
 FROM microsoft/dotnet:2.1-aspnetcore-runtime
 WORKDIR /app
-LABEL version="2.0.11"
+ARG VersionNumber="0.0.0"
+LABEL version=${VersionNumber}
+ENV Blog__VersionNumber=${VersionNumber}
 COPY --from=build /src/DanClarkeBlog.Web/bin/Release/netcoreapp2.1/publish .
 EXPOSE 80
 ENTRYPOINT dotnet DanClarkeBlog.Web.dll
