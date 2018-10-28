@@ -1,0 +1,2 @@
+Start-Process "http://localhost:3000"
+kubectl --namespace monitoring port-forward $(kubectl get pod --namespace monitoring -l app=kube-prometheus-grafana -o template --template "{{(index .items 0).metadata.name}}") 3000:3000
