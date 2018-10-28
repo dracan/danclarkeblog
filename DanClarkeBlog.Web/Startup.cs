@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Prometheus;
 using Settings = DanClarkeBlog.Core.Settings;
 
 namespace DanClarkeBlog.Web
@@ -61,6 +62,8 @@ namespace DanClarkeBlog.Web
 
             app.UseStaticFiles();
             app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+            app.UseMetricServer();
 
             app.UseMvc(routes =>
             {
