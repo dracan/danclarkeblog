@@ -30,6 +30,7 @@ namespace DanClarkeBlog.Tasks
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.LiterateConsole()
+                .WriteTo.Seq("http://seq")
                 .CreateLogger();
 
             var builder = new ContainerBuilder();

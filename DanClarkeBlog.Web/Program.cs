@@ -38,6 +38,7 @@ namespace DanClarkeBlog.Web
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.LiterateConsole()
+                .WriteTo.Seq("http://seq")
                 .CreateLogger();
         }
     }
