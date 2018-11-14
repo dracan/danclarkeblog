@@ -47,11 +47,34 @@ kind: Service
 metadata:
   name: web
   namespace: blog
+  labels:
+    name: web
+    env: prod
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
+  - name: web
+    port: 80
     targetPort: 80
   selector:
     name: web
     env: prod
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: web
+  namespace: monitoring
+  labels:
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      name: web
+      env: prod
+  namespaceSelector:
+    matchNames:
+    - blog
+  endpoints:
+  - port: web
+    interval: 30s
