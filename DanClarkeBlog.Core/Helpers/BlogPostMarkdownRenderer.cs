@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
+using Markdig;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -8,10 +9,12 @@ namespace DanClarkeBlog.Core.Helpers
     public class BlogPostMarkdownRenderer : IBlogPostRenderer
     {
         private readonly Settings _settings;
+        private readonly MarkdownPipeline _pipeline;
 
         public BlogPostMarkdownRenderer(Settings settings)
         {
             _settings = settings;
+            _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
 
         public string Render(string source, string postFolderName)
@@ -21,7 +24,7 @@ namespace DanClarkeBlog.Core.Helpers
 
         private string ConvertMarkdownToHtml(string markdown, string postFolderName)
         {
-            return Markdig.Markdown.ToHtml(UpdateImagePaths(markdown, postFolderName));
+            return Markdown.ToHtml(UpdateImagePaths(markdown, postFolderName), _pipeline);
         }
 
         internal string UpdateImagePaths(string source, string postFolderName)
