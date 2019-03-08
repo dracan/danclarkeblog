@@ -80,10 +80,10 @@ namespace DanClarkeBlog.Core.Helpers
                 Copyright = new TextSyndicationContent($"Copyright {DateTime.Now.Year}"),
                 Generator = "Dan Clarke's Blog Platform",
                 Language = "en-gb",
+                Authors = { new SyndicationPerson("blog@dracan.co.uk", "Dan Clarke", _settings.SiteHomeUri) },
                 Categories = { new SyndicationCategory("Programming") },
             };
 
-            feed.Authors.Add(new SyndicationPerson("", "Dan Clarke", _settings.SiteHomeUri));
             feed.Categories.Add(new SyndicationCategory("FeedCategory", "CategoryScheme", "CategoryLabel"));
 
             feed.Links.Add(new SyndicationLink(new Uri(new Uri(_settings.SiteHomeUri), "/rss"))
