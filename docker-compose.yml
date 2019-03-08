@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: DanClarkeBlog.Web/dev.Dockerfile
+      dockerfile: DanClarkeBlog.Web/Dockerfile
     ports:
       - 12311:80
     links:
@@ -33,7 +33,7 @@ services:
   tasks:
     build:
       context: .
-      dockerfile: DanClarkeBlog.Tasks/dev.Dockerfile
+      dockerfile: DanClarkeBlog.Tasks/Dockerfile
     links:
       - rabbitmq
       - postgres
