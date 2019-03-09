@@ -59,22 +59,22 @@ spec:
   selector:
     name: web
     env: prod
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: web
-  namespace: monitoring
-  labels:
-    prometheus: kube-prometheus
-spec:
-  selector:
-    matchLabels:
-      name: web
-      env: prod
-  namespaceSelector:
-    matchNames:
-    - blog
-  endpoints:
-  - port: web
-    interval: 30s
+# ---
+# apiVersion: monitoring.coreos.com/v1
+# kind: ServiceMonitor
+# metadata:
+#   name: web
+#   namespace: monitoring
+#   labels:
+#     prometheus: kube-prometheus
+# spec:
+#   selector:
+#     matchLabels:
+#       name: web
+#       env: prod
+#   namespaceSelector:
+#     matchNames:
+#     - blog
+#   endpoints:
+#   - port: web
+#     interval: 30s
