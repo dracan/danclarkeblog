@@ -23,9 +23,9 @@ services:
       - Blog__SiteHomeUri
       - Blog__ProfilePicUri
       - Blog__GoogleAnalyticsTracking
-      - Blog__RabbitMQServer
-      - Blog__RabbitMQUser
-      - Blog__RabbitMQPass
+      - Blog__RabbitMQServer=rabbitmq
+      - Blog__RabbitMQUser=guest
+      - Blog__RabbitMQPass=guest
       - Blog__DropboxAccessToken
       - Blog__DropboxAppSecret
       - Blog__MaxResizedImageSize
@@ -49,9 +49,9 @@ services:
       - Blog__SiteHomeUri
       - Blog__ProfilePicUri
       - Blog__GoogleAnalyticsTracking
-      - Blog__RabbitMQServer
-      - Blog__RabbitMQUser
-      - Blog__RabbitMQPass
+      - Blog__RabbitMQServer=rabbitmq
+      - Blog__RabbitMQUser=guest
+      - Blog__RabbitMQPass=guest
       - Blog__DropboxAccessToken
       - Blog__DropboxAppSecret
       - Blog__MaxResizedImageSize
