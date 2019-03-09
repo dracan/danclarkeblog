@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.ServiceModel.Syndication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using DanClarkeBlog.Core.Repositories;
 using JetBrains.Annotations;
-using Terradue.ServiceModel.Syndication;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -80,24 +80,23 @@ namespace DanClarkeBlog.Core.Helpers
                 Copyright = new TextSyndicationContent($"Copyright {DateTime.Now.Year}"),
                 Generator = "Dan Clarke's Blog Platform",
                 Language = "en-gb",
-                Authors = { new SyndicationPerson("blog@dracan.co.uk", "Dan Clarke", _settings.SiteHomeUri) },
-                Categories = { new SyndicationCategory("Programming") },
+                Authors = {new SyndicationPerson("blog@dracan.co.uk", "Dan Clarke", _settings.SiteHomeUri)},
+                Categories = {new SyndicationCategory("Programming")},
+                Links =
+                {
+                    new SyndicationLink(new Uri(new Uri(_settings.SiteHomeUri), "/rss"))
+                    {
+                        RelationshipType = "self",
+                        MediaType = "text/html",
+                        Title = blogDescription
+                    },
+                    new SyndicationLink(new Uri(_settings.SiteHomeUri))
+                    {
+                        MediaType = "text/html",
+                        Title = blogDescription
+                    }
+                }
             };
-
-            feed.Categories.Add(new SyndicationCategory("FeedCategory", "CategoryScheme", "CategoryLabel"));
-
-            feed.Links.Add(new SyndicationLink(new Uri(new Uri(_settings.SiteHomeUri), "/rss"))
-            {
-                RelationshipType = "self",
-                MediaType = "text/html",
-                Title = blogDescription
-            });
-
-            feed.Links.Add(new SyndicationLink(new Uri(_settings.SiteHomeUri))
-            {
-                MediaType = "text/html",
-                Title = blogDescription
-            });
 
             var posts = await _blogPostRepository.GetWithConditionAsync(x => x.Published, cancelationToken);
 
