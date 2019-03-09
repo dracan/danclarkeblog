@@ -8,7 +8,7 @@
 var factory = new ConnectionFactory
 {
     HostName = "localhost",
-	Port = 5673,
+	Port = 5672,
     DispatchConsumersAsync = true
 };
 
