@@ -280,3 +280,5 @@ tools/
 artifacts_web/
 /Scripts/SetEnvVariables_nocommit.ps1
 /Kubernetes/config.yaml
+
+DanClarkeBlog.Web.Old/
