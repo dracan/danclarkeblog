@@ -174,3 +174,11 @@ blockquote {
     font-style: italic;
     line-height: 1.4em;
 }
+
+.mvplogo {
+  width: 77%;
+}
+
+.noProfilePicSpacer {
+  height: 20px;
+}
