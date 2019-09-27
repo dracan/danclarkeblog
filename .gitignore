@@ -282,3 +282,5 @@ artifacts_web/
 /Kubernetes/config.yaml
 
 DanClarkeBlog.Web.Old/
+
+.ionide/
