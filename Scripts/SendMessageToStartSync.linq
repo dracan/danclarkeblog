@@ -1,24 +1,17 @@
 <Query Kind="Statements">
-  <NuGetReference>Newtonsoft.Json</NuGetReference>
-  <NuGetReference>RabbitMQ.Client</NuGetReference>
-  <Namespace>RabbitMQ.Client</Namespace>
+  <NuGetReference>Microsoft.Azure.ConfigurationManager</NuGetReference>
+  <NuGetReference>Microsoft.Azure.Storage.Queue</NuGetReference>
+  <Namespace>Microsoft.Azure.Storage</Namespace>
+  <Namespace>Microsoft.Azure.Storage.Queue</Namespace>
   <Namespace>Newtonsoft.Json</Namespace>
 </Query>
 
-var factory = new ConnectionFactory
-{
-    HostName = "localhost",
-	Port = 5672,
-    DispatchConsumersAsync = true
-};
+var queue = CloudStorageAccount.Parse(Environment.GetEnvironmentVariable("Blog__AzureStorageConnectionString"))
+    .CreateCloudQueueClient()
+    .GetQueueReference("sync");
 
-factory.UserName = "guest";
-factory.Password = "guest";
+await queue.CreateIfNotExistsAsync();
 
-var connection = factory.CreateConnection();
-var channel = connection.CreateModel();
-
-var message = JsonConvert.SerializeObject(new { IsIncremental = false });
-
-channel.QueueDeclare("sync", false, false, false, null); // Ensure Queue Exists
-channel.BasicPublish("", "sync", null, Encoding.UTF8.GetBytes(message));
+queue.AddMessage(new CloudQueueMessage(
+    JsonConvert.SerializeObject(new { IsIncremental = false })
+));

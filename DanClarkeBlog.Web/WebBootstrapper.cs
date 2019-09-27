@@ -25,7 +25,7 @@ namespace DanClarkeBlog.Web
             builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
             builder.RegisterType<HashVerify>().As<IHashVerify>();
-            builder.RegisterType<RabbitMqMessageQueue>().As<IMessageQueue>();
+            builder.RegisterType<AzureStorageQueue>().As<IMessageQueue>();
 
             builder.Populate(services);
 

@@ -39,7 +39,7 @@ namespace DanClarkeBlog.Web.Controllers
 
                 await _notificationTarget.SendMessageAsync("Received a challenge request from Dropbox. Replying to accept.", cancellationToken);
 
-                return Content(challenge, "text/plain", System.Text.Encoding.UTF8);
+                return Content(challenge, "text/plain", Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -76,7 +76,7 @@ namespace DanClarkeBlog.Web.Controllers
                     }
                 }
 
-                _messageQueue.Send("sync", JsonConvert.SerializeObject(new { IsIncremental = true }));
+                await _messageQueue.SendAsync("sync", JsonConvert.SerializeObject(new { IsIncremental = true }), cancellationToken);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }

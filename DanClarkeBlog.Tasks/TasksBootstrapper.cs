@@ -49,7 +49,7 @@ namespace DanClarkeBlog.Tasks
             builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
             builder.RegisterType<HashVerify>().As<IHashVerify>();
             builder.RegisterType<AzureBlobLockRepository>().As<ILockRepository>();
-            builder.RegisterType<RabbitMqMessageQueue>().As<IMessageQueue>();
+            builder.RegisterType<AzureStorageQueue>().As<IMessageQueue>();
 
             builder.RegisterType<SyncTask>();
 
