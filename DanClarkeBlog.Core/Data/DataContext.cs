@@ -44,7 +44,7 @@ namespace DanClarkeBlog.Core.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_connectionString);
+            optionsBuilder.UseSqlServer(_connectionString);
         }
     }
 }
