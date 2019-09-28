@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace DanClarkeBlog.Tasks.Models
+namespace DanClarkeBlog.Functions.Models
 {
     [UsedImplicitly]
     public class SyncMessage

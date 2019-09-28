@@ -6,7 +6,10 @@ using DanClarkeBlog.Core.Models;
 
 namespace DanClarkeBlog.Core.Repositories
 {
-    public interface IBlogPostRepository
+    public interface IBlogPostSourceRepository { }
+    public interface IBlogPostTargetRepository { }
+
+    public interface IBlogPostRepository : IBlogPostSourceRepository, IBlogPostTargetRepository
     {
         Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken);
         Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken);
