@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -38,7 +39,7 @@ namespace DanClarkeBlog.Web
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.LiterateConsole()
-                .WriteTo.Seq("http://seq")
+                .WriteTo.ApplicationInsights(Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"), TelemetryConverter.Traces)
                 .CreateLogger();
         }
     }
