@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Repositories;
 using DanClarkeBlog.Web.ViewModels;
@@ -102,6 +102,7 @@ namespace DanClarkeBlog.Web.Controllers
             return Content(xml, "application/xml");
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View();

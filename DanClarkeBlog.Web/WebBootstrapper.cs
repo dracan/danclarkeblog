@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using DanClarkeBlog.Core;
+﻿using DanClarkeBlog.Core;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,27 +7,22 @@ namespace DanClarkeBlog.Web
 {
     internal static class WebBootstrapper
     {
-        public static IContainer Init(IServiceCollection services, Settings settings)
+        public static void Init(IServiceCollection services, Settings settings)
         {
-            var builder = new ContainerBuilder();
-
-            builder.Register(_ => settings);
-            builder.RegisterType<BlogPostSqlServerRepository>().As<IBlogPostRepository>();
-            builder.RegisterType<BlogPostSummaryHelper>();
-            builder.RegisterType<BlogPostMarkdownRenderer>().As<IBlogPostRenderer>();
-            builder.RegisterType<AzureImageRepository>().As<IImageRepository>();
-            builder.RegisterType<ImageResizer>().As<IImageResizer>();
-            builder.RegisterType<SyncHelper>();
-            builder.RegisterType<DropboxHelper>().As<IDropboxHelper>();
-            builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
-            builder.RegisterType<SlackNotificationTarget>().As<INotificationTarget>();
-            builder.RegisterType<FeedGenerator>().As<IFeedGenerator>();
-            builder.RegisterType<HashVerify>().As<IHashVerify>();
-            builder.RegisterType<AzureStorageQueue>().As<IMessageQueue>();
-
-            builder.Populate(services);
-
-            return builder.Build();
+            services.AddSingleton(settings);
+            services.AddScoped<IBlogPostRepository, BlogPostSqlServerRepository>();
+            services.AddSingleton<BlogPostSummaryHelper>();
+            services.AddSingleton<IBlogPostRenderer, BlogPostMarkdownRenderer>();
+            services.AddScoped<IImageRepository, AzureImageRepository>();
+            services.AddSingleton<IImageResizer, ImageResizer>();
+            services.AddScoped<SyncHelper>();
+            services.AddSingleton<IDropboxHelper, DropboxHelper>();
+            services.AddSingleton<IHttpClientHelper, HttpClientHelper>();
+            services.AddSingleton<INotificationTarget, SlackNotificationTarget>();
+            services.AddScoped<IFeedGenerator, FeedGenerator>();
+            services.AddSingleton<IHashVerify, HashVerify>();
+            services.AddSingleton<IMessageQueue, AzureStorageQueue>();
+            services.AddSingleton<ILockRepository, AzureBlobLockRepository>();
         }
     }
 }

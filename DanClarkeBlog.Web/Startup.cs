@@ -1,43 +1,31 @@
-using System;
-using Autofac.Extensions.DependencyInjection;
-using DanClarkeBlog.Web.Middleware;
-using JetBrains.Annotations;
+using DanClarkeBlog.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Prometheus;
-using Settings = DanClarkeBlog.Core.Settings;
 
 namespace DanClarkeBlog.Web
 {
-    [UsedImplicitly]
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationInsightsTelemetry();
+            services.AddControllersWithViews(config =>
+                 {
+                     config.RespectBrowserAcceptHeader = true;
+                 }).AddXmlSerializerFormatters();
 
-            services.AddMvc(config =>
-                {
-                    config.RespectBrowserAcceptHeader = true;
-                })
-                .AddXmlSerializerFormatters();
+            services.AddApplicationInsightsTelemetry();
 
             services.AddOptions();
             services.Configure<Settings>(Configuration.GetSection("Blog"));
@@ -45,16 +33,12 @@ namespace DanClarkeBlog.Web
             var sp = services.BuildServiceProvider();
             var settings = sp.GetService<IOptions<Settings>>();
 
-            var container = WebBootstrapper.Init(services, settings.Value);
-
-            return new AutofacServiceProvider(container);
+            WebBootstrapper.Init(services, settings.Value);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCustomErrorHandling();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -62,37 +46,40 @@ namespace DanClarkeBlog.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
             }
-
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
-            app.UseMetricServer();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "tags",
-                    template: "tags/{tag}",
+                    pattern: "tags/{tag}",
                     defaults: new { Controller = "Home", Action = "Index"});
 
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "rss",
-                    template: "rss",
+                    pattern: "rss",
                     defaults: new { Controller = "Home", Action = "RssFeed"});
 
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "atom",
-                    template: "atom",
+                    pattern: "atom",
                     defaults: new { Controller = "Home", Action = "AtomFeed"});
 
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "blogPost",
-                    template: "{route}",
+                    pattern: "{route}",
                     defaults: new { controller = "Home", action = "BlogPost" });
             });
         }
