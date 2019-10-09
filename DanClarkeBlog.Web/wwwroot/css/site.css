@@ -169,6 +169,11 @@ h1, h2, h3 {
     font-size: 14px;
 }
 
+.sidemenu {
+    background-color: #222;
+    color: #bbb;
+}
+
 .sidemenu .postTitle {
     font-size: 14px;
     margin-bottom: 5px;
@@ -181,6 +186,7 @@ h1, h2, h3 {
 
 .sidemenu h3 {
     font-size: 16px;
+    color: #fff;
 }
 
 .sidemenu img.profilePic {
@@ -191,7 +197,7 @@ h1, h2, h3 {
 .sidemenu a:link,
 .sidemenu a:visited,
 .sidemenu a:hover {
-    color: #50585D;
+    color: #bbb;
 }
 
 .paging {
