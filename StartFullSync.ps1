@@ -1,0 +1,1 @@
+lprun ./Scripts/SendMessageToStartSync.linq
