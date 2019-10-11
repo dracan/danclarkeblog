@@ -54,11 +54,14 @@
             @RenderBody()
         </div>
     </div>
-    <hr/>
     <footer>
-        <div class="col-md-9">
-            @await Html.PartialAsync("_Footer")
-        </div>
+       <div class="row">
+           <div class="col-md-2 sidemenu">
+           </div>
+           <div class="col-md-10">
+                @await Html.PartialAsync("_Footer")
+           </div>
+       </div>
     </footer>
 </div>
 
