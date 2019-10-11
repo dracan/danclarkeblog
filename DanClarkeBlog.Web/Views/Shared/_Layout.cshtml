@@ -5,7 +5,7 @@
 @* ReSharper disable Mvc.PartialViewNotResolved *@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,57 +18,58 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="d-flex flex-grow-1">
+            <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand d-none d-lg-inline-block">Dan Clarke<small>.NET | Azure | Dev</small></a>
+            <div class="w-100 text-right">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Dan Clarke <small title="Quote taken about me from a work colleague whilst asking for my help :)">"Better than a rubber duck"</small></a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/about">About me</a></li>
-                    <li><a href="/public-speaking">Public Speaking</a></li>
-                    <li>
-                        <a href="https://www.twitter.com/dracan" class="socialImg"><img alt="Twitter" src="~/images/twitter.png"/></a>
-                        <a href="https://github.com/dracan" class="socialImg"><img alt="GitHub" src="~/images/github.png"/></a>
-                        <a href="http://stackoverflow.com/story/danclarke" class="socialImg"><img alt="StackOverflow" src="~/images/stackoverflow.png"/></a>
-                        <a href="https://www.linkedin.com/in/danclarkeuk" class="socialImg"><img alt="LinkedIn" src="~/images/linkedin.png"/></a>
-                        <a href="/rss" class="socialImg"><img alt="RSS" src="~/images/rss.png"/></a>
-                    </li>
-                </ul>
-            </div>
+        </div>
+        <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+                <li class="nav-item navitem-text-link"><a class="nav-link" href="/about">About me</a></li>
+                <li class="nav-item navitem-text-link"><a class="nav-link" href="/public-speaking">Public Speaking</a></li>
+
+                <li class="nav-item"><a class="nav-link" href="https://www.twitter.com/dracan"><img class="socialImg" alt="Twitter" src="~/images/twitter.png"/></a></li>
+                <li class="nav-item"><a class="nav-link" href="https://www.linkedin.com/in/danclarkeuk"><img class="socialImg" alt="LinkedIn" src="~/images/linkedin.png"/></a></li>
+                <li class="nav-item"><a class="nav-link" href="https://github.com/dracan"><img class="socialImg" alt="GitHub" src="~/images/github.png"/></a></li>
+                <li class="nav-item"><a class="nav-link" href="http://stackoverflow.com/story/danclarke"><img class="socialImg" alt="StackOverflow" src="~/images/stackoverflow.png"/></a></li>
+                <li class="nav-item"><a class="nav-link" href="/rss"><img class="socialImg" alt="RSS" src="~/images/rss.png"/></a></li>
+            </ul>
         </div>
     </nav>
-    <div class="container-fluid body-content">
-        <div class="row">
-            <div class="col-md-3 sidemenu">
-                @await Html.PartialAsync("_SidePanel")
-            </div>
-            <div class="col-md-9">
-                @RenderBody()
-            </div>
+</header>
+
+<div class="container-fluid body-content">
+    <div class="row">
+        <div class="col-md-2 sidemenu">
+            @await Html.PartialAsync("_SidePanel")
         </div>
-        <hr />
-        <footer>
-            <div class="col-md-9">
-                @await Html.PartialAsync("_Footer")
-            </div>
-        </footer>
+        <div class="col-md-10">
+            @RenderBody()
+        </div>
     </div>
+    <hr/>
+    <footer>
+        <div class="col-md-9">
+            @await Html.PartialAsync("_Footer")
+        </div>
+    </footer>
+</div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-    <environment names="Staging,Production">
-        <google-analytics></google-analytics>
-    </environment>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<environment names="Staging,Production">
+    <google-analytics></google-analytics>
+</environment>
 
-    @RenderSection("Scripts", required: false)
+@RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,29 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
-
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -72,8 +49,6 @@ body {
 /* AFTER THIS IS CUSTOM */
 
 body {
-    padding-top: 50px;
-    padding-bottom: 20px;
     font-size: 16px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
@@ -92,20 +67,24 @@ textarea {
     max-width: 280px;
 }
 
-.navbar-fixed-top {
+.navbar {
     background-image: url('/images/HeaderBackground.jpg');
 }
 
 .navbar-brand {
     font-size: 26px;
     font-weight: bold;
-    padding-top: 8px;
 }
 
 .navbar-brand small {
     display:block;
     font-size:12px;
     padding-top: 2px;
+}
+
+.navitem-text-link {
+    padding-top: 11px;
+    font-size: 20px;
 }
 
 .postListing {
@@ -170,7 +149,7 @@ h1, h2, h3 {
 }
 
 .sidemenu {
-    background-color: #222;
+    background-color: rgb(24, 26, 27);
     color: #bbb;
 }
 
@@ -190,8 +169,15 @@ h1, h2, h3 {
 }
 
 .sidemenu img.profilePic {
-    margin: 20px 10px 10px 10px;
-    width: 75%;
+    width: 100%;
+}
+
+.sidemenu .mvplogo {
+    width: 100%;
+}
+
+.sidemenu .subscribe-button {
+    width: 100%;
 }
 
 .sidemenu a:link,
@@ -209,12 +195,7 @@ h1, h2, h3 {
 }
 
 .socialImg {
-    float: left;
-    padding: 5px !important;
-}
-
-.socialImg img {
-    height: 40px;
+    height: 50px;
 }
 
 h1,
@@ -252,10 +233,6 @@ blockquote {
     font-size: 15px;
     font-style: italic;
     line-height: 1.4em;
-}
-
-.mvplogo {
-  width: 77%;
 }
 
 .noProfilePicSpacer {
