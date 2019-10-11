@@ -285,3 +285,6 @@ DanClarkeBlog.Web.Old/
 DanClarkeBlog.Web.Old2/
 
 .ionide/
+
+DanClarkeBlog.Web/wwwroot/css/site.min.css
+DanClarkeBlog.Web/wwwroot/js/site.min.js
