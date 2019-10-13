@@ -15,10 +15,6 @@
         public string BaseImageUri { get; set; }
         public string GoogleAnalyticsTrackingId { get; set; }
 
-        public string RabbitMQServer { get; set; }
-        public string RabbitMQUser { get; set; }
-        public string RabbitMQPass { get; set; }
-
         public string VersionNumber { get; set; }
 
         /// <summary>

@@ -23,9 +23,6 @@ namespace DanClarkeBlog.Functions
                 SlackNotificationUri = Environment.GetEnvironmentVariable("Blog__SlackNotificationUri"),
                 PostPreviewLength = int.Parse(Environment.GetEnvironmentVariable("Blog__PostPreviewLength") ?? "200"),
                 BaseImageUri  = Environment.GetEnvironmentVariable("Blog__BaseImageUri"),
-                RabbitMQServer = Environment.GetEnvironmentVariable("Blog__RabbitMQServer"),
-                RabbitMQUser = Environment.GetEnvironmentVariable("Blog__RabbitMQUser"),
-                RabbitMQPass = Environment.GetEnvironmentVariable("Blog__RabbitMQPass"),
             };
 
             builder.Services.AddSingleton(settings);
