@@ -14,9 +14,7 @@ namespace DanClarkeBlog.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder
-                        .UseStartup<Startup>()
-                        .UseUrls("http://*:80");
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
