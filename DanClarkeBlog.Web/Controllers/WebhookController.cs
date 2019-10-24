@@ -62,7 +62,7 @@ namespace DanClarkeBlog.Web.Controllers
 
                 using(var reader = new StreamReader(HttpContext.Request.Body))
                 {
-                    body = reader.ReadToEnd();
+                    body = await reader.ReadToEndAsync();
                 }
 
                 using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_settings.DropboxAppSecret)))
