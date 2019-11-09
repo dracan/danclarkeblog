@@ -149,6 +149,10 @@ h1, h2, h3 {
     }
 }
 
+.blogPost {
+    font-size: 1.05em;
+}
+
 .blogPost hr {
     margin-top: 0;
 }
