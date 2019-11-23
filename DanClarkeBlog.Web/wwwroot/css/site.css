@@ -282,6 +282,12 @@ code {
     color: darkslategrey;
 }
 
+@media (prefers-color-scheme: dark) {
+    code {
+        color: lightblue;
+    }
+}
+
 blockquote {
     font-size: 15px;
     font-style: italic;
