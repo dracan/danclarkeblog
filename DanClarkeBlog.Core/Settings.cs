@@ -27,5 +27,10 @@
         /// Ie. The BlogPostFileSystemRepository implementation
         /// </summary>
         public string BlogFileSystemRootPath { get; set; }
+
+        // Azure Search settings
+        public string AzureSearchInstanceName { get; set; }
+        public string AzureSearchKey { get; set; }
+        public string AzureSearchIndexName { get; set; }
     }
 }

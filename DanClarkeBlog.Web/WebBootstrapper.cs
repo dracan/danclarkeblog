@@ -23,6 +23,7 @@ namespace DanClarkeBlog.Web
             services.AddSingleton<IHashVerify, HashVerify>();
             services.AddSingleton<IMessageQueue, AzureStorageQueue>();
             services.AddSingleton<ILockRepository, AzureBlobLockRepository>();
+            services.AddSingleton<ISearchHelper, AzureSearchHelper>();
         }
     }
 }

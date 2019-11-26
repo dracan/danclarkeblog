@@ -15,14 +15,46 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
         private readonly IFeedGenerator _feedGenerator;
+        private readonly ISearchHelper _searchHelper;
         private const int NumPostsPerPage = 10;
         private const int NumRecentPosts = 5;
 
-        public HomeController(IBlogPostRepository blogPostRepository, Settings settings, IFeedGenerator feedGenerator)
+        public HomeController(IBlogPostRepository blogPostRepository, Settings settings, IFeedGenerator feedGenerator, ISearchHelper searchHelper)
         {
             _blogPostRepository = blogPostRepository;
             _settings = settings;
             _feedGenerator = feedGenerator;
+            _searchHelper = searchHelper;
+        }
+
+        public async Task<IActionResult> Search([FromQuery] string term, [FromQuery] int? page, CancellationToken cancellationToken)
+        {
+            var offset = ((page ?? 1) - 1) * NumPostsPerPage;
+
+            var pagedPostsTask = _searchHelper.SearchAsync(term, offset, NumPostsPerPage);
+            var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cancellationToken);
+            var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cancellationToken);
+            var tagsTask = _blogPostRepository.GetTagCountsAsync(cancellationToken);
+
+            var pagedPostsResults = await pagedPostsTask;
+            var featuredPosts = await featuredPostsTask;
+            var recentPosts = await recentPostsTask;
+            var tags = await tagsTask;
+
+            ViewData["Title"] = term;
+
+            return View("Index", new HomeViewModel
+            {
+                FeaturedPosts = featuredPosts,
+                RecentPosts = recentPosts,
+                Posts = pagedPostsResults?.Posts,
+                Tags = tags,
+                PageNumber = page ?? 1,
+                TotalPages = (int)Math.Ceiling((decimal)(pagedPostsResults?.TotalPosts ?? 0) / NumPostsPerPage),
+                ProfilePicUri = _settings.ProfilePicUri,
+                GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
+                VersionNumber = _settings.VersionNumber,
+            });
         }
 
         public async Task<IActionResult> Index(string tag, int? page, CancellationToken cancellationToken)
@@ -40,9 +72,7 @@ namespace DanClarkeBlog.Web.Controllers
             var tags = await tagsTask;
 
             if (!string.IsNullOrWhiteSpace(tag) && pagedPostsResults.TotalPosts == 0) // 404 on a tag listing page with an invalid tag
-            {
                 return NotFound();
-            }
 
             // Use the tag name from the database, not from the query string to preserve case
             ViewData["Title"] = string.IsNullOrWhiteSpace(tag)

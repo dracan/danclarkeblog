@@ -68,6 +68,11 @@ namespace DanClarkeBlog.Web
                     defaults: new { Controller = "Home", Action = "Index"});
 
                 endpoints.MapControllerRoute(
+                    name: "search",
+                    pattern: "search",
+                    defaults: new { Controller = "Home", Action = "Search"});
+
+                endpoints.MapControllerRoute(
                     name: "rss",
                     pattern: "rss",
                     defaults: new { Controller = "Home", Action = "RssFeed"});
