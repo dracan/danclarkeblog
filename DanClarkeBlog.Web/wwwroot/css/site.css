@@ -283,7 +283,7 @@ code {
 }
 
 @media (prefers-color-scheme: dark) {
-    code {
+    code, pre code {
         color: lightblue;
     }
 }
