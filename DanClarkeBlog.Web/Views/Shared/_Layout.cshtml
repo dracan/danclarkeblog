@@ -55,18 +55,23 @@
 <div class="container-fluid body-content">
     <div class="row">
         <div class="col-md-2 sidemenu">
-            @await Html.PartialAsync("_SidePanel")
+            @await Html.PartialAsync("_SidePanelLeft")
         </div>
-        <div class="col-md-10 body-container">
+        <div class="col-md-8 body-container">
             @RenderBody()
+        </div>
+        <div class="col-md-2 sidemenu">
+            @await Html.PartialAsync("_SidePanelRight")
         </div>
     </div>
     <footer>
        <div class="row">
            <div class="col-md-2 sidemenu">
            </div>
-           <div class="col-md-10">
+           <div class="col-md-8">
                 @await Html.PartialAsync("_Footer")
+           </div>
+           <div class="col-md-2 sidemenu">
            </div>
        </div>
     </footer>
