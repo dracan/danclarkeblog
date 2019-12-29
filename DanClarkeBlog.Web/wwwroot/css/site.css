@@ -163,6 +163,7 @@ h1, h2, h3 {
 
 .blogPost h1 {
     font-size: 32px;
+    margin-top: 30px;
 }
 
 .blogPost .blogPostDateAndTags a,
