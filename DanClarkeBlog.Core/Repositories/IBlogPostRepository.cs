@@ -14,10 +14,11 @@ namespace DanClarkeBlog.Core.Repositories
         Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken);
         Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken);
         Task<List<BlogPost>> GetFeaturedAsync(CancellationToken cancellationToken);
-        Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken);
         Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken);
         Task DeleteAsync(IEnumerable<BlogPost> postsToDelete, CancellationToken cancellationToken);
         Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken);
+        Task<BlogPost> GetDraftByIdAsync(Guid draftId, CancellationToken cancellationToken);
+        Task<BlogPost> GetPublishedByRouteAsync(string route, CancellationToken cancellationToken);
 
         // Tags
         Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken);

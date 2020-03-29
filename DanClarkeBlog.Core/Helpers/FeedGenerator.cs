@@ -98,11 +98,11 @@ namespace DanClarkeBlog.Core.Helpers
                 }
             };
 
-            var posts = await _blogPostRepository.GetWithConditionAsync(x => x.Published, cancelationToken);
+            var postsListing = await _blogPostRepository.GetPublishedAsync(null, null, null, cancelationToken);
 
             var items = new List<SyndicationItem>();
 
-            foreach (var post in posts)
+            foreach (var post in postsListing.Posts)
             {
                 var postUri = new Uri(new Uri(_settings.SiteHomeUri), post.Route);
 
@@ -115,9 +115,7 @@ namespace DanClarkeBlog.Core.Helpers
                 };
 
                 if (post.PublishDate.HasValue)
-                {
                     item.PublishDate = post.PublishDate.Value;
-                }
 
                 item.Links.Add(new SyndicationLink(postUri));
 

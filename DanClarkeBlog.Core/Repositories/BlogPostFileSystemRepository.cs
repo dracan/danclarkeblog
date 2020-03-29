@@ -95,11 +95,6 @@ namespace DanClarkeBlog.Core.Repositories
             return (await GetAllAsync(null, cancellationToken)).Where(x => x.Featured).ToList();
         }
 
-        public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
-        {
-            return (await GetAllAsync(null, cancellationToken)).Where(conditionFunc).ToList();
-        }
-
         public Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
@@ -113,6 +108,16 @@ namespace DanClarkeBlog.Core.Repositories
         public async Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken)
         {
             return (await GetAllAsync(null, cancellationToken)).Take(numRecent).ToList();
+        }
+
+        public Task<BlogPost> GetDraftByIdAsync(Guid draftId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BlogPost> GetPublishedByRouteAsync(string route, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<List<TagCount>> GetTagCountsAsync(CancellationToken cancellationToken)

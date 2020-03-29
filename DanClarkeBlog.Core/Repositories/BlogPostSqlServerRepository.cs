@@ -91,19 +91,6 @@ namespace DanClarkeBlog.Core.Repositories
             }
         }
 
-        public async Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
-        {
-            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
-            {
-                return await ctx.BlogPosts
-                    .Where(x => conditionFunc(x))
-                    .Include(x => x.BlogPostTags)
-                    .ThenInclude(x => x.Tag)
-                    .OrderByDescending(x => x.PublishDate)
-                    .ToListAsync(cancellationToken);
-            }
-        }
-
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
             Log.Debug("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
@@ -181,6 +168,30 @@ namespace DanClarkeBlog.Core.Repositories
                     .OrderByDescending(x => x.PublishDate)
                     .Take(numRecent)
                     .ToListAsync(cancellationToken);
+            }
+        }
+
+        public async Task<BlogPost> GetDraftByIdAsync(Guid draftId, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
+            {
+                return await ctx.BlogPosts
+                    .Where(x => !x.Published && x.Id == draftId)
+                    .Include(x => x.BlogPostTags)
+                    .ThenInclude(x => x.Tag)
+                    .FirstOrDefaultAsync(cancellationToken);
+            }
+        }
+
+        public async Task<BlogPost> GetPublishedByRouteAsync(string route, CancellationToken cancellationToken)
+        {
+            using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
+            {
+                return await ctx.BlogPosts
+                    .Where(x => x.Published && x.Route == $"/{route}")
+                    .Include(x => x.BlogPostTags)
+                    .ThenInclude(x => x.Tag)
+                    .FirstOrDefaultAsync(cancellationToken);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Repositories;
 using DanClarkeBlog.Web.ViewModels;
@@ -18,6 +19,12 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly ISearchHelper _searchHelper;
         private const int NumPostsPerPage = 10;
         private const int NumRecentPosts = 5;
+
+        private readonly Dictionary<string, Guid> _specialPages = new Dictionary<string, Guid>
+        {
+            { "about", new Guid("a760d5f4-a372-4de4-a527-a578eeb09e82") },
+            { "public-speaking", new Guid("07d4b359-3797-4acd-8173-4a62dcd995e8") },
+        };
 
         public HomeController(IBlogPostRepository blogPostRepository, Settings settings, IFeedGenerator feedGenerator, ISearchHelper searchHelper)
         {
@@ -94,14 +101,17 @@ namespace DanClarkeBlog.Web.Controllers
 
         public async Task<IActionResult> BlogPost(string route, CancellationTokenSource cts)
         {
-            var postTask = _blogPostRepository.GetWithConditionAsync(x => (x.Published || x.Title == "About Me" || x.Title == "Public Speaking")
-                ? x.Route.TrimStart('/') == route.TrimStart('/') // For published, match Route property in blog post
-                : x.Id.ToString() == route.TrimStart('/'), cts.Token); // For draft, use ID as route
+            var postTask = _specialPages.TryGetValue(route, out var specialPageId)
+                ? _blogPostRepository.GetDraftByIdAsync(specialPageId, cts.Token)
+                : Guid.TryParse(route, out var draftId)
+                    ? _blogPostRepository.GetDraftByIdAsync(draftId, cts.Token) // For draft, use ID as route
+                    : _blogPostRepository.GetPublishedByRouteAsync(route, cts.Token); // For published, match Route property in blog post
+
             var featuredPostsTask = _blogPostRepository.GetFeaturedAsync(cts.Token);
             var recentPostsTask = _blogPostRepository.GetRecentAsync(NumRecentPosts, cts.Token);
             var tagsTask = _blogPostRepository.GetTagCountsAsync(cts.Token);
 
-            var post = (await postTask).SingleOrDefault();
+            var post = await postTask;
             if (post == null)
             {
                 cts.Cancel();

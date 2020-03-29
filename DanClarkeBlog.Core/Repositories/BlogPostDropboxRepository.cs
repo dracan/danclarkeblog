@@ -123,11 +123,6 @@ namespace DanClarkeBlog.Core.Repositories
             return blogPosts;
         }
 
-        public Task<IEnumerable<BlogPost>> GetWithConditionAsync(Func<BlogPost, bool> conditionFunc, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
@@ -139,6 +134,16 @@ namespace DanClarkeBlog.Core.Repositories
         }
 
         public Task<List<BlogPost>> GetRecentAsync(int numRecent, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BlogPost> GetDraftByIdAsync(Guid draftId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BlogPost> GetPublishedByRouteAsync(string route, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
