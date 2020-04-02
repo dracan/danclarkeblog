@@ -59,16 +59,15 @@ namespace DanClarkeBlog.Core.Repositories
 
                 dropboxFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
 
-                _logger.LogTrace("Files dropbox thinks has been updated:");
+                _logger.LogDebug("Files dropbox thinks has been updated:");
+
                 foreach (var updatedFile in dropboxFiles)
-                {
-                    _logger.LogTrace($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
-                }
+                    _logger.LogDebug($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
             }
 
             var blogPosts = new List<BlogPost>();
 
-            _logger.LogTrace("Reading blog.json ...");
+            _logger.LogDebug("Reading blog.json ...");
 
             var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
 

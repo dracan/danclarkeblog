@@ -49,7 +49,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
 
-            _logger.LogTrace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            _logger.LogDebug($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
             var posts = blogPostList.AsQueryable();
 
@@ -67,7 +67,7 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var postFile = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, blogPost.Folder.TrimStart('/')));
 
-                _logger.LogTrace($"Reading content for {blogPost.Folder} ...");
+                _logger.LogDebug($"Reading content for {blogPost.Folder} ...");
 
                 var post = new BlogPost
                 {

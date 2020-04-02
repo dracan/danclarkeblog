@@ -25,7 +25,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public void CreateDatabase()
         {
-            _logger.LogTrace("CreateDatabase");
+            _logger.LogDebug("CreateDatabase");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -35,7 +35,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
-            _logger.LogTrace("Get all async");
+            _logger.LogDebug("Get all async");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -49,7 +49,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            _logger.LogTrace($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
+            _logger.LogDebug($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -95,7 +95,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
-            _logger.LogTrace("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
+            _logger.LogDebug("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -221,7 +221,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
         {
-            _logger.LogTrace($"Setting dropbox cursor to {cursor}");
+            _logger.LogDebug($"Setting dropbox cursor to {cursor}");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
