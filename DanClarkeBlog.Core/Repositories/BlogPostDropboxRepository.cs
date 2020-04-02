@@ -27,7 +27,7 @@ namespace DanClarkeBlog.Core.Repositories
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
                                          BlogPostSummaryHelper blogPostSummaryHelper,
                                          IDropboxHelper dropboxHelper,
-                                         ILogger logger)
+                                         ILogger<BlogPostDropboxRepository> logger)
         {
             _renderer = renderer;
             _blogPostSummaryHelper = blogPostSummaryHelper;

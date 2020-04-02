@@ -22,7 +22,7 @@ namespace DanClarkeBlog.Core.Repositories
         public BlogPostFileSystemRepository(IBlogPostRenderer renderer,
                                             Settings settings,
                                             BlogPostSummaryHelper blogPostSummaryHelper,
-                                            ILogger logger)
+                                            ILogger<BlogPostFileSystemRepository> logger)
         {
             _renderer = renderer;
             _settings = settings;

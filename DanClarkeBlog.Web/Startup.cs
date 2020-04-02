@@ -25,6 +25,7 @@ namespace DanClarkeBlog.Web
                      config.RespectBrowserAcceptHeader = true;
                  }).AddXmlSerializerFormatters();
 
+            services.AddLogging();
             services.AddApplicationInsightsTelemetry();
 
             services.AddOptions();

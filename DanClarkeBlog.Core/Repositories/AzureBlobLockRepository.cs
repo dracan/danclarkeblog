@@ -17,7 +17,7 @@ namespace DanClarkeBlog.Core.Repositories
         private string _leaseId;
         private CloudBlobContainer _storageContainer;
 
-        public AzureBlobLockRepository(Settings settings, ILogger logger)
+        public AzureBlobLockRepository(Settings settings, ILogger<AzureBlobLockRepository> logger)
         {
             _settings = settings;
             _logger = logger;
@@ -53,8 +53,8 @@ namespace DanClarkeBlog.Core.Repositories
         }
 
         /// <summary>
-        /// Validates the connection string information in app.config and throws an exception if it looks like 
-        /// the user hasn't updated this to valid values. 
+        /// Validates the connection string information in app.config and throws an exception if it looks like
+        /// the user hasn't updated this to valid values.
         /// </summary>
         /// <param name="storageConnectionString">The storage connection string</param>
         /// <returns>CloudStorageAccount object</returns>

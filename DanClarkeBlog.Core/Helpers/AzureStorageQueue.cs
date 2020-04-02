@@ -17,7 +17,7 @@ namespace DanClarkeBlog.Core.Helpers
         private CloudQueueClient _client;
         private readonly string _connectionString;
 
-        public AzureStorageQueue(Settings settings, ILogger logger)
+        public AzureStorageQueue(Settings settings, ILogger<AzureStorageQueue> logger)
         {
             _logger = logger;
             _connectionString = settings.AzureStorageConnectionString;

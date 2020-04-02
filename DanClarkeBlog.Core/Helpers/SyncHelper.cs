@@ -24,7 +24,7 @@ namespace DanClarkeBlog.Core.Helpers
                           IImageRepository imageRepository,
                           IImageResizer imageResizer,
                           ILockRepository lockRepository,
-                          ILogger logger,
+                          ILogger<SyncHelper> logger,
                           Settings settings)
         {
             _dropboxHelper = dropboxHelper;

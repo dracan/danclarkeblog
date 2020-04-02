@@ -16,7 +16,7 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly Settings _settings;
         private readonly ILogger _logger;
 
-        public AzureImageRepository(Settings settings, ILogger logger)
+        public AzureImageRepository(Settings settings, ILogger<AzureImageRepository> logger)
         {
             _settings = settings;
             _logger = logger;
@@ -73,8 +73,8 @@ namespace DanClarkeBlog.Core.Repositories
         }
 
         /// <summary>
-        /// Validates the connection string information in app.config and throws an exception if it looks like 
-        /// the user hasn't updated this to valid values. 
+        /// Validates the connection string information in app.config and throws an exception if it looks like
+        /// the user hasn't updated this to valid values.
         /// </summary>
         /// <param name="storageConnectionString">The storage connection string</param>
         /// <returns>CloudStorageAccount object</returns>

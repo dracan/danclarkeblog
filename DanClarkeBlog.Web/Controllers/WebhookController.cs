@@ -26,7 +26,7 @@ namespace DanClarkeBlog.Web.Controllers
                                  INotificationTarget notificationTarget,
                                  IHashVerify hashVerify,
                                  IMessageQueue messageQueue,
-                                 ILogger logger)
+                                 ILogger<WebhookController> logger)
         {
             _settings = settings;
             _notificationTarget = notificationTarget;

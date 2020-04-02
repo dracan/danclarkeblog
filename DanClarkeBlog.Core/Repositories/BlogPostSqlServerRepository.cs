@@ -17,7 +17,7 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly Settings _setting;
         private readonly ILogger _logger;
 
-        public BlogPostSqlServerRepository(Settings setting, ILogger logger)
+        public BlogPostSqlServerRepository(Settings setting, ILogger<BlogPostSqlServerRepository> logger)
         {
             _setting = setting;
             _logger = logger;
