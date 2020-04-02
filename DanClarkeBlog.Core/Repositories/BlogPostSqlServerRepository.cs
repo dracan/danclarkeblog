@@ -7,7 +7,7 @@ using DanClarkeBlog.Core.Data;
 using DanClarkeBlog.Core.Models;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace DanClarkeBlog.Core.Repositories
 {
@@ -15,15 +15,17 @@ namespace DanClarkeBlog.Core.Repositories
     public class BlogPostSqlServerRepository : IBlogPostRepository
     {
         private readonly Settings _setting;
+        private readonly ILogger _logger;
 
-        public BlogPostSqlServerRepository(Settings setting)
+        public BlogPostSqlServerRepository(Settings setting, ILogger logger)
         {
             _setting = setting;
+            _logger = logger;
         }
 
         public void CreateDatabase()
         {
-            Log.Verbose("CreateDatabase");
+            _logger.LogTrace("CreateDatabase");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -33,7 +35,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
         {
-            Log.Verbose("Get all async");
+            _logger.LogTrace("Get all async");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -47,7 +49,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            Log.Verbose($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
+            _logger.LogTrace($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -93,7 +95,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
-            Log.Debug("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
+            _logger.LogTrace("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -219,7 +221,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
         {
-            Log.Verbose($"Setting dropbox cursor to {cursor}");
+            _logger.LogTrace($"Setting dropbox cursor to {cursor}");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {

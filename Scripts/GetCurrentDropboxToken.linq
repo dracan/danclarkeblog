@@ -5,14 +5,12 @@
   <NuGetReference>Microsoft.EntityFrameworkCore</NuGetReference>
   <NuGetReference>Microsoft.EntityFrameworkCore.SqlServer</NuGetReference>
   <NuGetReference>Polly</NuGetReference>
-  <NuGetReference>Serilog.Sinks.Debug</NuGetReference>
   <NuGetReference>WindowsAzure.Storage</NuGetReference>
   <Namespace>Autofac</Namespace>
   <Namespace>DanClarkeBlog.Core</Namespace>
   <Namespace>DanClarkeBlog.Core.Helpers</Namespace>
   <Namespace>DanClarkeBlog.Core.Repositories</Namespace>
   <Namespace>Newtonsoft.Json</Namespace>
-  <Namespace>Serilog</Namespace>
   <Namespace>System.Threading.Tasks</Namespace>
 </Query>
 
@@ -60,6 +58,6 @@ IContainer Setup()
     container.RegisterType<HashVerify>().As<IHashVerify>().SingleInstance();
     container.RegisterType<AzureBlobLockRepository>().As<ILockRepository>().SingleInstance();
     container.RegisterType<AzureStorageQueue>().As<IMessageQueue>().SingleInstance();
-    
+
     return container.Build();
 }

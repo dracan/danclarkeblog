@@ -17,9 +17,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Polly" Version="7.2.0" />
-    <PackageReference Include="Serilog" Version="2.9.0" />
-    <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
-    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
     <PackageReference Include="System.ServiceModel.Syndication" Version="4.7.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />

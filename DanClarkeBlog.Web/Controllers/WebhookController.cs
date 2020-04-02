@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using DanClarkeBlog.Core.Helpers;
 using Settings = DanClarkeBlog.Core.Settings;
-using Serilog;
 using System.Net.Http;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace DanClarkeBlog.Web.Controllers
 {
@@ -20,13 +20,19 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly INotificationTarget _notificationTarget;
         private readonly IHashVerify _hashVerify;
         private readonly IMessageQueue _messageQueue;
+        private readonly ILogger _logger;
 
-        public WebhookController(Settings settings, INotificationTarget notificationTarget, IHashVerify hashVerify, IMessageQueue messageQueue)
+        public WebhookController(Settings settings,
+                                 INotificationTarget notificationTarget,
+                                 IHashVerify hashVerify,
+                                 IMessageQueue messageQueue,
+                                 ILogger logger)
         {
             _settings = settings;
             _notificationTarget = notificationTarget;
             _hashVerify = hashVerify;
             _messageQueue = messageQueue;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -35,7 +41,7 @@ namespace DanClarkeBlog.Web.Controllers
         {
             try
             {
-                Log.Information("Received Dropbox challenge request");
+                _logger.LogInformation("Received Dropbox challenge request");
 
                 await _notificationTarget.SendMessageAsync("Received a challenge request from Dropbox. Replying to accept.", cancellationToken);
 
@@ -54,7 +60,7 @@ namespace DanClarkeBlog.Web.Controllers
         {
             try
             {
-                Log.Information("Received Dropbox change notification");
+                _logger.LogInformation("Received Dropbox change notification");
 
                 HttpContext.Request.Headers.TryGetValue("X-Dropbox-Signature", out var signature);
 
@@ -69,7 +75,7 @@ namespace DanClarkeBlog.Web.Controllers
                 {
                     if (!_hashVerify.VerifySha256Hash(hmac, body, signature))
                     {
-                        Log.Warning("Dropbox webhook notification failed hmac check");
+                        _logger.LogWarning("Dropbox webhook notification failed hmac check");
 
                         await _notificationTarget.SendMessageAsync("Webhook request from Dropbox failed HMAC check", cancellationToken);
                         return new HttpResponseMessage(HttpStatusCode.BadRequest);

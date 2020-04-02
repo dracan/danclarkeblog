@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Models;
 using DanClarkeBlog.Core.Repositories;
 using JetBrains.Annotations;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -17,18 +17,21 @@ namespace DanClarkeBlog.Core.Helpers
         private readonly IImageRepository _imageRepository;
         private readonly IImageResizer _imageResizer;
         private readonly ILockRepository _lockRepository;
+        private readonly ILogger _logger;
         private readonly Settings _settings;
 
         public SyncHelper(IDropboxHelper dropboxHelper,
                           IImageRepository imageRepository,
                           IImageResizer imageResizer,
                           ILockRepository lockRepository,
+                          ILogger logger,
                           Settings settings)
         {
             _dropboxHelper = dropboxHelper;
             _imageRepository = imageRepository;
             _imageResizer = imageResizer;
             _lockRepository = lockRepository;
+            _logger = logger;
             _settings = settings;
         }
 
@@ -42,7 +45,7 @@ namespace DanClarkeBlog.Core.Helpers
             {
                 await _lockRepository.AcquireLockAsync("synchelperlock", 10, TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(1), cancellationToken);
 
-                Log.Verbose($"SynchronizeBlogPostsAsync with incremental = {incremental}");
+                _logger.LogTrace($"SynchronizeBlogPostsAsync with incremental = {incremental}");
 
                 var dropboxCursor = new CursorContainer();
 
@@ -51,7 +54,7 @@ namespace DanClarkeBlog.Core.Helpers
                     // Try to get a persisted cursor from our SQL database, if that's null (so we haven't got one), then we'll do a full update
                     dropboxCursor.Cursor = overrideCursor ?? await destRepo.GetDropboxCursorAsync(cancellationToken);
 
-                    Log.Verbose($"Cursor = {dropboxCursor.Cursor}");
+                    _logger.LogTrace($"Cursor = {dropboxCursor.Cursor}");
                 }
 
                 var cursor = incremental && !string.IsNullOrWhiteSpace(dropboxCursor.Cursor) ? dropboxCursor : null;
@@ -59,19 +62,19 @@ namespace DanClarkeBlog.Core.Helpers
 
                 if (string.IsNullOrWhiteSpace(dropboxCursor.Cursor))
                 {
-                    Log.Verbose("No current dropbox cursor, so explicitly requesting current cursor ...");
+                    _logger.LogTrace("No current dropbox cursor, so explicitly requesting current cursor ...");
                     dropboxCursor.Cursor = await _dropboxHelper.GetCurrentCursorAsync(cancellationToken);
-                    Log.Verbose($"Returned cursor {dropboxCursor.Cursor}");
+                    _logger.LogTrace($"Returned cursor {dropboxCursor.Cursor}");
                 }
 
-                Log.Debug($"Processing {sourcePosts.Count} source posts ...");
+                _logger.LogDebug($"Processing {sourcePosts.Count} source posts ...");
 
                 foreach (var sourcePost in sourcePosts)
                 {
                     await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
                 }
 
-                Log.Debug("Processing images ...");
+                _logger.LogDebug("Processing images ...");
 
                 var imageTasks = new List<Task>();
 
@@ -97,14 +100,14 @@ namespace DanClarkeBlog.Core.Helpers
 
                     var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Id != d.Id)).ToList();
 
-                    Log.Verbose($"Found {postsToDelete.Count} to delete out of {destPosts.Count} posts");
+                    _logger.LogTrace($"Found {postsToDelete.Count} to delete out of {destPosts.Count} posts");
 
                     await destRepo.DeleteAsync(postsToDelete, cancellationToken);
                 }
 
                 await destRepo.RemoveUnusedTagsAsync(cancellationToken);
 
-                Log.Verbose($"Saving new Dropbox cursor: {dropboxCursor.Cursor}");
+                _logger.LogTrace($"Saving new Dropbox cursor: {dropboxCursor.Cursor}");
 
                 await destRepo.SetDropboxCursorAsync(dropboxCursor.Cursor, cancellationToken);
             }

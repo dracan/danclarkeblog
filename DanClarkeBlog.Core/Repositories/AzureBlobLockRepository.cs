@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Polly;
-using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
@@ -13,17 +13,19 @@ namespace DanClarkeBlog.Core.Repositories
     public class AzureBlobLockRepository : ILockRepository
     {
         private readonly Settings _settings;
+        private readonly ILogger _logger;
         private string _leaseId;
         private CloudBlobContainer _storageContainer;
 
-        public AzureBlobLockRepository(Settings settings)
+        public AzureBlobLockRepository(Settings settings, ILogger logger)
         {
             _settings = settings;
+            _logger = logger;
         }
 
         public async Task AcquireLockAsync(string key, int numRetries, TimeSpan waitBetweenRetries, TimeSpan lockTimeout, CancellationToken cancellationToken)
         {
-           Log.Debug($"Acquiring lock for key {key} ...");
+            _logger.LogDebug($"Acquiring lock for key {key} ...");
 
             var storage = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
             var storageClient = storage.CreateCloudBlobClient();
@@ -33,7 +35,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             await Policy.Handle<StorageException>().WaitAndRetryAsync(numRetries, n =>
                {
-                   Log.Debug($"Failed to acquire lock. Retrying ... (retry count {n})");
+                   _logger.LogDebug($"Failed to acquire lock. Retrying ... (retry count {n})");
                    return waitBetweenRetries;
                }).ExecuteAsync(async () =>
                {
@@ -45,7 +47,7 @@ namespace DanClarkeBlog.Core.Repositories
         {
             if (!string.IsNullOrWhiteSpace(_leaseId))
             {
-                Log.Debug("Releasing lock ...");
+                _logger.LogDebug("Releasing lock ...");
                 await _storageContainer.ReleaseLeaseAsync(AccessCondition.GenerateLeaseCondition(_leaseId));
             }
         }
@@ -66,12 +68,12 @@ namespace DanClarkeBlog.Core.Repositories
             }
             catch (FormatException)
             {
-                Log.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
                 throw;
             }
             catch (ArgumentException)
             {
-                Log.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
                 throw;
             }
 

@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
@@ -20,16 +20,19 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly IBlogPostRenderer _renderer;
         private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
         private readonly IDropboxHelper _dropboxHelper;
+        private readonly ILogger _logger;
 
-	    private static readonly Func<DropboxFileModel, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Name.Contains);
+        private static readonly Func<DropboxFileModel, bool> ImageFileFilter = x => new[] { ".jpg", ".png", ".gif" }.Any(x.Name.Contains);
 
         public BlogPostDropboxRepository(IBlogPostRenderer renderer,
                                          BlogPostSummaryHelper blogPostSummaryHelper,
-                                         IDropboxHelper dropboxHelper)
+                                         IDropboxHelper dropboxHelper,
+                                         ILogger logger)
         {
             _renderer = renderer;
             _blogPostSummaryHelper = blogPostSummaryHelper;
             _dropboxHelper = dropboxHelper;
+            _logger = logger;
         }
 
         public Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
@@ -48,30 +51,30 @@ namespace DanClarkeBlog.Core.Repositories
 
             if (cursor == null)
             {
-                Log.Debug("Processing files from Dropbox ...");
+                _logger.LogDebug("Processing files from Dropbox ...");
             }
             else
             {
-                Log.Debug("Processing updated files from Dropbox ...");
+                _logger.LogDebug("Processing updated files from Dropbox ...");
 
                 dropboxFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
 
-                Log.Verbose("Files dropbox thinks has been updated:");
+                _logger.LogTrace("Files dropbox thinks has been updated:");
                 foreach (var updatedFile in dropboxFiles)
                 {
-                    Log.Verbose($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
+                    _logger.LogTrace($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
                 }
             }
 
             var blogPosts = new List<BlogPost>();
 
-            Log.Debug("Reading blog.json ...");
+            _logger.LogTrace("Reading blog.json ...");
 
             var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
 
             var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
 
-            Log.Verbose($"Blog.json content was {blogJson}");
+            _logger.LogTrace($"Blog.json content was {blogJson}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
 
@@ -79,7 +82,7 @@ namespace DanClarkeBlog.Core.Repositories
                 ? blogPostList
                 : blogPostList.Where(x => dropboxFiles.Any(y => y.PathLower == $"{x.Folder}/post.md".ToLower())).ToList();
 
-            Log.Debug($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
+            _logger.LogDebug($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
 
             foreach (var blogPost in blogPostsToUpdate)
             {
@@ -96,7 +99,7 @@ namespace DanClarkeBlog.Core.Repositories
                         ImageDataTask = _dropboxHelper.GetFileContentAsync(i, cancellationToken),
                     }).ToList();
 
-                Log.Debug($"Reading content for {blogPost.Folder} ...");
+                _logger.LogDebug($"Reading content for {blogPost.Folder} ...");
 
                 var postFile = await _dropboxHelper.GetFileContentAsync($"{blogPost.Folder}/post.md", cancellationToken);
 

@@ -7,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
@@ -17,14 +17,17 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly IBlogPostRenderer _renderer;
         private readonly Settings _settings;
         private readonly BlogPostSummaryHelper _blogPostSummaryHelper;
+        private readonly ILogger _logger;
 
-	    public BlogPostFileSystemRepository(IBlogPostRenderer renderer,
+        public BlogPostFileSystemRepository(IBlogPostRenderer renderer,
                                             Settings settings,
-                                            BlogPostSummaryHelper blogPostSummaryHelper)
+                                            BlogPostSummaryHelper blogPostSummaryHelper,
+                                            ILogger logger)
         {
             _renderer = renderer;
             _settings = settings;
             _blogPostSummaryHelper = blogPostSummaryHelper;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
@@ -34,19 +37,19 @@ namespace DanClarkeBlog.Core.Repositories
 
         public Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            Log.Debug($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
+            _logger.LogDebug($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
 
             var blogPosts = new List<BlogPost>();
 
-            Log.Debug("Reading blog.json ...");
+            _logger.LogDebug("Reading blog.json ...");
 
             var content = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, "Blog.json"));
 
-            Log.Verbose($"Blog.json content was {content}");
+            _logger.LogTrace($"Blog.json content was {content}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
 
-            Log.Verbose($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            _logger.LogTrace($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
             var posts = blogPostList.AsQueryable();
 
@@ -64,7 +67,7 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var postFile = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, blogPost.Folder.TrimStart('/')));
 
-                Log.Verbose($"Reading content for {blogPost.Folder} ...");
+                _logger.LogTrace($"Reading content for {blogPost.Folder} ...");
 
                 var post = new BlogPost
                 {

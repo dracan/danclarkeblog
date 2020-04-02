@@ -2,7 +2,6 @@
 using Autofac;
 using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
-using Serilog;
 
 namespace DanClarkeBlog.Core.Tests
 {
@@ -15,11 +14,6 @@ namespace DanClarkeBlog.Core.Tests
 
         private static IContainer Init<TBlogPostRepository>(IHttpClientHelper httpClientHelper = null) where TBlogPostRepository : IBlogPostRepository
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.LiterateConsole()
-                .CreateLogger();
-
             var settings = new Settings
                            {
                                DropboxAccessToken = Environment.GetEnvironmentVariable("Blog__DropboxAccessToken"),

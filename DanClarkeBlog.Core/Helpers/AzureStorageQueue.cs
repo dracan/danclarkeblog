@@ -5,19 +5,21 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Queue;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace DanClarkeBlog.Core.Helpers
 {
     [UsedImplicitly]
     public class AzureStorageQueue : IMessageQueue
     {
+        private readonly ILogger _logger;
         private readonly Dictionary<string, CloudQueue> _initialisedQueues = new Dictionary<string, CloudQueue>();
         private CloudQueueClient _client;
         private readonly string _connectionString;
 
-        public AzureStorageQueue(Settings settings)
+        public AzureStorageQueue(Settings settings, ILogger logger)
         {
+            _logger = logger;
             _connectionString = settings.AzureStorageConnectionString;
         }
 
@@ -45,7 +47,7 @@ namespace DanClarkeBlog.Core.Helpers
 
             await queue.AddMessageAsync(new CloudQueueMessage(message), cancellationToken);
 
-            Log.Debug("Sent message: {Message}", message);
+            _logger.LogDebug("Sent message: {Message}", message);
         }
 
         public async Task SubscribeAsync(string queueName, Func<string, Task> callbackAsync, CancellationToken cancellationToken)
@@ -60,7 +62,7 @@ namespace DanClarkeBlog.Core.Helpers
                 {
                     await callbackAsync(msg.AsString);
 
-                    Log.Information($"Message received for queue {queueName}");
+                    _logger.LogInformation($"Message received for queue {queueName}");
 
                     await queue.DeleteMessageAsync(msg, cancellationToken);
                 }

@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using Serilog;
 
 namespace DanClarkeBlog.Core.Repositories
 {
@@ -14,11 +14,13 @@ namespace DanClarkeBlog.Core.Repositories
     public class AzureImageRepository : IImageRepository
     {
         private readonly Settings _settings;
+        private readonly ILogger _logger;
 
-	    public AzureImageRepository(Settings settings)
-	    {
-		    _settings = settings;
-	    }
+        public AzureImageRepository(Settings settings, ILogger logger)
+        {
+            _settings = settings;
+            _logger = logger;
+        }
 
         public async Task AddAsync(string destPath, string fileName, byte[] data, CancellationToken cancellationToken)
         {
@@ -28,7 +30,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var fileReference = $"{leafPostFolderName.TrimStart('/')}/{fileName}";
 
-            Log.Debug($"AzureImageRepository.AddAsync called for image {fileReference}");
+            _logger.LogDebug($"AzureImageRepository.AddAsync called for image {fileReference}");
 
             var storageAccount = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
 
@@ -45,15 +47,15 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 if (blobReference.Metadata.ContainsKey("CRC") && blobReference.Metadata["CRC"] == dataHash)
                 {
-                    Log.Debug("File already exists, and hashes match, so not attempting upload");
+                    _logger.LogDebug("File already exists, and hashes match, so not attempting upload");
                     return;
                 }
 
-                Log.Debug("File already exists, but hashes differ, so attempting upload");
+                _logger.LogDebug("File already exists, but hashes differ, so attempting upload");
             }
             else
             {
-                Log.Debug($"File does not exist, so attempting upload (data length = {data.Length}) ...");
+                _logger.LogDebug($"File does not exist, so attempting upload (data length = {data.Length}) ...");
             }
 
             await blobReference.UploadFromByteArrayAsync(data, 0, data.Length);
@@ -86,12 +88,12 @@ namespace DanClarkeBlog.Core.Repositories
             }
             catch (FormatException)
             {
-                Log.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
                 throw;
             }
             catch (ArgumentException)
             {
-                Log.Error("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
                 throw;
             }
 

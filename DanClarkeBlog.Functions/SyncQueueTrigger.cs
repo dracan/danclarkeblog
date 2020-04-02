@@ -6,7 +6,6 @@ using DanClarkeBlog.Functions.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace DanClarkeBlog.Functions
@@ -40,7 +39,7 @@ namespace DanClarkeBlog.Functions
                 null,
                 CancellationToken.None);
 
-            Log.Debug("Finished dropbox sync");
+            log.LogDebug("Finished dropbox sync");
         }
     }
 }
