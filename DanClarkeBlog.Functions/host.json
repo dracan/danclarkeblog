@@ -3,7 +3,8 @@
   "functionTimeout": "00:10:00",
   "logging": {
     "logLevel": {
-      "default": "Debug"
+      "default": "Debug",
+      "DanClarkeBlog.Core": "Debug"
     }
   }
 }
