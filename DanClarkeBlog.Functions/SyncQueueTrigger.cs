@@ -24,7 +24,7 @@ namespace DanClarkeBlog.Functions
         }
 
         [FunctionName("QueueTrigger")]
-        public async Task Run([QueueTrigger("sync-dev", Connection = "AzureWebJobsStorage")] string message, ILogger log)
+        public async Task Run([QueueTrigger("sync", Connection = "AzureWebJobsStorage")] string message, ILogger log)
         {
             log.LogInformation("Found message on queue: {Message}", message);
 
