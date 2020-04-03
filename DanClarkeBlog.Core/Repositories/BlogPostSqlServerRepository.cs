@@ -25,12 +25,10 @@ namespace DanClarkeBlog.Core.Repositories
 
         public void CreateDatabase()
         {
-            _logger.LogDebug("CreateDatabase");
+            _logger.LogInformation("Ensuring database exists...");
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
-            {
                 ctx.Database.EnsureCreated();
-            }
         }
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync(CursorContainer cursor, CancellationToken cancellationToken)
@@ -95,7 +93,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task AddOrUpdateAsync(BlogPost post, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
+            _logger.LogInformation("Adding/updating post: '{Title}' ({ID}) ...", post.Title, post.Id);
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {

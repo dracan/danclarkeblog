@@ -51,15 +51,15 @@ namespace DanClarkeBlog.Core.Repositories
 
             if (cursor == null)
             {
-                _logger.LogDebug("Processing files from Dropbox ...");
+                _logger.LogInformation("Processing files from Dropbox ...");
             }
             else
             {
-                _logger.LogDebug("Processing updated files from Dropbox ...");
+                _logger.LogInformation("Processing updated files from Dropbox ...");
 
                 dropboxFiles = await _dropboxHelper.GetFilesAsync("", cursor, cancellationToken);
 
-                _logger.LogDebug("Files dropbox thinks has been updated:");
+                _logger.LogInformation("Files dropbox thinks has been updated:");
 
                 foreach (var updatedFile in dropboxFiles)
                     _logger.LogDebug($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
@@ -67,7 +67,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var blogPosts = new List<BlogPost>();
 
-            _logger.LogDebug("Reading blog.json ...");
+            _logger.LogInformation("Reading blog.json ...");
 
             var blogMetaDataFile = await _dropboxHelper.GetFileContentAsync("/Blog.json", cancellationToken);
 
@@ -81,7 +81,7 @@ namespace DanClarkeBlog.Core.Repositories
                 ? blogPostList
                 : blogPostList.Where(x => dropboxFiles.Any(y => y.PathLower == $"{x.Folder}/post.md".ToLower())).ToList();
 
-            _logger.LogDebug($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
+            _logger.LogInformation($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
 
             foreach (var blogPost in blogPostsToUpdate)
             {
@@ -98,7 +98,7 @@ namespace DanClarkeBlog.Core.Repositories
                         ImageDataTask = _dropboxHelper.GetFileContentAsync(i, cancellationToken),
                     }).ToList();
 
-                _logger.LogDebug($"Reading content for {blogPost.Folder} ...");
+                _logger.LogInformation($"Reading content for {blogPost.Folder} ...");
 
                 var postFile = await _dropboxHelper.GetFileContentAsync($"{blogPost.Folder}/post.md", cancellationToken);
 

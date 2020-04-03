@@ -37,31 +37,27 @@ namespace DanClarkeBlog.Core.Repositories
 
         public Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
+            _logger.LogInformation($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
 
             var blogPosts = new List<BlogPost>();
 
-            _logger.LogDebug("Reading blog.json ...");
+            _logger.LogInformation("Reading blog.json ...");
 
             var content = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, "Blog.json"));
 
-            _logger.LogTrace($"Blog.json content was {content}");
+            _logger.LogInformation($"Blog.json content was {content}");
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
 
-            _logger.LogDebug($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            _logger.LogInformation($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
 
             var posts = blogPostList.AsQueryable();
 
             if (offset.HasValue)
-            {
                 posts = posts.Skip(offset.Value);
-            }
 
             if (maxResults.HasValue)
-            {
                 posts = posts.Take(maxResults.Value);
-            }
 
             foreach (var blogPost in posts)
             {

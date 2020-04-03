@@ -30,7 +30,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var fileReference = $"{leafPostFolderName.TrimStart('/')}/{fileName}";
 
-            _logger.LogDebug($"AzureImageRepository.AddAsync called for image {fileReference}");
+            _logger.LogInformation($"AzureImageRepository.AddAsync called for image {fileReference}");
 
             var storageAccount = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
 
@@ -47,15 +47,15 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 if (blobReference.Metadata.ContainsKey("CRC") && blobReference.Metadata["CRC"] == dataHash)
                 {
-                    _logger.LogDebug("File already exists, and hashes match, so not attempting upload");
+                    _logger.LogInformation("File already exists, and hashes match, so not attempting upload");
                     return;
                 }
 
-                _logger.LogDebug("File already exists, but hashes differ, so attempting upload");
+                _logger.LogInformation("File already exists, but hashes differ, so attempting upload");
             }
             else
             {
-                _logger.LogDebug($"File does not exist, so attempting upload (data length = {data.Length}) ...");
+                _logger.LogInformation($"File does not exist, so attempting upload (data length = {data.Length}) ...");
             }
 
             await blobReference.UploadFromByteArrayAsync(data, 0, data.Length);

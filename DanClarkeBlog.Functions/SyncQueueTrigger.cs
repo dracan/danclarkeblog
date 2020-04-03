@@ -24,9 +24,9 @@ namespace DanClarkeBlog.Functions
         }
 
         [FunctionName("QueueTrigger")]
-        public async Task Run([QueueTrigger("sync", Connection = "")] string message, ILogger log)
+        public async Task Run([QueueTrigger("sync-dev", Connection = "AzureWebJobsStorage")] string message, ILogger log)
         {
-            log.LogDebug("Found message on queue: {Message}", message);
+            log.LogInformation("Found message on queue: {Message}", message);
 
             var msgObj = JsonConvert.DeserializeObject<SyncMessage>(message);
 
@@ -39,7 +39,7 @@ namespace DanClarkeBlog.Functions
                 null,
                 CancellationToken.None);
 
-            log.LogDebug("Finished dropbox sync");
+            log.LogInformation("Finished dropbox sync");
         }
     }
 }

@@ -25,7 +25,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task AcquireLockAsync(string key, int numRetries, TimeSpan waitBetweenRetries, TimeSpan lockTimeout, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"Acquiring lock for key {key} ...");
+            _logger.LogInformation($"Acquiring lock for key {key} ...");
 
             var storage = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
             var storageClient = storage.CreateCloudBlobClient();
@@ -35,7 +35,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             await Policy.Handle<StorageException>().WaitAndRetryAsync(numRetries, n =>
                {
-                   _logger.LogDebug($"Failed to acquire lock. Retrying ... (retry count {n})");
+                   _logger.LogInformation($"Failed to acquire lock. Retrying ... (retry count {n})");
                    return waitBetweenRetries;
                }).ExecuteAsync(async () =>
                {
@@ -47,7 +47,7 @@ namespace DanClarkeBlog.Core.Repositories
         {
             if (!string.IsNullOrWhiteSpace(_leaseId))
             {
-                _logger.LogDebug("Releasing lock ...");
+                _logger.LogInformation("Releasing lock ...");
                 await _storageContainer.ReleaseLeaseAsync(AccessCondition.GenerateLeaseCondition(_leaseId));
             }
         }
