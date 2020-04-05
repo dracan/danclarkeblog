@@ -38,11 +38,6 @@ IContainer Setup()
         BaseImageUri = Environment.GetEnvironmentVariable("Blog__BaseImageUri"),
     };
 
-    Log.Logger = new LoggerConfiguration()
-        .WriteTo.Debug()
-        .MinimumLevel.Debug()
-        .CreateLogger();
-
     container.Register(x => settings);
     container.RegisterType<BlogPostSqlServerRepository>().As<IBlogPostTargetRepository>().SingleInstance();
     container.RegisterType<BlogPostDropboxRepository>().As<IBlogPostSourceRepository>().SingleInstance();
