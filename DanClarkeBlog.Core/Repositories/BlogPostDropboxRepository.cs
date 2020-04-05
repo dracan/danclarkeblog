@@ -79,7 +79,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var blogPostsToUpdate = cursor == null
                 ? blogPostList
-                : blogPostList.Where(x => dropboxFiles.Any(y => y.PathLower == $"{x.Folder}/post.md".ToLower())).ToList();
+                : blogPostList.Where(x => dropboxFiles.Any(y => y.PathLower == $"/blog{x.Folder}/post.md".ToLower())).ToList();
 
             _logger.LogInformation($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
 
