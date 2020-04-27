@@ -5,5 +5,10 @@
     "logLevel": {
       "default": "Information"
     }
-  }
+  },
+  "extensions": {
+    "queues": {
+        "maxPollingInterval": "00:00:02"
+    }
+}
 }
