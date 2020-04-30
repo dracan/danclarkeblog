@@ -1,4 +1,32 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+﻿:root {
+  --bgcolour: rgb(255, 255, 255);
+  --bodytextcolour: rgb(0, 0, 0);
+  --postListingDateColour: cornflowerblue;
+  --postListingAnchorColour: cornflowerblue;
+  --linkcolour: #50585D;
+  --codeColour: darkslategrey;
+  --postListingTagColour: cornflowerblue;
+  --scrollBarBackgroundColour: inherit;
+  --scrollBarColour: #c5c1b9;
+  --scrollBarCornerBackgroundColour: inherit;
+  --scrollBarThumbColour: inherit;
+}
+
+[data-theme="dark"] {
+  --bgcolour: rgb(24, 26, 27);
+  --bodytextcolour: rgb(218, 215, 210);
+  --postListingDateColour: rgb(100, 168, 237);
+  --postListingAnchorColour: rgb(51, 162, 255);
+  --linkcolour: rgb(200, 196, 187);
+  --codeColour: lightblue;
+  --postListingTagColour: rgb(122, 171, 255);
+  --scrollBarBackgroundColour: #1c1e1f;
+  --scrollBarColour: #c5c1b9;
+  --scrollBarCornerBackgroundColour: #181a1b;
+  --scrollBarThumbColour: #2a2c2e;
+}
+
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
 /* Sticky footer styles
@@ -55,14 +83,9 @@ html {
 
 body {
     font-size: 17px;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: rgb(24, 26, 27);
-        color: rgb(218, 215, 210);
-    }
+    /*font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;*/
+    background-color: var(--bgcolour);
+    color: var(--bodytextcolour)
 }
 
 /* Wrapping element */
@@ -136,17 +159,11 @@ h1, h2, h3 {
 
 .postListing .blogPostDate {
     font-size: 14px;
-    color: cornflowerblue;
+    color: var(--postListingDateColour)
 }
 
-@media (prefers-color-scheme: dark) {
-    .postListing .blogPostDate {
-        color: rgb(100, 168, 237);
-    }
-
-    .postListing a, .blogPost a {
-        color: rgb(51, 162, 255);
-    }
+.postListing a, .blogPost a {
+    color: var(--postListingAnchorColour)
 }
 
 .blogPost {
@@ -173,13 +190,7 @@ h1, h2, h3 {
 
 .postListing .tag {
     font-size: 14px;
-}
-
-@media (prefers-color-scheme: dark) {
-    .postListing .tag {
-        font-size: 14px;
-        color: rgb(122, 171, 255);
-    }
+    color: var(--postListingTagColour);
 }
 
 .sidemenu {
@@ -248,27 +259,7 @@ h3 a:visited,
 h3 a:hover,
 h3 a:active
 {
-    color: #50585D;
-}
-
-@media (prefers-color-scheme: dark) {
-    h1,
-    h1 a:link,
-    h1 a:visited,
-    h1 a:hover,
-    h1 a:active,
-    h2,
-    h2 a:link,
-    h2 a:visited,
-    h2 a:hover,
-    h2 a:active,
-    h3,
-    h3 a:link,
-    h3 a:visited,
-    h3 a:hover,
-    h3 a:active {
-        color: rgb(200, 196, 187);
-    }
+  color: var(--linkcolour)
 }
 
 footer {
@@ -279,14 +270,8 @@ footer {
     text-align: center;
 }
 
-code {
-    color: darkslategrey;
-}
-
-@media (prefers-color-scheme: dark) {
-    code, pre code {
-        color: lightblue;
-    }
+code, pre code {
+    color: var(--codeColour);
 }
 
 blockquote {
@@ -295,21 +280,23 @@ blockquote {
     line-height: 1.4em;
 }
 
-@media (prefers-color-scheme: dark) {
-    .btn-primary {
-        background-color: rgb(0, 98, 204);
-    }
+.btn-primary {
+    background-color: rgb(0, 98, 204);
+}
 
-    ::-webkit-scrollbar {
-        background-color: #1c1e1f;
-        color: #c5c1b9;
-    }
+::-webkit-scrollbar {
+    background-color: var(--scrollBarBackgroundColour);
+    color: var(--scrollBarColour);
+}
 
-    ::-webkit-scrollbar-corner {
-        background-color: #181a1b;
-    }
+::-webkit-scrollbar-corner {
+    background-color: var(--scrollBarCornerBackgroundColour);
+}
 
-    ::-webkit-scrollbar-thumb {
-        background-color: #2a2c2e;
-    }
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollBarThumbColour);
+}
+
+pre.prettyprint {
+  margin: 10px 0 10px 0 !important;
 }
