@@ -1,4 +1,6 @@
-﻿//determines if the user has a set theme
+﻿// Code pinched from https://stackoverflow.com/a/56550819/227086
+
+//determines if the user has a set theme
 function detectColorScheme(){
     var theme="light";    //default to light
 
