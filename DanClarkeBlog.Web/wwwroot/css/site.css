@@ -183,6 +183,14 @@ h1, h2, h3 {
     margin-top: 30px;
 }
 
+.blogPost h2 {
+    font-size: 25px;
+}
+
+.blogPost h3 {
+    font-size: 21px;
+}
+
 .blogPost .blogPostDateAndTags a,
 .blogPost .blogPostDateAndTags span {
     font-size: 14px;
