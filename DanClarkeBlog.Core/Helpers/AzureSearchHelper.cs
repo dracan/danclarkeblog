@@ -23,22 +23,24 @@ namespace DanClarkeBlog.Core.Helpers
             {
                 var results = (await indexClient.Documents.SearchAsync(searchTerm, new SearchParameters
                 {
-                    Select = new[] {"Id", "Title", "Route", "PublishDate", "HtmlShortText", "Published"},
+                    Select = new[] {"id", "Title", "Route", "PublishDate", "HtmlShortText", "Published"},
                     Skip = offset,
                     Top = count,
                     IncludeTotalResultCount = true,
-                })).Results.Where(x => (bool) x.Document["Published"]).ToList();
+                    OrderBy = new[] { "PublishDate desc" },
+                    Filter = "Published"
+                }));
 
                 return new BlogPostListing
                 {
-                    Posts = results.Select(x => new BlogPost
+                    Posts = results.Results.Select(x => new BlogPost
                     {
-                        Id = Guid.Parse((string) x.Document["Id"]),
+                        Id = Guid.Parse((string) x.Document["id"]),
                         Title = (string) x.Document["Title"],
                         Route = (string) x.Document["Route"],
                         HtmlShortText = (string) x.Document["HtmlShortText"],
                     }).ToList(),
-                    TotalPosts = results.Count,
+                    TotalPosts = results.Count.HasValue ? (int)results.Count : 0
                 };
             }
         }
