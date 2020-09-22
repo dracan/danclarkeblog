@@ -42,9 +42,7 @@ namespace DanClarkeBlog.Core.Data
                     .HasName("AlternateKey_TagName");
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionString);
-        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
+            optionsBuilder.UseSqlServer(_connectionString, o => o.EnableRetryOnFailure());
     }
 }
