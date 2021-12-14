@@ -5,6 +5,7 @@ metadata:
   namespace: blog
 data:
   ASPNETCORE_ENVIRONMENT: 'Production'
+  APPINSIGHTS_INSTRUMENTATIONKEY: {{ .Values.config.appInsightsInstrumentationKey | quote }}
   Blog__AzureSearchIndexName: 'azuresql-index-sortable'
   Blog__AzureSearchInstanceName: {{ .Values.config.azureSearchIndexName | quote }}
   Blog__BaseImageUri: {{ .Values.config.baseImageUri | quote }}
@@ -12,3 +13,5 @@ data:
   Blog__GoogleAnalyticsTrackingId: {{ .Values.config.googleAnalyticsTrackingId | quote }}
   Blog__ProfilePicUri: {{ .Values.config.profilePicUri | quote }}
   Blog__SiteHomeUri: {{ .Values.config.siteHomeUri | quote }}
+  KeyVaultUri: { { .Values.config.keyVaultUri | quote } }
+
