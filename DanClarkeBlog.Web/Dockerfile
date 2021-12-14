@@ -1,16 +1,21 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 WORKDIR /src
+
+COPY DanClarkeBlog.Core/*.csproj DanClarkeBlog.Core/
+COPY DanClarkeBlog.Web/*.csproj DanClarkeBlog.Web/
+WORKDIR /src/DanClarkeBlog.Web/
+RUN dotnet restore
+
 COPY DanClarkeBlog.Core/. DanClarkeBlog.Core/.
 COPY DanClarkeBlog.Web/. DanClarkeBlog.Web/.
 WORKDIR /src/DanClarkeBlog.Web/
-RUN dotnet restore
 RUN dotnet publish -c Release
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 ARG VersionNumber="0.0.0"
 LABEL version=${VersionNumber}
 ENV Blog__VersionNumber=${VersionNumber}
-COPY --from=build /src/DanClarkeBlog.Web/bin/Release/netcoreapp3.1/publish .
+COPY --from=build /src/DanClarkeBlog.Web/bin/Release/net6.0/publish .
 EXPOSE 80
 ENTRYPOINT dotnet DanClarkeBlog.Web.dll
