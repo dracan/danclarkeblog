@@ -1,0 +1,14 @@
+apiVersion: v2
+name: blog
+description: The full chart for my blog
+type: application
+version: 0.1.0
+appVersion: "1.1.0"
+
+dependencies:
+- name: blog-web
+- name: blog-worker
+- name: blog-db
+  condition: useLocalDatastores
+- name: blog-storage
+  condition: useLocalDatastores

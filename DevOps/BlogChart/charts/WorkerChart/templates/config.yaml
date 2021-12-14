@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker
+  namespace: blog
+data:
+  Blog__BaseImageUri: {{ .Values.config.baseImageUri | quote }}
+  Blog__DisqusDomainName: {{ .Values.config.disqusDomainName | quote }}
+  Blog__MaxResizedImageSize: {{ .Values.config.maxResizedImageSize | quote }}
+  Blog__PostPreviewLength: {{ .Values.config.postPreviewLength | quote }}

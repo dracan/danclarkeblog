@@ -1,0 +1,6 @@
+apiVersion: v2
+name: blog-storage
+description: Local-only Azure Storage
+type: application
+version: 0.1.0
+appVersion: "1.1.0"

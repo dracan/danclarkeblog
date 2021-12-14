@@ -1,0 +1,6 @@
+apiVersion: v2
+name: blog-worker
+description: The background worker that converts Markdown from Dropbox to HTML
+type: application
+version: 0.1.0
+appVersion: "1.1.0"

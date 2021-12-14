@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azurite
+  namespace: blog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azurite
+  template:
+    metadata:
+      labels:
+        app: azurite
+    spec:
+      containers:
+      - name: azurite
+        image: mcr.microsoft.com/azure-storage/azurite
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 10000
