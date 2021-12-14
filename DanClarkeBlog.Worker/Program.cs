@@ -3,25 +3,28 @@ using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
 using DanClarkeBlog.Worker;
 using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+IConfiguration? config = null;
+
 var builder = Host.CreateDefaultBuilder()
+    .ConfigureAppConfiguration((_, configBuilder) =>
+    {
+        var keyVaultUri = configBuilder.Build()["KeyVaultUri"];
+
+        if (!string.IsNullOrWhiteSpace(keyVaultUri))
+            configBuilder.AddAzureKeyVault(keyVaultUri, new DefaultKeyVaultSecretManager());
+
+        config = configBuilder.Build();
+    })
     .ConfigureServices(services =>
     {
-        var settings = new Settings
-        {
-            DropboxAccessToken = Environment.GetEnvironmentVariable("Blog__DropboxAccessToken"),
-            BlogSqlConnectionString = Environment.GetEnvironmentVariable("Blog__BlogSqlConnectionString"),
-            AzureStorageConnectionString = Environment.GetEnvironmentVariable("Blog__AzureStorageConnectionString"),
-            AzureServiceBusConnectionString = Environment.GetEnvironmentVariable("Blog__AzureServiceBusConnectionString"),
-            MaxResizedImageSize = int.Parse(Environment.GetEnvironmentVariable("Blog__MaxResizedImageSize") ?? "0"),
-            KeepAlivePingUri = Environment.GetEnvironmentVariable("Blog__KeepAlivePingUri"),
-            SlackNotificationUri = Environment.GetEnvironmentVariable("Blog__SlackNotificationUri"),
-            PostPreviewLength = int.Parse(Environment.GetEnvironmentVariable("Blog__PostPreviewLength") ?? "200"),
-            BaseImageUri = Environment.GetEnvironmentVariable("Blog__BaseImageUri"),
-        };
+        var settings = new Settings();
+        config?.GetSection("Blog").Bind(settings);
 
         services.AddSingleton(settings);
         services.AddSingleton<IBlogPostTargetRepository, BlogPostSqlServerRepository>();
