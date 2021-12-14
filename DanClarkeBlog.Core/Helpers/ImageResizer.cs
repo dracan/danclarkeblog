@@ -1,7 +1,6 @@
 using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Transforms;
 
 namespace DanClarkeBlog.Core.Helpers
 {

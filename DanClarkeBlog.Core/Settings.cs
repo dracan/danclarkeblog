@@ -5,6 +5,7 @@
         public string DropboxAccessToken { get; set; }
         public string BlogSqlConnectionString { get; set; }
         public string AzureStorageConnectionString { get; set; }
+        public string AzureServiceBusConnectionString { get; set; }
         public string DisqusDomainName { get; set; }
         public int MaxResizedImageSize { get; set; }
         public string KeepAlivePingUri { get; set; }
