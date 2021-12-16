@@ -1,0 +1,32 @@
+useLocalDatastores: false
+
+blog-web:
+  hostname: blog.web.local
+  healthChecks:
+    enabled: false
+    readinessRoute: TODO
+  useAcrSecret: true
+  image:
+    name: PLACEHOLDER
+    tag: 0
+  config:
+    appInsightsInstrumentationKey: PLACEHOLDER
+    azureSearchIndexName: danclarkeblog-search
+    baseImageUri: https://danclarkeblogstorage.blob.core.windows.net/images
+    disqusDomainName: coderhell.disqus.com
+    googleAnalyticsTrackingId: UA-24720650-1
+    profilePicUri: https://danclarkeblogstorage.blob.core.windows.net/images/about/danprofile-new.jpg
+    siteHomeUri: https://www.danclarke.com
+
+blog-worker:
+  useAcrSecret: true
+  image:
+    name: blog-worker
+    tag: 0
+  config:
+    appInsightsInstrumentationKey: PLACEHOLDER
+    baseImageUri: https://danclarkeblogstorage.blob.core.windows.net/images
+    disqusDomainName: coderhell.disqus.com
+    maxResizedImageSize: 1500
+    postPreviewLength: 200
+
