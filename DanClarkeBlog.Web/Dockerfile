@@ -6,8 +6,8 @@ COPY DanClarkeBlog.Web/*.csproj DanClarkeBlog.Web/
 WORKDIR /src/DanClarkeBlog.Web/
 RUN dotnet restore
 
-COPY DanClarkeBlog.Core/. DanClarkeBlog.Core/.
-COPY DanClarkeBlog.Web/. DanClarkeBlog.Web/.
+COPY DanClarkeBlog.Core/. /src/DanClarkeBlog.Core/.
+COPY DanClarkeBlog.Web/. /src/DanClarkeBlog.Web/.
 WORKDIR /src/DanClarkeBlog.Web/
 RUN dotnet publish -c Release
 
