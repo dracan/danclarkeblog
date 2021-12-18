@@ -38,7 +38,7 @@ var builder = Host.CreateDefaultBuilder()
         services.AddSingleton<IFeedGenerator, FeedGenerator>();
         services.AddSingleton<IHashVerify, HashVerify>();
         services.AddSingleton<ILockRepository, AzureBlobLockRepository>();
-        services.AddSingleton<IMessageQueue, AzureStorageQueue>();
+        services.AddSingleton<IMessageQueue, AzureServiceBusPublisher>();
 
         services.AddHostedService<WorkerService>();
 

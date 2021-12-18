@@ -19,7 +19,7 @@ namespace DanClarkeBlog.Web
             services.AddSingleton<INotificationTarget, SlackNotificationTarget>();
             services.AddScoped<IFeedGenerator, FeedGenerator>();
             services.AddSingleton<IHashVerify, HashVerify>();
-            services.AddSingleton<IMessageQueue, AzureStorageQueue>();
+            services.AddSingleton<IMessageQueue, AzureServiceBusPublisher>();
             services.AddSingleton<ILockRepository, AzureBlobLockRepository>();
             services.AddSingleton<ISearchHelper, AzureSearchHelper>();
         }
