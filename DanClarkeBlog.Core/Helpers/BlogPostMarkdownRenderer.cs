@@ -2,6 +2,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Markdig;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -11,9 +12,9 @@ namespace DanClarkeBlog.Core.Helpers
         private readonly Settings _settings;
         private readonly MarkdownPipeline _pipeline;
 
-        public BlogPostMarkdownRenderer(Settings settings)
+        public BlogPostMarkdownRenderer(IOptions<Settings> settings)
         {
-            _settings = settings;
+            _settings = settings.Value;
             _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         }
 

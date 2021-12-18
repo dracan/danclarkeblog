@@ -1,6 +1,7 @@
 ﻿using DanClarkeBlog.Core;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Web.TagHelpers
 {
@@ -9,9 +10,9 @@ namespace DanClarkeBlog.Web.TagHelpers
     {
         private readonly Settings _settings;
 
-        public GoogleAnalyticsTagHelper(Settings settings)
+        public GoogleAnalyticsTagHelper(IOptions<Settings> settings)
         {
-            _settings = settings;
+            _settings = settings.Value;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)

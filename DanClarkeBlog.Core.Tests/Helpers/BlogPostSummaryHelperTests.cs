@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using DanClarkeBlog.Core.Helpers;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace DanClarkeBlog.Core.Tests.Helpers
@@ -15,7 +16,7 @@ namespace DanClarkeBlog.Core.Tests.Helpers
 
             var settings = container.Resolve<Settings>();
 
-            var sut = new BlogPostSummaryHelper(settings);
+            var sut = new BlogPostSummaryHelper(Options.Create(settings));
             var result = sut.GetSummaryText("abc");
             Assert.Equal("abc", result);
         }

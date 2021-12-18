@@ -11,6 +11,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Web.Controllers
 {
@@ -22,13 +23,13 @@ namespace DanClarkeBlog.Web.Controllers
         private readonly IMessageQueue _messageQueue;
         private readonly ILogger _logger;
 
-        public WebhookController(Settings settings,
+        public WebhookController(IOptions<Settings> settings,
                                  INotificationTarget notificationTarget,
                                  IHashVerify hashVerify,
                                  IMessageQueue messageQueue,
                                  ILogger<WebhookController> logger)
         {
-            _settings = settings;
+            _settings = settings.Value;
             _notificationTarget = notificationTarget;
             _hashVerify = hashVerify;
             _messageQueue = messageQueue;

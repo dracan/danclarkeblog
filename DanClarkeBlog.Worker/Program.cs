@@ -23,10 +23,8 @@ var builder = Host.CreateDefaultBuilder()
     })
     .ConfigureServices(services =>
     {
-        var settings = new Settings();
-        config?.GetSection("Blog").Bind(settings);
+        services.Configure<Settings>(config!.GetSection("Blog"));
 
-        services.AddSingleton(settings);
         services.AddSingleton<IBlogPostTargetRepository, BlogPostSqlServerRepository>();
         services.AddSingleton<IBlogPostSourceRepository, BlogPostDropboxRepository>();
         services.AddSingleton<BlogPostSummaryHelper>();

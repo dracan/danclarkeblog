@@ -1,5 +1,6 @@
 ﻿using DanClarkeBlog.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Data
 {
@@ -12,9 +13,9 @@ namespace DanClarkeBlog.Core.Data
         public DbSet<BlogPostTag> BlogPostTags { get; set; }
         public DbSet<DropboxCursor> DropboxCursors { get; set; }
 
-        public DataContext(Settings settings)
+        public DataContext(IOptions<Settings> settings)
         {
-            _connectionString = settings.AzureStorageConnectionString;
+            _connectionString = settings.Value.AzureStorageConnectionString;
         }
 
         public DataContext(string connectionString)

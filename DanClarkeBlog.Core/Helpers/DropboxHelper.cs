@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Dropbox;
 using DanClarkeBlog.Core.Models;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace DanClarkeBlog.Core.Helpers
@@ -22,9 +23,9 @@ namespace DanClarkeBlog.Core.Helpers
         private static readonly string DropboxApiUri = "https://api.dropboxapi.com";
         private static readonly string DropboxContentUri = "https://content.dropboxapi.com";
 
-        public DropboxHelper(Settings settings, IHttpClientHelper httpClientHelper)
+        public DropboxHelper(IOptions<Settings> settings, IHttpClientHelper httpClientHelper)
         {
-            _settings = settings;
+            _settings = settings.Value;
             _httpClientHelper = httpClientHelper;
         }
 

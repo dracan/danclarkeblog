@@ -34,7 +34,7 @@ namespace DanClarkeBlog.Web
             var sp = services.BuildServiceProvider();
             var settings = sp.GetService<IOptions<Settings>>();
 
-            WebBootstrapper.Init(services, settings.Value);
+            WebBootstrapper.Init(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

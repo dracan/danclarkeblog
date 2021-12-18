@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DanClarkeBlog.Core.Models;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -11,9 +12,9 @@ namespace DanClarkeBlog.Core.Helpers
     {
         private readonly Settings _settings;
 
-        public AzureSearchHelper(Settings settings)
+        public AzureSearchHelper(IOptions<Settings> settings)
         {
-            _settings = settings;
+            _settings = settings.Value;
         }
 
         public async Task<BlogPostListing> SearchAsync(string searchTerm, int offset, int count)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -7,9 +8,9 @@ namespace DanClarkeBlog.Core.Helpers
     {
         private readonly Settings _settings;
 
-        public BlogPostSummaryHelper(Settings _settings)
+        public BlogPostSummaryHelper(IOptions<Settings> settings)
         {
-            this._settings = _settings;
+            _settings = settings.Value;
         }
 
         internal static string ManualSplitterText => "<--->";

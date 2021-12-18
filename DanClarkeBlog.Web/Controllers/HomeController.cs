@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading;
 using DanClarkeBlog.Core.Helpers;
+using Microsoft.Extensions.Options;
 using Settings = DanClarkeBlog.Core.Settings;
 
 namespace DanClarkeBlog.Web.Controllers
@@ -26,10 +27,10 @@ namespace DanClarkeBlog.Web.Controllers
             { "public-speaking", new Guid("07d4b359-3797-4acd-8173-4a62dcd995e8") },
         };
 
-        public HomeController(IBlogPostRepository blogPostRepository, Settings settings, IFeedGenerator feedGenerator, ISearchHelper searchHelper)
+        public HomeController(IBlogPostRepository blogPostRepository, IOptions<Settings> settings, IFeedGenerator feedGenerator, ISearchHelper searchHelper)
         {
             _blogPostRepository = blogPostRepository;
-            _settings = settings;
+            _settings = settings.Value;
             _feedGenerator = feedGenerator;
             _searchHelper = searchHelper;
         }

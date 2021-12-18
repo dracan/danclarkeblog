@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Polly;
@@ -17,15 +18,15 @@ namespace DanClarkeBlog.Core.Repositories
         private string _leaseId;
         private CloudBlobContainer _storageContainer;
 
-        public AzureBlobLockRepository(Settings settings, ILogger<AzureBlobLockRepository> logger)
+        public AzureBlobLockRepository(IOptions<Settings> settings, ILogger<AzureBlobLockRepository> logger)
         {
-            _settings = settings;
+            _settings = settings.Value;
             _logger = logger;
         }
 
         public async Task AcquireLockAsync(string key, int numRetries, TimeSpan waitBetweenRetries, TimeSpan lockTimeout, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Acquiring lock for key {key} ...");
+            _logger.LogInformation("Acquiring lock for key {Key} ...", key);
 
             var storage = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
             var storageClient = storage.CreateCloudBlobClient();
@@ -35,7 +36,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             await Policy.Handle<StorageException>().WaitAndRetryAsync(numRetries, n =>
                {
-                   _logger.LogInformation($"Failed to acquire lock. Retrying ... (retry count {n})");
+                   _logger.LogInformation("Failed to acquire lock. Retrying ... (retry count {RetryCount})", n);
                    return waitBetweenRetries;
                }).ExecuteAsync(async () =>
                {
@@ -68,12 +69,12 @@ namespace DanClarkeBlog.Core.Repositories
             }
             catch (FormatException)
             {
-                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample");
                 throw;
             }
             catch (ArgumentException)
             {
-                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample");
                 throw;
             }
 

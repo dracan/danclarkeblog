@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace DanClarkeBlog.Core.Helpers
@@ -12,9 +13,9 @@ namespace DanClarkeBlog.Core.Helpers
     {
         private readonly Settings _settings;
 
-        public SlackNotificationTarget(Settings settings)
+        public SlackNotificationTarget(IOptions<Settings> settings)
         {
-            _settings = settings;
+            _settings = settings.Value;
         }
 
         public async Task SendMessageAsync(string message, CancellationToken cancellationToken)

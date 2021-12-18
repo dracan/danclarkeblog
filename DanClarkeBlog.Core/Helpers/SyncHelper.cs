@@ -7,6 +7,7 @@ using DanClarkeBlog.Core.Models;
 using DanClarkeBlog.Core.Repositories;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -25,14 +26,14 @@ namespace DanClarkeBlog.Core.Helpers
                           IImageResizer imageResizer,
                           ILockRepository lockRepository,
                           ILogger<SyncHelper> logger,
-                          Settings settings)
+                          IOptions<Settings> settings)
         {
             _dropboxHelper = dropboxHelper;
             _imageRepository = imageRepository;
             _imageResizer = imageResizer;
             _lockRepository = lockRepository;
             _logger = logger;
-            _settings = settings;
+            _settings = settings.Value;
         }
 
         public async Task SynchronizeBlogPostsAsync(IBlogPostRepository sourceRepo,

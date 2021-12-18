@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using DanClarkeBlog.Core.Repositories;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -19,10 +20,10 @@ namespace DanClarkeBlog.Core.Helpers
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly Settings _settings;
 
-        public FeedGenerator(IBlogPostRepository blogPostRepository, Settings settings)
+        public FeedGenerator(IBlogPostRepository blogPostRepository, IOptions<Settings> settings)
         {
             _blogPostRepository = blogPostRepository;
-            _settings = settings;
+            _settings = settings.Value;
         }
 
         public async Task<string> GenerateRssAsync(CancellationToken cancelationToken)

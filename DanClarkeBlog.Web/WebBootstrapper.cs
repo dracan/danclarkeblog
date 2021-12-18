@@ -1,5 +1,4 @@
-﻿using DanClarkeBlog.Core;
-using DanClarkeBlog.Core.Helpers;
+﻿using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,9 +6,8 @@ namespace DanClarkeBlog.Web
 {
     internal static class WebBootstrapper
     {
-        public static void Init(IServiceCollection services, Settings settings)
+        public static void Init(IServiceCollection services)
         {
-            services.AddSingleton(settings);
             services.AddScoped<IBlogPostRepository, BlogPostSqlServerRepository>();
             services.AddSingleton<BlogPostSummaryHelper>();
             services.AddSingleton<IBlogPostRenderer, BlogPostMarkdownRenderer>();

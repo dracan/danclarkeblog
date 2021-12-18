@@ -8,6 +8,7 @@ using DanClarkeBlog.Core.Models;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Repositories
 {
@@ -17,9 +18,9 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly Settings _setting;
         private readonly ILogger _logger;
 
-        public BlogPostSqlServerRepository(Settings setting, ILogger<BlogPostSqlServerRepository> logger)
+        public BlogPostSqlServerRepository(IOptions<Settings> setting, ILogger<BlogPostSqlServerRepository> logger)
         {
-            _setting = setting;
+            _setting = setting.Value;
             _logger = logger;
         }
 

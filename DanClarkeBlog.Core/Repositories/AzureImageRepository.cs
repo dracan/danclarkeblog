@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -16,9 +17,9 @@ namespace DanClarkeBlog.Core.Repositories
         private readonly Settings _settings;
         private readonly ILogger _logger;
 
-        public AzureImageRepository(Settings settings, ILogger<AzureImageRepository> logger)
+        public AzureImageRepository(IOptions<Settings> settings, ILogger<AzureImageRepository> logger)
         {
-            _settings = settings;
+            _settings = settings.Value;
             _logger = logger;
         }
 

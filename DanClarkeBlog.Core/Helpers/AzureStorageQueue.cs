@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Queue;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Core.Helpers
 {
@@ -17,10 +18,10 @@ namespace DanClarkeBlog.Core.Helpers
         private CloudQueueClient _client;
         private readonly string _connectionString;
 
-        public AzureStorageQueue(Settings settings, ILogger<AzureStorageQueue> logger)
+        public AzureStorageQueue(IOptions<Settings> settings, ILogger<AzureStorageQueue> logger)
         {
             _logger = logger;
-            _connectionString = settings.AzureStorageConnectionString;
+            _connectionString = settings.Value.AzureStorageConnectionString;
         }
 
         private async Task<CloudQueue> GetQueueReferenceAsync(string queueName)
