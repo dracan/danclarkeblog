@@ -1,0 +1,29 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - DanClarkeBlog.Core
+      - DanClarkeBlog.Worker
+
+variables:
+  azureServicePrincipal: k8s-cluster
+
+stages:
+  - template: Templates/Build.yaml
+    parameters:
+      dockerFile: DanClarkeBlog.Worker/Dockerfile
+      dockerRepository: blog-worker
+      buildContext: .
+      helmChartPath: $(System.DefaultWorkingDirectory)/DevOps/BlogChart/charts/WorkerChart/
+
+  # Deploy UAT
+  - template: Templates/Deploy.yaml
+    parameters:
+      environment: uat
+      tag: $(Build.BuildId)
+      name: worker
+      imageName: $(imageName)
+      appInsightsInstrumentationKey: $(appInsightsInstrumentationKey)
+      keyVaultUri: $(keyVaultUri)

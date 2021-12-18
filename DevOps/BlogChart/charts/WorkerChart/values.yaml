@@ -1,0 +1,11 @@
+useAcrSecret: false
+image:
+  name: blog-worker
+  tag: 0
+config:
+  appInsightsInstrumentationKey: PLACEHOLDER
+  keyVaultUri: PLACEHOLDER
+  baseImageUri: https://danclarkeblogstorage.blob.core.windows.net/images
+  disqusDomainName: coderhell.disqus.com
+  maxResizedImageSize: 1500
+  postPreviewLength: 200

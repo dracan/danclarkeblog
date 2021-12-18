@@ -1,0 +1,31 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - DanClarkeBlog.Web
+      - DanClarkeBlog.Core
+      - DanClarkeBlog.Core.Tests
+
+variables:
+  azureServicePrincipal: k8s-cluster
+
+stages:
+  # Build
+  - template: Templates/Build.yaml
+    parameters:
+      dockerFile: DanClarkeBlog.Web/Dockerfile
+      dockerRepository: blog
+      buildContext: .
+      helmChartPath: $(System.DefaultWorkingDirectory)/DevOps/BlogChart/charts/WebChart/
+
+  # Deploy
+  - template: Templates/Deploy.yaml
+    parameters:
+      environment: uat
+      tag: $(Build.BuildId)
+      name: web
+      imageName: $(imageName)
+      appInsightsInstrumentationKey: $(appInsightsInstrumentationKey)
+      keyVaultUri: $(keyVaultUri)

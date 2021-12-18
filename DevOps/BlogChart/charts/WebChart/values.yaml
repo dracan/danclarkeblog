@@ -1,0 +1,17 @@
+hostname: danclarke.com
+healthChecks:
+  enabled: false
+  readinessRoute: TODO
+useAcrSecret: false
+image:
+  name: blog-web
+  tag: 0
+config:
+  appInsightsInstrumentationKey: PLACEHOLDER
+  keyVaultUri: PLACEHOLDER
+  azureSearchIndexName: danclarkeblog-search
+  baseImageUri: https://danclarkeblogstorage.blob.core.windows.net/images
+  disqusDomainName: coderhell.disqus.com
+  googleAnalyticsTrackingId: UA-24720650-1
+  profilePicUri: https://danclarkeblogstorage.blob.core.windows.net/images/about/danprofile-new.jpg
+  siteHomeUri: https://www.danclarke.com
