@@ -53,7 +53,7 @@ stages:
                       echo 'helm upgrade...'
                       helm upgrade \
                         --install \
-                        --namespace ${{ parameters['environment'] }} \
+                        --namespace blog \
                         --create-namespace \
                         --set image.tag=${{ parameters['tag'] }} \
                         --set image.name=${{ parameters['imageName'] }} \
