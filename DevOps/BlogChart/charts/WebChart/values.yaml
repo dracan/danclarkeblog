@@ -1,4 +1,4 @@
-hostname: danclarke.com
+hostname: www.danclarke.com
 healthChecks:
   enabled: false
   readinessRoute: TODO
