@@ -13,5 +13,5 @@ data:
   Blog__GoogleAnalyticsTrackingId: {{ .Values.config.googleAnalyticsTrackingId | quote }}
   Blog__ProfilePicUri: {{ .Values.config.profilePicUri | quote }}
   Blog__SiteHomeUri: {{ .Values.config.siteHomeUri | quote }}
-  KeyVaultUri: { { .Values.config.keyVaultUri | quote } }
+  KeyVaultUri: {{ .Values.config.keyVaultUri | quote }}
 
