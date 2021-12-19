@@ -29,3 +29,5 @@ stages:
       imageName: $(imageName)
       appInsightsInstrumentationKey: $(appInsightsInstrumentationKey)
       keyVaultUri: $(keyVaultUri)
+      managedIdentityResourceId: $(managedIdentityResourceId)
+      managedIdentityClientId: $(managedIdentityClientId)

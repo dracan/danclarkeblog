@@ -11,6 +11,10 @@ parameters:
     type: string
   - name: keyVaultUri
     type: string
+  - name: managedIdentityResourceId
+    type: string
+  - name: managedIdentityClientId
+    type: string
 
 stages:
   - stage: Deploy_${{ parameters['environment'] }}
@@ -59,5 +63,7 @@ stages:
                         --set image.name=${{ parameters['imageName'] }} \
                         --set config.appInsightsInstrumentationKey=${{ parameters['appInsightsInstrumentationKey'] }} \
                         --set config.keyVaultUri=${{ parameters['keyVaultUri'] }} \
+                        --set managedIdentity.resourceId=${{ parameters['managedIdentityResourceId'] }} \
+                        --set managedIdentity.clientId=${{ parameters['managedIdentityClientId'] }} \
                         ${{ parameters['name'] }} \
                         $(Pipeline.Workspace)/HelmChart/.

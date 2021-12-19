@@ -12,6 +12,10 @@ spec:
     metadata:
       labels:
         app: web
+
+        {{ if .Values.managedIdentity.enabled }}
+        aadpodidbinding: {{ .Values.managedIdentity.name }}
+        {{ end }}
     spec:
       containers:
       - name: web

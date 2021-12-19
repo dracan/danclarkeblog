@@ -15,3 +15,8 @@ config:
   googleAnalyticsTrackingId: UA-24720650-1
   profilePicUri: https://danclarkeblogstorage.blob.core.windows.net/images/about/danprofile-new.jpg
   siteHomeUri: https://www.danclarke.com
+managedIdentity:
+  enabled: PLACEHOLDER # True when in Azure, false when local
+  name: blog-web-identity # k8s name, nothing in Azure itself
+  resourceId: PLACEHOLDER
+  clientId: PLACEHOLDER
