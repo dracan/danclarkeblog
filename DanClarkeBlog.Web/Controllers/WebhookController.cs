@@ -83,7 +83,7 @@ namespace DanClarkeBlog.Web.Controllers
                     }
                 }
 
-                await _messageQueue.SendAsync("sync", JsonConvert.SerializeObject(new { IsIncremental = true }), cancellationToken);
+                await _messageQueue.SendAsync("blog-postupdated", JsonConvert.SerializeObject(new { IsIncremental = true }), cancellationToken);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
