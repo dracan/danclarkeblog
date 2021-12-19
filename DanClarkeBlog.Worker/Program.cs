@@ -42,6 +42,8 @@ var builder = Host.CreateDefaultBuilder()
 
         services.AddHostedService<WorkerService>();
 
+        services.AddApplicationInsightsTelemetryWorkerService();
+
         services.AddMediatR(typeof(Program));
         services.AddLogging(builder => builder.AddSimpleConsole());
     })
