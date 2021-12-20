@@ -12,6 +12,9 @@ spec:
     metadata:
       labels:
         app: worker
+        {{ if .Values.managedIdentity.enabled }}
+        aadpodidbinding: {{ .Values.managedIdentity.name }}
+        {{ end }}
     spec:
       containers:
       - name: worker

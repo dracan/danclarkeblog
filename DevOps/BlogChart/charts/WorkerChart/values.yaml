@@ -9,3 +9,8 @@ config:
   disqusDomainName: coderhell.disqus.com
   maxResizedImageSize: 1500
   postPreviewLength: 200
+managedIdentity:
+  enabled: PLACEHOLDER # True when in Azure, false when local
+  name: blog-worker-identity # k8s name, nothing in Azure itself
+  resourceId: PLACEHOLDER
+  clientId: PLACEHOLDER
