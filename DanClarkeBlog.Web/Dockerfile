@@ -18,4 +18,5 @@ LABEL version=${VersionNumber}
 ENV Blog__VersionNumber=${VersionNumber}
 COPY --from=build /src/DanClarkeBlog.Web/bin/Release/net6.0/publish .
 EXPOSE 80
+ENV Logging__Console__FormatterName=
 ENTRYPOINT dotnet DanClarkeBlog.Web.dll
