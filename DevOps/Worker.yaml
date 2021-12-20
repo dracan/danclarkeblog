@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - k8s
+      - main
   paths:
     include:
       - DanClarkeBlog.Core
