@@ -45,7 +45,7 @@ var builder = Host.CreateDefaultBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
 
         services.AddMediatR(typeof(Program));
-        services.AddLogging(builder => builder.AddSimpleConsole());
+        services.AddLogging(logging => logging.AddApplicationInsights());
     })
     .UseConsoleLifetime();
 
