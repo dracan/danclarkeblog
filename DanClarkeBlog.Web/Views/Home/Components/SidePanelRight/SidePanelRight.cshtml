@@ -4,7 +4,7 @@
 <vc:search />
 <hr />
 
-@await Html.PartialAsync("_RecentPosts")
+<vc:recent-posts posts="@Model!.RecentPosts" />
 <hr />
 <vc:featured-posts posts="@Model!.FeaturedPosts" />
 <hr />
