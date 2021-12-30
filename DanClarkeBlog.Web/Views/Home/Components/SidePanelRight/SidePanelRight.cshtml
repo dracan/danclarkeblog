@@ -6,6 +6,6 @@
 
 @await Html.PartialAsync("_RecentPosts")
 <hr />
-@await Html.PartialAsync("_FeaturedPosts")
+<vc:featured-posts posts="@Model!.FeaturedPosts" />
 <hr />
 <vc:dot-net-oxford-links />

@@ -1,8 +1,0 @@
-@model DanClarkeBlog.Web.ViewModels.ViewModelBase
-
-<h3>Featured Posts</h3>
-
-@foreach (var post in Model.FeaturedPosts)
-{
-    <div class="postTitle"><a href="@post.Route">@post.Title</a></div>
-}
