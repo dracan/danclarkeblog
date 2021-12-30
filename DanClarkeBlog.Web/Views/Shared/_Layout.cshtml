@@ -1,8 +1,7 @@
-﻿@model DanClarkeBlog.Web.ViewModels.ViewModelBase
+﻿@using DanClarkeBlog.Web.Views.Home.Components.Footer
+@model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
 @addTagHelper *, DanClarkeBlog.Web
-
-@* ReSharper disable Mvc.PartialViewNotResolved *@
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
@@ -31,42 +30,19 @@
 <body>
 
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="d-flex flex-grow-1">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand d-inline-block">Dan Clarke<small>.NET | Azure | Dev</small></a>
-            <div class="w-100 text-right">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </div>
-        <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar">
-            <ul class="navbar-nav ml-auto flex-nowrap">
-                <li class="nav-item navitem-text-link"><a class="nav-link" href="/about">About me</a></li>
-                <li class="nav-item navitem-text-link"><a class="nav-link" href="https://unhandledexceptionpodcast.com/" target="_blank">Podcast</a></li>
-                <li class="nav-item navitem-text-link"><a class="nav-link" href="/public-speaking">Public Speaking</a></li>
-
-                <li class="nav-item"><a class="nav-link" href="https://www.twitter.com/dracan"><img class="socialImg" alt="Twitter" src="~/images/twitter.png"/></a></li>
-                <li class="nav-item"><a class="nav-link" href="https://www.linkedin.com/in/danclarkeuk"><img class="socialImg" alt="LinkedIn" src="~/images/linkedin.png"/></a></li>
-                <li class="nav-item"><a class="nav-link" href="https://github.com/dracan"><img class="socialImg" alt="GitHub" src="~/images/github.png"/></a></li>
-                <li class="nav-item"><a class="nav-link" href="http://stackoverflow.com/story/danclarke"><img class="socialImg" alt="StackOverflow" src="~/images/stackoverflow.png"/></a></li>
-                <li class="nav-item"><a class="nav-link" href="/rss"><img class="socialImg" alt="RSS" src="~/images/rss.png"/></a></li>
-                <li class="nav-item"><a class="nav-link" href="https://bio.link/danclarke"><img class="socialImg" alt="BioLink" style="background-color: #cccccc" src="~/images/biolink.svg"/></a></li>
-            </ul>
-        </div>
-    </nav>
+    <vc:navbar />
 </header>
 
 <div class="container-fluid body-content">
     <div class="row">
         <div class="col-md-2 sidemenu">
-            @await Html.PartialAsync("_SidePanelLeft")
+            <vc:side-panel-left model="@Model" />
         </div>
         <div class="col-md-8 body-container">
             @RenderBody()
         </div>
         <div class="col-md-2 sidemenu">
-            @await Html.PartialAsync("_SidePanelRight")
+            <vc:side-panel-right model="@Model" />
         </div>
     </div>
     <footer>
@@ -74,7 +50,7 @@
            <div class="col-md-2 sidemenu">
            </div>
            <div class="col-md-8">
-                @await Html.PartialAsync("_Footer")
+               <vc:footer version-number="@Model!.VersionNumber" />
            </div>
            <div class="col-md-2 sidemenu">
            </div>
@@ -99,6 +75,6 @@
     <google-analytics></google-analytics>
 </environment>
 
-@RenderSection("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

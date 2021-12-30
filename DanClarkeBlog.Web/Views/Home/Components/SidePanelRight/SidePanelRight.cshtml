@@ -1,0 +1,11 @@
+@using DanClarkeBlog.Web.ViewModels
+@model ViewModelBase
+
+<vc:search />
+<hr />
+
+<vc:recent-posts posts="@Model!.RecentPosts" />
+<hr />
+<vc:featured-posts posts="@Model!.FeaturedPosts" />
+<hr />
+<vc:dot-net-oxford-links />

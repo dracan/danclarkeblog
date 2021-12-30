@@ -1,0 +1,22 @@
+@model DanClarkeBlog.Core.Models.BlogPost
+
+@if (Model is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="blogPostDate">@Model.PublishDate?.ToString("dd MMM yyyy")</div>
+    <h1>
+        <a href="@Model.Route">@Model.Title</a>
+    </h1>
+    <div>@Html.Raw(Model.HtmlShortText)</div>
+
+    @if (Model.BlogPostTags != null)
+    {
+        foreach (var tag in Model.BlogPostTags.Select(x => x.TagName))
+        {
+            <a class="tag" href="/tags/@tag.ToLower()">@tag@(tag == Model.BlogPostTags.Last().TagName ? "" : ", ")</a>
+        }
+    }
+}
