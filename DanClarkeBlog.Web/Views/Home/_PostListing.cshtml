@@ -13,16 +13,7 @@
 <div class="postListing">
     @foreach (var post in Model.Posts)
     {
-        <div class="blogPostDate">@post.PublishDate?.ToString("dd MMM yyyy")</div>
-        <h1><a href="@post.Route">@post.Title</a></h1>
-        <div>@Html.Raw(post.HtmlShortText)</div>
-
-        if (post.BlogPostTags != null) {
-            foreach (var tag in post.BlogPostTags.Select(x => x.TagName)) {
-                <a class="tag" href="/tags/@tag.ToLower()">@tag@(tag == post.BlogPostTags.Last().TagName ? "" : ", ")</a>
-            }
-        }
-
+        <vc:post-listing-item item=@post />
         <hr />
     }
 </div>
