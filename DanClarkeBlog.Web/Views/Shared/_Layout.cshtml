@@ -60,7 +60,7 @@
 <div class="container-fluid body-content">
     <div class="row">
         <div class="col-md-2 sidemenu">
-            @await Html.PartialAsync("_SidePanelLeft")
+            <vc:side-panel-left model="@Model" />
         </div>
         <div class="col-md-8 body-container">
             @RenderBody()
