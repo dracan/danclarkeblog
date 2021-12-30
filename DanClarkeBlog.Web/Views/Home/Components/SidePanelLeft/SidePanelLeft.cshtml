@@ -12,20 +12,9 @@
 </form>
 
 <hr />
-
-<div id="darkmode-toggle-div">
-    <i class="fas fa-adjust fa-2x"></i>
-    <label class="switch" id="theme-switch">
-        <input type="checkbox" id="checkbox_theme">
-        <span class="slider round"></span>
-    </label>
-</div>
-
+<vc:dark-mode-toggle />
 <hr />
-
 <vc:buy-me-a-coffee />
-
 <hr />
-
-<vc:tag-cloud tags=@Model.Tags />
+<vc:tag-cloud tags="@Model.Tags" />
 <hr />
