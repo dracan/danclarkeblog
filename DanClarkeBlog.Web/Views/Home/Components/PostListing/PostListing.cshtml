@@ -1,0 +1,21 @@
+@model DanClarkeBlog.Web.ViewModels.HomeViewModel
+
+@if (Model.Posts.Count == 0)
+{
+    <div style="margin: 25px 0 25px 0">
+        <img src="images/sadface.png" width="100px" />
+    </div>
+
+    <p>Sorry, there were no results found matching your search query!</p>
+    <p>If you were searching for a topic you think I should blog about, then please let me know! :)</p>
+}
+
+<div class="postListing">
+    @foreach (var post in Model.Posts)
+    {
+        <vc:post-listing-item item=@post />
+        <hr />
+    }
+</div>
+
+@await Html.PartialAsync("_Paging")
