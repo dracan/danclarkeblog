@@ -1,4 +1,5 @@
-﻿@model DanClarkeBlog.Web.ViewModels.ViewModelBase
+﻿@using DanClarkeBlog.Web.Views.Home.Components.Footer
+@model DanClarkeBlog.Web.ViewModels.ViewModelBase
 
 @addTagHelper *, DanClarkeBlog.Web
 
@@ -74,7 +75,7 @@
            <div class="col-md-2 sidemenu">
            </div>
            <div class="col-md-8">
-                @await Html.PartialAsync("_Footer")
+               <vc:footer version-number="@Model!.VersionNumber" />
            </div>
            <div class="col-md-2 sidemenu">
            </div>
