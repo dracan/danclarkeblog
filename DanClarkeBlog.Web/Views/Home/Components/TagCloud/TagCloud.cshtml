@@ -1,0 +1,8 @@
+@model List<DanClarkeBlog.Core.Models.TagCount>
+
+<h3>Tags</h3>
+
+@foreach (var tag in Model!)
+{
+    <a class="postTag" href="/tags/@tag.TagName.ToLower()">@tag.TagName (@tag.Count)@(tag == Model.Last() ? "" : ", ")</a>
+}

@@ -1,8 +1,0 @@
-@model DanClarkeBlog.Web.ViewModels.ViewModelBase
-
-<h3>Tags</h3>
-
-@foreach (var tag in Model.Tags)
-{
-    <a class="postTag" href="/tags/@tag.TagName.ToLower()">@tag.TagName (@tag.Count)@(tag == Model.Tags.Last() ? "" : ", ")</a>
-}
