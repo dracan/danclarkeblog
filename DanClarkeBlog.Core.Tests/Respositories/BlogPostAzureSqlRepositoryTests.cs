@@ -6,17 +6,25 @@ using DanClarkeBlog.Core.Helpers;
 using DanClarkeBlog.Core.Models;
 using DanClarkeBlog.Core.Repositories;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace DanClarkeBlog.Core.Tests.Respositories
 {
     public class BlogPostAzureSqlRepositoryTests
     {
-        private const string skipText = "Manual"; // Make me null temporarily to run these tests. Ensure pointing at local database!
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public BlogPostAzureSqlRepositoryTests(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
+        private const string SkipTest = "Manual"; // Make me null temporarily to run these tests. Ensure pointing at local database!
 
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact(Skip = skipText), Trait("Category", "Manual")]
+        [Fact(Skip = SkipTest), Trait("Category", "Manual")]
         public async Task AddPost()
         {
             var container = TestBootstrapper.Init();
@@ -39,7 +47,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact(Skip = skipText), Trait("Category", "Manual")]
+        [Fact(Skip = SkipTest), Trait("Category", "Manual")]
         public async Task GetPosts()
         {
             var container = TestBootstrapper.Init();
@@ -50,27 +58,27 @@ namespace DanClarkeBlog.Core.Tests.Respositories
 
             foreach(var post in posts)
             {
-                Console.WriteLine(post.Title);
+                _testOutputHelper.WriteLine(post.Title);
             }
         }
 
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact(Skip = skipText), Trait("Category", "Manual")]
+        [Fact(Skip = SkipTest), Trait("Category", "Manual")]
         public async Task MigrateAsync()
         {
             var container = TestBootstrapper.Init();
 
             var destRepo = container.ResolveNamed<IBlogPostRepository>("SqlServer") as BlogPostSqlServerRepository;
 
-            await destRepo.UpdateDatabaseAsync(CancellationToken.None);
+            await destRepo!.UpdateDatabaseAsync(CancellationToken.None);
         }
 
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact(Skip = skipText), Trait("Category", "Manual")]
+        [Fact(Skip = SkipTest), Trait("Category", "Manual")]
         public async Task RunSync()
         {
             var container = TestBootstrapper.Init();
@@ -89,7 +97,7 @@ namespace DanClarkeBlog.Core.Tests.Respositories
         /// <summary>
         /// This is just to manually run the Azure SQL code during dev. It's not an automated test.
         /// </summary>
-        [Fact(Skip = skipText), Trait("Category", "Manual")]
+        [Fact(Skip = SkipTest), Trait("Category", "Manual")]
         public async Task IncrementalSyncTest()
         {
             var container = TestBootstrapper.Init();

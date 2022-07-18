@@ -37,7 +37,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Processing files from filesystem (rootPath = {_settings.BlogFileSystemRootPath}) ...");
+            _logger.LogInformation("Processing files from filesystem (rootPath = {RootPath}) ...", _settings.BlogFileSystemRootPath);
 
             var blogPosts = new List<BlogPost>();
 
@@ -45,11 +45,11 @@ namespace DanClarkeBlog.Core.Repositories
 
             var content = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, "Blog.json"));
 
-            _logger.LogInformation($"Blog.json content was {content}");
+            _logger.LogInformation("Blog.json content was {Content}", content);
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(content);
 
-            _logger.LogInformation($"Enumerating through {blogPostList.Count} posts downloading the file contents ...");
+            _logger.LogInformation("Enumerating through {BlogPostListCount} posts downloading the file contents ...", blogPostList.Count);
 
             var posts = blogPostList.AsQueryable();
 
@@ -63,7 +63,7 @@ namespace DanClarkeBlog.Core.Repositories
             {
                 var postFile = File.ReadAllText(Path.Combine(_settings.BlogFileSystemRootPath, blogPost.Folder.TrimStart('/')));
 
-                _logger.LogDebug($"Reading content for {blogPost.Folder} ...");
+                _logger.LogDebug("Reading content for {BlogPostFolder} ...", blogPost.Folder);
 
                 var post = new BlogPost
                 {

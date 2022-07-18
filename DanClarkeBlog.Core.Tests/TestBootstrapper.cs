@@ -46,7 +46,7 @@ namespace DanClarkeBlog.Core.Tests
             if (httpClientHelper == null)
                 builder.RegisterType<HttpClientHelper>().As<IHttpClientHelper>();
             else
-                builder.Register(x => httpClientHelper).As<IHttpClientHelper>();
+                builder.Register(_ => httpClientHelper).As<IHttpClientHelper>();
 
             return builder.Build();
         }

@@ -48,7 +48,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task<BlogPostListing> GetPublishedAsync(string tag, int? offset, int? maxResults, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"Get all async (tag = {tag}, offset = {offset}, maxResults = {maxResults})");
+            _logger.LogDebug("Get all async (tag = {Tag}, offset = {Offset}, maxResults = {MaxResults})", tag, offset, maxResults);
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {
@@ -220,7 +220,7 @@ namespace DanClarkeBlog.Core.Repositories
 
         public async Task SetDropboxCursorAsync(string cursor, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"Setting dropbox cursor to {cursor}");
+            _logger.LogDebug("Setting dropbox cursor to {Cursor}", cursor);
 
             using (var ctx = new DataContext(_setting.BlogSqlConnectionString))
             {

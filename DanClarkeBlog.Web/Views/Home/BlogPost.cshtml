@@ -1,7 +1,7 @@
 @model DanClarkeBlog.Web.ViewModels.PostViewModel
 
 @{
-    ViewData["Title"] = Model.Post.Title;
+    ViewData["Title"] = Model!.Post.Title;
 }
 
 <div class="blogPost">
@@ -43,5 +43,5 @@
     })();
     </script>
     <noscript>Please enable JavaScript to view the <a href='https://disqus.com/?ref_noscript'>comments powered by Disqus.</a></noscript>
-    ");
+    ")
 }

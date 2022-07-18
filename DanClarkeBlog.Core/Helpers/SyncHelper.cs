@@ -46,7 +46,7 @@ namespace DanClarkeBlog.Core.Helpers
             {
                 await _lockRepository.AcquireLockAsync("synchelperlock", 10, TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(1), cancellationToken);
 
-                _logger.LogInformation($"SynchronizeBlogPostsAsync with incremental = {incremental}");
+                _logger.LogInformation("SynchronizeBlogPostsAsync with incremental = {IsIncremental}", incremental);
 
                 var dropboxCursor = new CursorContainer();
 
@@ -55,7 +55,7 @@ namespace DanClarkeBlog.Core.Helpers
                     // Try to get a persisted cursor from our SQL database, if that's null (so we haven't got one), then we'll do a full update
                     dropboxCursor.Cursor = overrideCursor ?? await destRepo.GetDropboxCursorAsync(cancellationToken);
 
-                    _logger.LogDebug($"Cursor = {dropboxCursor.Cursor}");
+                    _logger.LogDebug("Cursor = {Cursor}", dropboxCursor.Cursor);
                 }
 
                 var cursor = incremental && !string.IsNullOrWhiteSpace(dropboxCursor.Cursor) ? dropboxCursor : null;
@@ -65,10 +65,10 @@ namespace DanClarkeBlog.Core.Helpers
                 {
                     _logger.LogInformation("No current dropbox cursor, so explicitly requesting current cursor ...");
                     dropboxCursor.Cursor = await _dropboxHelper.GetCurrentCursorAsync(cancellationToken);
-                    _logger.LogInformation($"Returned cursor {dropboxCursor.Cursor}");
+                    _logger.LogInformation("Returned cursor {Cursor}", dropboxCursor.Cursor);
                 }
 
-                _logger.LogInformation($"Processing {sourcePosts.Count} source posts ...");
+                _logger.LogInformation("Processing {SourcePostCount} source posts ...", sourcePosts.Count);
 
                 foreach (var sourcePost in sourcePosts)
                     await destRepo.AddOrUpdateAsync(sourcePost, cancellationToken);
@@ -99,14 +99,14 @@ namespace DanClarkeBlog.Core.Helpers
 
                     var postsToDelete = destPosts.Where(d => sourcePosts.All(s => s.Id != d.Id)).ToList();
 
-                    _logger.LogInformation($"Found {postsToDelete.Count} to delete out of {destPosts.Count} posts");
+                    _logger.LogInformation("Found {PostsToDeleteCount} to delete out of {DestPostsCount} posts", postsToDelete.Count, destPosts.Count);
 
                     await destRepo.DeleteAsync(postsToDelete, cancellationToken);
                 }
 
                 await destRepo.RemoveUnusedTagsAsync(cancellationToken);
 
-                _logger.LogInformation($"Saving new Dropbox cursor: {dropboxCursor.Cursor}");
+                _logger.LogInformation("Saving new Dropbox cursor: {Cursor}", dropboxCursor.Cursor);
 
                 await destRepo.SetDropboxCursorAsync(dropboxCursor.Cursor, cancellationToken);
             }

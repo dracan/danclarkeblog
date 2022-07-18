@@ -62,7 +62,7 @@ namespace DanClarkeBlog.Core.Repositories
                 _logger.LogInformation("Files dropbox thinks has been updated:");
 
                 foreach (var updatedFile in dropboxFiles)
-                    _logger.LogDebug($"  Name: \"{updatedFile.Name}\", PathLower: \"{updatedFile.PathLower}\"");
+                    _logger.LogDebug("  Name: \"{UpdatedFileName}\", PathLower: \"{UpdatedFilePathLower}\"", updatedFile.Name, updatedFile.PathLower);
             }
 
             var blogPosts = new List<BlogPost>();
@@ -73,7 +73,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var blogJson = Encoding.UTF8.GetString(blogMetaDataFile);
 
-            _logger.LogTrace($"Blog.json content was {blogJson}");
+            _logger.LogTrace("Blog.json content was {BlogJson}", blogJson);
 
             var blogPostList = JsonConvert.DeserializeObject<List<BlogJsonItem>>(blogJson);
 
@@ -81,7 +81,7 @@ namespace DanClarkeBlog.Core.Repositories
                 ? blogPostList
                 : blogPostList.Where(x => dropboxFiles.Any(y => y.PathLower == $"/blog{x.Folder}/post.md".ToLower())).ToList();
 
-            _logger.LogInformation($"Enumerating through {blogPostsToUpdate.Count} posts downloading the file contents ...");
+            _logger.LogInformation("Enumerating through {BlogPostsToUpdateCount} posts downloading the file contents ...", blogPostsToUpdate.Count);
 
             foreach (var blogPost in blogPostsToUpdate)
             {
@@ -98,7 +98,7 @@ namespace DanClarkeBlog.Core.Repositories
                         ImageDataTask = _dropboxHelper.GetFileContentAsync(i, cancellationToken),
                     }).ToList();
 
-                _logger.LogInformation($"Reading content for {blogPost.Folder} ...");
+                _logger.LogInformation("Reading content for {BlogPostFolder} ...", blogPost.Folder);
 
                 var postFile = await _dropboxHelper.GetFileContentAsync($"{blogPost.Folder}/post.md", cancellationToken);
 
@@ -108,7 +108,7 @@ namespace DanClarkeBlog.Core.Repositories
                            {
                                Id = blogPost.Id,
                                Title = blogPost.Title,
-                               PublishDate = string.IsNullOrWhiteSpace(blogPost.PublishDate) ? null : (DateTime?)DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
+                               PublishDate = string.IsNullOrWhiteSpace(blogPost.PublishDate) ? null : DateTime.ParseExact(blogPost.PublishDate, "yyyy-MM-dd", new CultureInfo("en-GB")),
                                HtmlText = _renderer.Render(postFileText, blogPost.Folder),
                                HtmlShortText = _renderer.Render(_blogPostSummaryHelper.GetSummaryText(postFileText), blogPost.Folder),
                                Route = blogPost.Route,

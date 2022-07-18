@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace DanClarkeBlog.Web
 {
@@ -30,9 +29,6 @@ namespace DanClarkeBlog.Web
 
             services.AddOptions();
             services.Configure<Settings>(Configuration.GetSection("Blog"));
-
-            var sp = services.BuildServiceProvider();
-            var settings = sp.GetService<IOptions<Settings>>();
 
             WebBootstrapper.Init(services);
         }

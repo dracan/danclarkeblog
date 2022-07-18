@@ -31,7 +31,7 @@ namespace DanClarkeBlog.Core.Repositories
 
             var fileReference = $"{leafPostFolderName.TrimStart('/')}/{fileName}";
 
-            _logger.LogInformation($"AzureImageRepository.AddAsync called for image {fileReference}");
+            _logger.LogInformation("AzureImageRepository.AddAsync called for image {FileReference}", fileReference);
 
             var storageAccount = CreateStorageAccountFromConnectionString(_settings.AzureStorageConnectionString);
 
@@ -56,7 +56,7 @@ namespace DanClarkeBlog.Core.Repositories
             }
             else
             {
-                _logger.LogInformation($"File does not exist, so attempting upload (data length = {data.Length}) ...");
+                _logger.LogInformation("File does not exist, so attempting upload (data length = {DataLength}) ...", data.Length);
             }
 
             await blobReference.UploadFromByteArrayAsync(data, 0, data.Length);
@@ -89,12 +89,12 @@ namespace DanClarkeBlog.Core.Repositories
             }
             catch (FormatException)
             {
-                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample");
                 throw;
             }
             catch (ArgumentException)
             {
-                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample.");
+                _logger.LogError("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid in the app.config file - then restart the sample");
                 throw;
             }
 
