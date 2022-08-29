@@ -65,7 +65,7 @@ jobs:
           --create-namespace \
           --set image.tag=${{ github.sha }} \
           --set image.name=${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }} \
-          --set keyVaultUri=${{ secrets.KEYVAULTURI }} \
+          --set config.keyVaultUri=${{ secrets.KEYVAULTURI }} \
           --set appInsightsInstrumentationKey=${{ secrets.APPINSIGHTS_INSTRUMENTATION_KEY }} \
           --set managedIdentity.resourceId=${{ secrets.MANAGED_IDENTITY_RESOURCE_ID }} \
           --set managedIdentity.clientId=${{ secrets.MANAGED_IDENTITY_CLIENT_ID }} \
