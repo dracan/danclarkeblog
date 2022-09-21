@@ -1,4 +1,4 @@
-name: Build and deploy the website to AKS with Helm
+name: Website (build/deploy)
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Build and deploy the Worker to AKS with Helm
+name: Worker (build/deploy)
 
 on:
   push:
