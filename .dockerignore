@@ -1,0 +1,10 @@
+**
+!/DanClarkeBlog.Core
+!/DanClarkeBlog.Web
+!/DanClarkeBlog.Worker
+/DanClarkeBlog.Core/bin
+/DanClarkeBlog.Core/obj
+/DanClarkeBlog.Web/bin
+/DanClarkeBlog.Web/obj
+/DanClarkeBlog.Worker/bin
+/DanClarkeBlog.Worker/obj
