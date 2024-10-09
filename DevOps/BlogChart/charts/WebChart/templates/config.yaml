@@ -10,7 +10,7 @@ data:
   Blog__AzureSearchInstanceName: {{ .Values.config.azureSearchIndexName | quote }}
   Blog__BaseImageUri: {{ .Values.config.baseImageUri | quote }}
   Blog__DisqusDomainName: {{ .Values.config.disqusDomainName | quote }}
-  Blog__GoogleAnalyticsTrackingId: {{ .Values.config.googleAnalyticsTrackingId | quote }}
+  Blog__GoogleTagId: {{ .Values.config.googleTagId | quote }}
   Blog__ProfilePicUri: {{ .Values.config.profilePicUri | quote }}
   Blog__SiteHomeUri: {{ .Values.config.siteHomeUri | quote }}
   KeyVaultUri: {{ .Values.config.keyVaultUri | quote }}

@@ -60,7 +60,7 @@ namespace DanClarkeBlog.Web.Controllers
                 PageNumber = page ?? 1,
                 TotalPages = (int)Math.Ceiling((decimal)(pagedPostsResults?.TotalPosts ?? 0) / NumPostsPerPage),
                 ProfilePicUri = _settings.ProfilePicUri,
-                GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
+                GoogleTagId = _settings.GoogleTagId,
                 VersionNumber = _settings.VersionNumber,
             });
         }
@@ -95,7 +95,7 @@ namespace DanClarkeBlog.Web.Controllers
                 PageNumber = page ?? 1,
                 TotalPages = (int)Math.Ceiling((decimal)(pagedPostsResults?.TotalPosts ?? 0) / NumPostsPerPage),
                 ProfilePicUri = _settings.ProfilePicUri,
-                GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
+                GoogleTagId = _settings.GoogleTagId,
                 VersionNumber = _settings.VersionNumber,
             });
         }
@@ -131,7 +131,7 @@ namespace DanClarkeBlog.Web.Controllers
                 DisqusDomainName = _settings.DisqusDomainName,
                 Tags = tags,
                 ProfilePicUri = _settings.ProfilePicUri,
-                GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
+                GoogleTagId = _settings.GoogleTagId,
                 VersionNumber = _settings.VersionNumber,
             });
         }
@@ -166,7 +166,7 @@ namespace DanClarkeBlog.Web.Controllers
                             RecentPosts = recent,
                             Tags = tags,
                             ProfilePicUri = _settings.ProfilePicUri,
-                            GoogleAnalyticsTrackingId = _settings.GoogleAnalyticsTrackingId,
+                            GoogleTagId = _settings.GoogleTagId,
                             VersionNumber = _settings.VersionNumber,
                         });
         }

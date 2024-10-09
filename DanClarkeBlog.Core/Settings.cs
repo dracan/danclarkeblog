@@ -14,7 +14,7 @@
         public string ProfilePicUri { get; set; }
         public int PostPreviewLength { get; set; } = 200;
         public string BaseImageUri { get; set; }
-        public string GoogleAnalyticsTrackingId { get; set; }
+        public string GoogleTagId { get; set; }
 
         public string VersionNumber { get; set; }
 
